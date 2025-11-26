@@ -68,7 +68,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            z-index: 2000;
+            z-index: 5000;
             transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
             padding: 20px;
         }
@@ -190,7 +190,7 @@
             top: 0; left: 0; width: 100%;
             height: 60px;
             background: var(--rlc-blue);
-            z-index: 1002; /* Topmost Layer */
+            z-index: 3000; /* Extremely High */
             align-items: center;
             justify-content: space-between;
             padding: 0 15px;
@@ -203,7 +203,7 @@
             color: var(--rlc-gold);
             font-size: 1.5rem;
             cursor: pointer;
-            padding: 5px;
+            padding: 10px; /* Larger touch target */
         }
 
         .mobile-title {
@@ -218,7 +218,7 @@
         .mobile-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.6);
-            z-index: 1000; /* Behind Menu, Above Content */
+            z-index: 2000; /* Below sidebar, above content */
             display: none;
             backdrop-filter: blur(3px);
             transition: opacity 0.3s;
@@ -669,6 +669,18 @@
            AMAZING MOBILE EXPERIENCE
            ========================================================================== */
         @media screen and (max-width: 768px) {
+            
+            /* CRITICAL FIX FOR BLURRY/UNCLICKABLE MENU */
+            /* This resets the transform stack that was trapping the menu underneath the overlay */
+            #app-container { 
+                transform: none !important; 
+                opacity: 1 !important;
+                display: block; /* Break flexbox */
+                padding-top: 60px; /* Space for mobile header */
+                height: 100%;
+                overflow: hidden;
+            }
+
             /* Enable Mobile Header */
             .mobile-header { display: flex; }
 
@@ -685,13 +697,6 @@
                 position: fixed; width: 100%; height: 100%;
             }
 
-            #app-container {
-                display: block; /* Break flexbox */
-                padding-top: 60px; /* Space for mobile header */
-                height: 100%;
-                overflow: hidden;
-            }
-
             /* Sidebar - Slide-in Drawer */
             .sidebar {
                 position: fixed;
@@ -702,7 +707,10 @@
                 border-right: none;
                 background: rgba(26, 34, 54, 0.98);
                 backdrop-filter: none; /* Removed blur to prevent glitches */
-                z-index: 1001; /* ABOVE the overlay (which is 1000) */
+                
+                /* EXTREMELY HIGH Z-INDEX + ABOVE OVERLAY */
+                z-index: 2500; 
+                
                 box-shadow: 10px 0 20px rgba(0,0,0,0.5);
             }
 
@@ -914,15 +922,15 @@
             <img src="https://upload.wikimedia.org/wikipedia/commons/e/ea/Cap_Badge_of_the_RLC.png" alt="RLC Cap Badge">
         </div>
         <h1 class="cover-title">Sgt Kirby's</h1>
-        <div class="cover-subtitle">Logistic Supply Specialist (LSS)</div>
+        <div class="cover-subtitle">Logistics Support Solutions (LSS)</div>
         
         <div class="launch-grid">
-            <button class="launch-btn" onclick="enterSystem('mjdi')">MJDI Guide</button>
-            <button class="launch-btn" onclick="enterSystem('vital')">VITAL SystemGuide</button>
+            <button class="launch-btn" onclick="enterSystem('mjdi')">MJDI Portal</button>
+            <button class="launch-btn" onclick="enterSystem('vital')">VITAL System</button>
         </div>
 
         <div class="lsai-btn-container">
-            <button class="launch-btn" onclick="enterSystem('mjdi-lsai')">LSA&I Inspection Book</button>
+            <button class="launch-btn" onclick="enterSystem('mjdi-lsai')">LSA&I Inspection</button>
         </div>
 
         <div class="protected-footer">Created by Kris Kirby</div>
@@ -2077,4 +2085,3 @@ Activity: TO</div>
     </script>
 </body>
 </html>
-
