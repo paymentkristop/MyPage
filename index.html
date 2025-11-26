@@ -659,7 +659,123 @@
         .guide-section.active { display: block; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* ===========================
+           RESPONSIVE: MOBILE LAYOUT
+           =========================== */
+        @media (max-width: 768px) {
 
+            /* Allow scrolling on small screens */
+            body {
+                height: auto;
+                overflow: auto;
+            }
+
+            /* Stack sidebar on top of content */
+            #app-container {
+                flex-direction: column;
+                height: auto;
+            }
+
+            .sidebar {
+                width: 100%;
+                flex: 0 0 auto;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+            }
+
+            /* Limit nav height so it does not take whole screen */
+            .nav-scroll-area {
+                max-height: 260px;
+            }
+
+            /* Main content padding tightened for small screens */
+            .main-viewport {
+                padding: 16px;
+            }
+
+            .doc-container {
+                max-width: 100%;
+                min-height: auto;
+                border-radius: 8px;
+                box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            }
+
+            .doc-header {
+                padding: 24px 20px;
+            }
+
+            .content-body {
+                padding: 20px 16px 24px;
+            }
+
+            /* Steps a bit more compact */
+            .step-block {
+                grid-template-columns: 40px 1fr;
+                gap: 12px;
+                margin-bottom: 24px;
+            }
+
+            .step-block::before {
+                left: 20px;
+                top: 40px;
+                bottom: -20px;
+            }
+
+            .step-marker {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+
+            .terminal-content {
+                font-size: 0.75rem;
+            }
+
+            /* Cover page typography for phones */
+            .rlc-badge-container img {
+                width: 120px;
+            }
+
+            .cover-title {
+                font-size: 2.1rem;
+                text-align: center;
+            }
+
+            .cover-subtitle {
+                font-size: 0.85rem;
+                text-align: center;
+                margin-bottom: 30px;
+            }
+
+            .launch-grid {
+                flex-direction: column;
+                width: 100%;
+                max-width: 320px;
+                align-items: stretch;
+            }
+
+            .launch-btn {
+                width: 100%;
+                min-width: 0;
+                font-size: 1rem;
+                padding: 14px 18px;
+            }
+
+            .lsai-btn-container {
+                width: 100%;
+                max-width: 320px;
+            }
+
+            /* Footer should not cover content on mobile */
+            .protected-footer {
+                position: static;
+                font-size: 0.7rem;
+            }
+
+            /* Viewer a bit shorter so it fits on screen */
+            .doc-viewer-container {
+                height: 400px;
+            }
+        }
     </style>
 </head>
 <body>
