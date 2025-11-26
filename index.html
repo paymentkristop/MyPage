@@ -190,7 +190,7 @@
             top: 0; left: 0; width: 100%;
             height: 60px;
             background: var(--rlc-blue);
-            z-index: 500;
+            z-index: 1002; /* Topmost Layer */
             align-items: center;
             justify-content: space-between;
             padding: 0 15px;
@@ -203,6 +203,7 @@
             color: var(--rlc-gold);
             font-size: 1.5rem;
             cursor: pointer;
+            padding: 5px;
         }
 
         .mobile-title {
@@ -216,10 +217,10 @@
         /* Mobile Overlay Mask */
         .mobile-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 900;
+            background: rgba(0,0,0,0.6);
+            z-index: 1000; /* Behind Menu, Above Content */
             display: none;
-            backdrop-filter: blur(2px);
+            backdrop-filter: blur(3px);
             transition: opacity 0.3s;
         }
 
@@ -232,7 +233,7 @@
             flex-direction: column;
             border-right: 1px solid rgba(255,255,255,0.1);
             box-shadow: 5px 0 15px rgba(0,0,0,0.2);
-            z-index: 1000; /* High Z-index for mobile overlap */
+            z-index: 100;
             transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
         }
 
@@ -700,8 +701,8 @@
                 height: calc(100% - 60px);
                 border-right: none;
                 background: rgba(26, 34, 54, 0.98);
-                backdrop-filter: blur(10px);
-                z-index: 800;
+                backdrop-filter: none; /* Removed blur to prevent glitches */
+                z-index: 1001; /* ABOVE the overlay (which is 1000) */
                 box-shadow: 10px 0 20px rgba(0,0,0,0.5);
             }
 
