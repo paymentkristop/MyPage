@@ -1997,6 +1997,18 @@ Activity: TO</div>
     </div>
 
     <script>
+        // SECURITY: Disable Key Combos
+        document.addEventListener('keydown', function(e) {
+            // F12
+            if(e.key === 'F12') { e.preventDefault(); return false; }
+            // Ctrl + U
+            if(e.ctrlKey && (e.key === 'u' || e.key === 'U')) { e.preventDefault(); return false; }
+            // Ctrl + Shift + I (DevTools)
+            if(e.ctrlKey && e.shiftKey && (e.key === 'i' || e.key === 'I')) { e.preventDefault(); return false; }
+            // Ctrl + S (Save)
+            if(e.ctrlKey && (e.key === 's' || e.key === 'S')) { e.preventDefault(); return false; }
+        });
+
         // Prevent Context Menu
         document.addEventListener('contextmenu', event => event.preventDefault());
         
