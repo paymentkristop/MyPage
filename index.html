@@ -69,6 +69,8 @@
             justify-content: center;
             z-index: 2000;
             transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 20px; /* Added padding for small screens */
+            text-align: center;
         }
 
         #cover-page.hidden {
@@ -101,6 +103,7 @@
             -webkit-text-fill-color: transparent;
             margin: 0;
             text-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            line-height: 1.1; /* Prevent overlapping lines */
         }
 
         .cover-subtitle {
@@ -118,6 +121,8 @@
             display: flex;
             gap: 30px;
             margin-bottom: 20px;
+            flex-wrap: wrap; /* Allow wrapping on small screens */
+            justify-content: center;
         }
 
         .launch-btn {
@@ -162,6 +167,9 @@
         .lsai-btn-container {
             margin-top: 10px;
             text-align: center;
+            width: 100%;
+            display: flex;
+            justify-content: center;
         }
 
         /* ===========================
@@ -190,6 +198,7 @@
             border-right: 1px solid rgba(255,255,255,0.1);
             box-shadow: 5px 0 15px rgba(0,0,0,0.2);
             z-index: 100;
+            flex-shrink: 0; /* Prevent sidebar shrinking */
         }
 
         .sidebar-header {
@@ -316,6 +325,7 @@
             padding: 40px;
             background-color: #f3f4f6;
             position: relative;
+            -webkit-overflow-scrolling: touch; /* Smooth scroll on iOS */
         }
 
         .doc-container {
@@ -407,6 +417,7 @@
             padding: 25px;
             transition: transform 0.2s, box-shadow 0.2s;
             position: relative;
+            min-width: 0; /* Fix flex child overflow */
         }
 
         .step-detail:hover {
@@ -459,6 +470,7 @@
             font-size: 0.85rem;
             line-height: 1.4;
             white-space: pre-wrap;
+            word-wrap: break-word; /* Wrap long lines */
         }
 
         .term-hl { color: #fff; font-weight: bold; background: rgba(255,255,255,0.2); }
@@ -659,134 +671,117 @@
         .guide-section.active { display: block; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        /* ===========================
-           RESPONSIVE: MOBILE LAYOUT
-           =========================== */
-        @media (max-width: 768px) {
 
-            /* Allow scrolling on small screens */
-            body {
-                height: auto;
-                overflow: auto;
+        /* ==========================================================================
+           MOBILE RESPONSIVENESS OVERRIDES
+           Added to ensure the system works on Phones and Tablets
+           ========================================================================== */
+        @media screen and (max-width: 768px) {
+            
+            /* Cover Page Adjustments */
+            .cover-title { font-size: 2rem; margin-bottom: 10px; }
+            .cover-subtitle { font-size: 0.9rem; margin-bottom: 30px; }
+            .launch-grid { flex-direction: column; width: 100%; gap: 15px; }
+            .launch-btn { width: 100%; font-size: 1rem; padding: 15px; }
+            .rlc-badge-container img { width: 120px; }
+
+            /* Main Layout - Switch to Column Stack */
+            body { 
+                overflow-y: auto; 
+                height: auto; 
+                position: relative;
             }
 
-            /* Stack sidebar on top of content */
             #app-container {
                 flex-direction: column;
                 height: auto;
+                overflow: visible;
+                padding-bottom: 50px; /* Space for footer */
             }
 
+            /* Sidebar Mobile */
             .sidebar {
                 width: 100%;
-                flex: 0 0 auto;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+                height: auto;
+                border-right: none;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+                position: relative;
             }
 
-            /* Limit nav height so it does not take whole screen */
+            .sidebar-header {
+                padding: 15px;
+            }
+
             .nav-scroll-area {
-                max-height: 260px;
+                /* Limit height so users can scroll past nav to content */
+                max-height: 40vh; 
+                border-bottom: 2px solid var(--rlc-gold);
             }
 
-            /* Main content padding tightened for small screens */
+            /* Viewport & Content */
             .main-viewport {
-                padding: 16px;
+                padding: 10px;
+                overflow: visible;
             }
 
             .doc-container {
-                max-width: 100%;
-                min-height: auto;
-                border-radius: 8px;
-                box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+                border-radius: 0;
+                box-shadow: none;
+                margin-bottom: 30px;
             }
 
             .doc-header {
-                padding: 24px 20px;
+                padding: 20px;
+                text-align: center;
             }
+
+            .doc-header h1 { font-size: 1.5rem; }
+            .credit-pill { top: 10px; right: 10px; font-size: 0.6rem; }
 
             .content-body {
-                padding: 20px 16px 24px;
+                padding: 15px;
             }
 
-            /* Steps a bit more compact */
+            /* Step Blocks - Vertical Stack */
             .step-block {
-                grid-template-columns: 40px 1fr;
-                gap: 12px;
-                margin-bottom: 24px;
+                grid-template-columns: 1fr; /* Stack vertically */
+                gap: 10px;
             }
 
             .step-block::before {
-                left: 20px;
-                top: 40px;
-                bottom: -20px;
+                display: none; /* Remove connector line as it breaks in stack mode */
             }
 
             .step-marker {
+                margin: 0 auto; /* Center marker */
                 width: 40px;
                 height: 40px;
                 font-size: 1rem;
             }
 
-            .terminal-content {
-                font-size: 0.75rem;
+            .step-detail {
+                padding: 15px;
             }
 
-            /* Cover page typography for phones */
-            .rlc-badge-container img {
-                width: 120px;
+            /* Terminal & Tools */
+            .terminal-content { font-size: 0.75rem; }
+            
+            /* Admin Panel Mobile */
+            #admin-panel {
+                width: 90%;
+                right: -100%;
             }
-
-            .cover-title {
-                font-size: 2.1rem;
-                text-align: center;
-            }
-
-            .cover-subtitle {
-                font-size: 0.85rem;
-                text-align: center;
-                margin-bottom: 30px;
-            }
-
-            .launch-grid {
-                flex-direction: column;
-                width: 100%;
-                max-width: 320px;
-                align-items: stretch;
-            }
-
-            .launch-btn {
-                width: 100%;
-                min-width: 0;
-                font-size: 1rem;
-                padding: 14px 18px;
-            }
-
-            .lsai-btn-container {
-                width: 100%;
-                max-width: 320px;
-            }
-
-            /* Footer should not cover content on mobile */
-            .protected-footer {
-                position: static;
-                font-size: 0.7rem;
-            }
-
-            /* Viewer a bit shorter so it fits on screen */
-            .doc-viewer-container {
-                height: 400px;
-            }
+            #admin-panel.open { right: 0; width: 100%; }
         }
+
     </style>
 </head>
 <body>
 
-    <!-- INVISIBLE SIGNATURE -->
     <div id="signature-lock-k-r-i-s-k-i-r-b-y"></div>
 
-    <!-- INVISIBLE ADMIN TRIGGER -->
     <div class="admin-trigger-secret" onclick="showAdminLogin()" title=""></div>
 
-    <!-- ADMIN LOGIN & PANEL -->
     <div id="admin-login-overlay">
         <div class="login-box">
             <h3>Admin Access</h3>
@@ -831,8 +826,7 @@
             <div class="admin-form-group">
                 <label>Select Category to Delete</label>
                 <select id="delete-category-select">
-                    <!-- Populated by JS -->
-                </select>
+                    </select>
             </div>
             <button class="admin-btn delete-cat" onclick="deleteCategory()">Delete Category</button>
         </div>
@@ -842,8 +836,7 @@
             <div class="admin-form-group">
                 <label>Target Section</label>
                 <select id="target-section-select">
-                    <!-- Populated by JS -->
-                </select>
+                    </select>
             </div>
             <div class="admin-form-group">
                 <label>Step Number</label>
@@ -876,7 +869,6 @@
         <div id="auto-save-indicator" style="color: #48bb78; font-size: 0.8rem; text-align: center; margin-top: 10px; opacity: 0; transition: opacity 0.5s;">Autosaved</div>
     </div>
 
-    <!-- COVER PAGE -->
     <div id="cover-page">
         <div class="rlc-badge-container">
             <img src="https://upload.wikimedia.org/wikipedia/commons/e/ea/Cap_Badge_of_the_RLC.png" alt="RLC Cap Badge">
@@ -896,13 +888,10 @@
         <div class="protected-footer">Created by Kris Kirby</div>
     </div>
 
-    <!-- MAIN APPLICATION -->
     <div id="app-container">
         
-        <!-- SIDEBAR -->
         <nav class="sidebar">
             <div class="sidebar-header">
-                <!-- Trigger is ONLY the logo now -->
                 <img src="https://upload.wikimedia.org/wikipedia/commons/e/ea/Cap_Badge_of_the_RLC.png" alt="RLC" class="admin-trigger-logo" onclick="showAdminLogin()">
                 <div>
                     <h2 id="guide-title" class="editable">VITAL Guide</h2>
@@ -910,7 +899,6 @@
                 </div>
             </div>
 
-            <!-- VITAL NAVIGATION -->
             <div class="nav-scroll-area" id="nav-content-vital">
                 <div class="nav-group" id="group-create-issue">
                     <button class="nav-trigger" onclick="toggleNav(this)">1. Creating & Maint. <span class="arrow">▼</span></button>
@@ -981,9 +969,7 @@
                 </div>
             </div>
 
-            <!-- MJDI NAVIGATION -->
             <div class="nav-scroll-area" id="nav-content-mjdi">
-                <!-- Refactored Categories -->
                 <div class="nav-group">
                     <button class="nav-trigger" onclick="toggleNav(this)">Receipts & Issues <span class="arrow">▼</span></button>
                     <div class="nav-content open">
@@ -1021,7 +1007,6 @@
                 </div>
             </div>
 
-            <!-- LSA&I NAVIGATION -->
             <div class="nav-scroll-area" id="nav-content-lsai">
                 <div class="nav-group" id="group-lsai">
                     <button class="nav-trigger" onclick="toggleNav(this)">LSA&I Tools <span class="arrow">▼</span></button>
@@ -1034,21 +1019,17 @@
             <button class="home-btn" onclick="goHome()">Exit System</button>
         </nav>
 
-        <!-- VIEWPORT -->
         <div class="main-viewport">
             <div class="doc-container">
                 
-                <!-- Header -->
                 <div class="doc-header">
                     <div class="credit-pill">Sgt Kirby</div>
                     <h1 id="header-main" class="editable">VITAL System Handover</h1>
                     <p id="header-sub" class="editable">Visibility In Transit Asset Logging - Procedural Guide</p>
                 </div>
 
-                <!-- Content Body -->
                 <div class="content-body">
                     
-                    <!-- WELCOME MSG -->
                     <div id="section-welcome" class="guide-section active">
                         <h3 class="editable">Welcome to VITAL</h3>
                         <p class="editable">Select a procedure from the sidebar to begin.</p>
@@ -1061,7 +1042,6 @@
                         </div>
                     </div>
 
-                    <!-- 1.1 CREATE ISSUE -->
                     <div id="section-create-issue" class="guide-section">
                         <h3 class="editable">1.1 Create Issue Package</h3>
                         <div class="menu-path editable">Menu: 1. Issues & Packages → Seq. 1 Create Issue Package</div>
@@ -1129,7 +1109,6 @@ L: 25  W: 20  H: 1</div>
                         </div>
                     </div>
 
-                    <!-- 1.2 MAINTAIN ISSUE -->
                     <div id="section-maintain-issue" class="guide-section">
                         <h3 class="editable">1.2 Maintain Issue</h3>
                         <div class="menu-path editable">Menu: 1. Issues & Packages → Seq. 2 Maintain Issue</div>
@@ -1173,7 +1152,6 @@ Press AddNew(Alt&F5)</div>
                         </div>
                     </div>
 
-                    <!-- 1.3 MAINTAIN PACKAGE -->
                     <div id="section-maintain-package" class="guide-section">
                         <h3 class="editable">1.3 Maintain Package (Audit)</h3>
                         <div class="menu-path editable">Menu: 1. Issues & Packages → Seq. 3 Maintain Package</div>
@@ -1201,7 +1179,6 @@ Current Node: WTM   Next Node: BIC   Final Node: CON</div>
                         </div>
                     </div>
 
-                    <!-- 1.4 DEPLOYMENT PACKAGES -->
                     <div id="section-deployment-pkg" class="guide-section">
                         <h3 class="editable">1.4 Deployment Packages</h3>
                         <div class="menu-path editable">Menu: 1. Issues & Packages → Seq. 4 Create Deployment Package</div>
@@ -1230,7 +1207,6 @@ Consignee: GOSPORT, SAMPLES</div>
                         </div>
                     </div>
 
-                    <!-- 1.5 PERMANENT PACKAGES -->
                     <div id="section-permanent-pkg" class="guide-section">
                         <h3 class="editable">1.5 Permanent Packages</h3>
                         <div class="menu-path editable">Menu: 1. Issues & Packages → Seq. 7 Create Permanent Package</div>
@@ -1250,7 +1226,6 @@ Desc: ISO CONTAINER 20FT</div>
                         </div>
                     </div>
 
-                    <!-- 2.1 DIRECT DESPATCH PDR -->
                     <div id="section-direct-despatch-pdr" class="guide-section">
                         <h3 class="editable">2.1 Direct Despatch PDR</h3>
                         <div class="menu-path editable">Menu: 2. Departures & Despatches → Direct Despatch PDR</div>
@@ -1277,7 +1252,6 @@ Mode: ROAD</div>
                         </div>
                     </div>
 
-                    <!-- 2.2 DIRECT DESPATCH PACKAGE -->
                     <div id="section-direct-despatch-pkg" class="guide-section">
                         <h3 class="editable">2.2 Direct Despatch Package</h3>
                         <div class="menu-path editable">Menu: 2. Departures & Despatches → Direct Despatch Packages</div>
@@ -1296,7 +1270,6 @@ Title: CONSIGNEE</div>
                         </div>
                     </div>
 
-                    <!-- 2.3 CREATE PDR -->
                     <div id="section-create-pdr" class="guide-section">
                         <h3 class="editable">2.3 Create PDR (1142)</h3>
                         <div class="menu-path editable">Menu: 2. Departures & Despatches → Seq. 1 Maintain PDR</div>
@@ -1323,7 +1296,6 @@ Originator Ref: POL</div>
                         </div>
                     </div>
 
-                    <!-- 2.4 CREATE AWB -->
                     <div id="section-create-awb" class="guide-section">
                         <h3 class="editable">2.4 Create AWB (1380)</h3>
                         <div class="menu-path editable">Menu: 2. Departures & Despatches → Seq. 6 Bid for Movement</div>
@@ -1350,7 +1322,6 @@ Import Auth: <span class="term-hl">22CFR123.4(A)(5)</span></div>
                         </div>
                     </div>
 
-                    <!-- 3.1 RECORD ARRIVAL -->
                     <div id="section-record-arrival" class="guide-section">
                         <h3 class="editable">3.1 Record Arrival</h3>
                         <div class="menu-path editable">Menu: 3. Arrivals → Seq. 1 Record Arrival</div>
@@ -1369,7 +1340,6 @@ Desc: SORBENT, OIL</div>
                         </div>
                     </div>
 
-                    <!-- 3.2 DISCREPANCIES -->
                     <div id="section-node-discrepancies" class="guide-section">
                         <h3 class="editable">3.2 Node Discrepancies (JSP 886)</h3>
                         <div class="menu-path editable">Menu: 3. Arrivals → Seq. 4 Node Discrepancies</div>
@@ -1395,7 +1365,6 @@ Desc: SORBENT, OIL</div>
                         </div>
                     </div>
 
-                    <!-- 4. TEMP LOCATIONS -->
                     <div id="section-temp-locs" class="guide-section">
                         <h3 class="editable">Manage Temporary Locations</h3>
                         <div class="menu-path editable">Menu: 5. Temporary Locations</div>
@@ -1422,7 +1391,6 @@ Pkg ID: WTM02516743</div>
                         </div>
                     </div>
 
-                    <!-- 5. EARLY BIRD -->
                     <div id="section-early-bird" class="guide-section">
                         <h3 class="editable">Early Bird Routine</h3>
                         <div class="step-block">
@@ -1448,7 +1416,6 @@ Activity: TO</div>
                         </div>
                     </div>
 
-                    <!-- 6. CONTRACTS -->
                     <div id="section-contracts" class="guide-section">
                         <h3 class="editable">Leonardo & Safran</h3>
                         <div class="step-block">
@@ -1469,7 +1436,6 @@ Activity: TO</div>
                         </div>
                     </div>
 
-                    <!-- 7. DSCOM & USA -->
                     <div id="section-dscom" class="guide-section">
                         <h3 class="editable">DSCOM Requests</h3>
                         <div class="step-block">
@@ -1494,7 +1460,6 @@ Activity: TO</div>
                         </div>
                     </div>
 
-                    <!-- 8. MANAGERIAL -->
                     <div id="section-kpis" class="guide-section">
                         <h3 class="editable">Weekly Managerial Checks (KPIs)</h3>
                         <div class="step-block">
@@ -1629,14 +1594,10 @@ Activity: TO</div>
                         </div>
                     </div>
 
-                    <!-- MJDI PLACEHOLDERS -->
                     <div id="section-mjdi-receipts" class="guide-section">
                         <h3 class="editable">MJDI: Receipts Guide</h3>
                         <p class="step-text editable">Content coming soon...</p>
                     </div>
-                    <!-- (Other MJDI sections maintained as placeholders) -->
-                    
-                    <!-- LSA&I VIEWER -->
                     <div id="section-lsai-viewer" class="guide-section">
                         <h3 class="editable">LSA&I Handbook Viewer</h3>
                         <div class="step-block">
