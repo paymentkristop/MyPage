@@ -1948,6 +1948,31 @@ Activity: TO</div>
                         </div>
                     </div>
 
+                    <div id="section-mjdi-receipts" class="guide-section">
+                        <h3 class="editable">MJDI: Receipts Guide</h3>
+                        <p class="step-text editable">Content coming soon...</p>
+                    </div>
+                    <div id="section-mjdi-issues" class="guide-section">
+                        <h3 class="editable">MJDI: Issues Guide</h3>
+                        <p class="step-text editable">Content coming soon...</p>
+                    </div>
+                    <div id="section-mjdi-discrepancies" class="guide-section">
+                        <h3 class="editable">MJDI: Discrepancies</h3>
+                        <p class="step-text editable">Content coming soon...</p>
+                    </div>
+                    <div id="section-mjdi-losses" class="guide-section">
+                        <h3 class="editable">MJDI: Losses</h3>
+                        <p class="step-text editable">Content coming soon...</p>
+                    </div>
+                    <div id="section-mjdi-sandr" class="guide-section">
+                        <h3 class="editable">MJDI: S&R</h3>
+                        <p class="step-text editable">Content coming soon...</p>
+                    </div>
+                    <div id="section-mjdi-uaa" class="guide-section">
+                        <h3 class="editable">MJDI: UAA</h3>
+                        <p class="step-text editable">Content coming soon...</p>
+                    </div>
+
                     <div id="section-lsai-viewer" class="guide-section">
                         <h3 class="editable">LSA&I Handbook Viewer</h3>
                         <div class="step-block">
@@ -2668,8 +2693,14 @@ Activity: TO</div>
             if (!title) { alert('Please enter a category title.'); return; }
             
             const navContainer = document.getElementById(guideSelect);
+            
+            // AUTOMATIC PREFIX FIX
+            let slugPrefix = 'section-';
+            if(guideSelect === 'nav-content-mjdi') slugPrefix = 'section-mjdi-';
+            if(guideSelect === 'nav-content-lsai') slugPrefix = 'section-lsai-';
+            
             const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
-            const sectionId = 'section-' + slug;
+            const sectionId = slugPrefix + slug;
             
             const navGroup = document.createElement('div');
             navGroup.className = 'nav-group';
