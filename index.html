@@ -2,7 +2,7 @@
 <html lang="en-GB">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="author" content="Kris Kirby">
     <meta name="copyright" content="LSS Guides developed by K.R.I.S K.I.R.B.Y">
     <title>Sgt Kirby's LSS Guides</title>
@@ -37,6 +37,7 @@
         * {
             box-sizing: border-box;
             outline: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -69,8 +70,7 @@
             justify-content: center;
             z-index: 2000;
             transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-            padding: 20px; /* Added padding for small screens */
-            text-align: center;
+            padding: 20px;
         }
 
         #cover-page.hidden {
@@ -103,7 +103,7 @@
             -webkit-text-fill-color: transparent;
             margin: 0;
             text-shadow: 0 10px 20px rgba(0,0,0,0.5);
-            line-height: 1.1; /* Prevent overlapping lines */
+            text-align: center;
         }
 
         .cover-subtitle {
@@ -115,14 +115,13 @@
             margin-bottom: 50px;
             border-bottom: 1px solid var(--rlc-gold);
             padding-bottom: 5px;
+            text-align: center;
         }
 
         .launch-grid {
             display: flex;
             gap: 30px;
             margin-bottom: 20px;
-            flex-wrap: wrap; /* Allow wrapping on small screens */
-            justify-content: center;
         }
 
         .launch-btn {
@@ -163,13 +162,9 @@
             transform: translateX(0);
         }
 
-        /* Centered LSA&I Button matching main buttons */
         .lsai-btn-container {
             margin-top: 10px;
             text-align: center;
-            width: 100%;
-            display: flex;
-            justify-content: center;
         }
 
         /* ===========================
@@ -188,6 +183,46 @@
             transform: scale(1);
         }
 
+        /* Mobile Header (Hidden on Desktop) */
+        .mobile-header {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            height: 60px;
+            background: var(--rlc-blue);
+            z-index: 500;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .mobile-menu-btn {
+            background: transparent;
+            border: none;
+            color: var(--rlc-gold);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .mobile-title {
+            color: #fff;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .mobile-logo { height: 35px; width: auto; }
+
+        /* Mobile Overlay Mask */
+        .mobile-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 900;
+            display: none;
+            backdrop-filter: blur(2px);
+            transition: opacity 0.3s;
+        }
+
         /* SIDEBAR NAVIGATION */
         .sidebar {
             width: 300px;
@@ -197,8 +232,8 @@
             flex-direction: column;
             border-right: 1px solid rgba(255,255,255,0.1);
             box-shadow: 5px 0 15px rgba(0,0,0,0.2);
-            z-index: 100;
-            flex-shrink: 0; /* Prevent sidebar shrinking */
+            z-index: 1000; /* High Z-index for mobile overlap */
+            transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
         }
 
         .sidebar-header {
@@ -210,7 +245,6 @@
             gap: 15px;
         }
 
-        /* Admin Trigger: Only the logo is clickable */
         .admin-trigger-logo { 
             width: 40px; 
             height: auto; 
@@ -227,17 +261,14 @@
             flex: 1;
             overflow-y: auto;
             padding: 15px;
-            display: none; /* Hidden by default, toggled by JS */
+            display: none; 
         }
         
         .nav-scroll-area.active {
             display: block;
         }
 
-        /* ACCORDION STYLES */
-        .nav-group {
-            margin-bottom: 10px;
-        }
+        .nav-group { margin-bottom: 10px; }
 
         .nav-trigger {
             width: 100%;
@@ -256,10 +287,7 @@
             transition: all 0.2s;
         }
 
-        .nav-trigger:hover {
-            background: rgba(255,255,255,0.05);
-            color: #fff;
-        }
+        .nav-trigger:hover { background: rgba(255,255,255,0.05); color: #fff; }
 
         .nav-trigger.active {
             background: linear-gradient(90deg, var(--rlc-blue), rgba(15, 28, 63, 0));
@@ -267,14 +295,8 @@
             border-left: 3px solid var(--rlc-gold);
         }
 
-        .nav-trigger .arrow {
-            font-size: 0.7rem;
-            transition: transform 0.3s;
-        }
-
-        .nav-trigger.active .arrow {
-            transform: rotate(180deg);
-        }
+        .nav-trigger .arrow { font-size: 0.7rem; transition: transform 0.3s; }
+        .nav-trigger.active .arrow { transform: rotate(180deg); }
 
         .nav-content {
             max-height: 0;
@@ -283,9 +305,7 @@
             padding-left: 15px;
         }
 
-        .nav-content.open {
-            max-height: 1000px; /* Arbitrary high limit */
-        }
+        .nav-content.open { max-height: 1000px; }
 
         .nav-link {
             display: block;
@@ -325,7 +345,6 @@
             padding: 40px;
             background-color: #f3f4f6;
             position: relative;
-            -webkit-overflow-scrolling: touch; /* Smooth scroll on iOS */
         }
 
         .doc-container {
@@ -368,9 +387,7 @@
             z-index: 2;
         }
 
-        .content-body {
-            padding: 40px;
-        }
+        .content-body { padding: 40px; }
 
         /* STEP CARDS */
         .step-block {
@@ -417,7 +434,6 @@
             padding: 25px;
             transition: transform 0.2s, box-shadow 0.2s;
             position: relative;
-            min-width: 0; /* Fix flex child overflow */
         }
 
         .step-detail:hover {
@@ -470,7 +486,6 @@
             font-size: 0.85rem;
             line-height: 1.4;
             white-space: pre-wrap;
-            word-wrap: break-word; /* Wrap long lines */
         }
 
         .term-hl { color: #fff; font-weight: bold; background: rgba(255,255,255,0.2); }
@@ -502,23 +517,12 @@
             justify-content: center;
             flex-direction: column;
         }
-
-        .upload-zone.dragover {
-            background-color: #e0f2fe;
-            border-color: var(--accent-blue);
-        }
-
-        .upload-zone:hover {
-            border-color: var(--rlc-blue);
-            background: #eff6ff;
-        }
-
+        
         .upload-zone img {
             max-width: 100%;
             max-height: 300px;
             display: none;
             border-radius: 4px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
         .upload-text { font-size: 0.85rem; color: #6b7280; font-weight: 600; }
@@ -590,16 +594,9 @@
             cursor: default;
         }
 
-        /* Hidden Signature Block */
-        #signature-lock-k-r-i-s-k-i-r-b-y {
-            display: none;
-            visibility: hidden;
-            content: "Created by K.R.I.S K.I.R.B.Y - Do Not Remove";
-        }
-
-        /* ===========================
-           ADMIN PANEL STYLES
-           =========================== */
+        /* ADMIN PANEL & UTILS */
+        #signature-lock-k-r-i-s-k-i-r-b-y { display: none; visibility: hidden; }
+        
         #admin-login-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.8); z-index: 10000;
@@ -652,12 +649,9 @@
         .admin-btn.close { background: #f56565; width: auto; padding: 5px 10px; }
         .admin-btn.delete-cat { background: #e53e3e; margin-top: 10px; }
 
-        /* Content Editing Mode */
         .editable { border: 2px dashed transparent; }
         body.editing .editable { border-color: var(--accent-blue); cursor: text; }
         body.editing .editable:hover { background: rgba(59, 130, 246, 0.1); }
-
-        /* Delete Step Button */
         .delete-step-btn {
             position: absolute; top: 10px; right: 10px;
             background: #f56565; color: white; border: none;
@@ -666,117 +660,162 @@
         }
         body.editing .delete-step-btn { display: block; }
 
-        /* Hide all sections initially */
         .guide-section { display: none; animation: fadeIn 0.5s; }
         .guide-section.active { display: block; }
-
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* ==========================================================================
-           MOBILE RESPONSIVENESS OVERRIDES
-           Added to ensure the system works on Phones and Tablets
+           AMAZING MOBILE EXPERIENCE
            ========================================================================== */
         @media screen and (max-width: 768px) {
-            
-            /* Cover Page Adjustments */
-            .cover-title { font-size: 2rem; margin-bottom: 10px; }
-            .cover-subtitle { font-size: 0.9rem; margin-bottom: 30px; }
-            .launch-grid { flex-direction: column; width: 100%; gap: 15px; }
-            .launch-btn { width: 100%; font-size: 1rem; padding: 15px; }
-            .rlc-badge-container img { width: 120px; }
+            /* Enable Mobile Header */
+            .mobile-header { display: flex; }
 
-            /* Main Layout - Switch to Column Stack */
+            /* Cover Page - Mobile Optimization */
+            .cover-title { font-size: 2.5rem; line-height: 1.1; margin-bottom: 15px; }
+            .cover-subtitle { font-size: 0.9rem; margin-bottom: 30px; width: 90%; margin-left: auto; margin-right: auto; }
+            .launch-grid { flex-direction: column; width: 100%; gap: 15px; }
+            .launch-btn { width: 100%; font-size: 1.1rem; padding: 18px; border-radius: 12px; }
+            .rlc-badge-container img { width: 140px; }
+
+            /* App Structure Adjustment */
             body { 
-                overflow-y: auto; 
-                height: auto; 
-                position: relative;
+                overflow: hidden; /* Prevent body scroll */
+                position: fixed; width: 100%; height: 100%;
             }
 
             #app-container {
-                flex-direction: column;
-                height: auto;
-                overflow: visible;
-                padding-bottom: 50px; /* Space for footer */
+                display: block; /* Break flexbox */
+                padding-top: 60px; /* Space for mobile header */
+                height: 100%;
+                overflow: hidden;
             }
 
-            /* Sidebar Mobile */
+            /* Sidebar - Slide-in Drawer */
             .sidebar {
-                width: 100%;
-                height: auto;
+                position: fixed;
+                top: 60px; /* Below header */
+                left: -100%; /* Hidden by default */
+                width: 80%;
+                height: calc(100% - 60px);
                 border-right: none;
-                border-bottom: 1px solid rgba(255,255,255,0.1);
-                position: relative;
+                background: rgba(26, 34, 54, 0.98);
+                backdrop-filter: blur(10px);
+                z-index: 800;
+                box-shadow: 10px 0 20px rgba(0,0,0,0.5);
             }
 
-            .sidebar-header {
-                padding: 15px;
+            .sidebar.mobile-open {
+                left: 0;
             }
 
-            .nav-scroll-area {
-                /* Limit height so users can scroll past nav to content */
-                max-height: 40vh; 
-                border-bottom: 2px solid var(--rlc-gold);
-            }
+            .sidebar-header { display: none; } /* Use mobile header instead */
+            .nav-scroll-area { padding-bottom: 100px; }
 
-            /* Viewport & Content */
+            /* Main Content - Full Screen & Scrolling */
             .main-viewport {
-                padding: 10px;
-                overflow: visible;
+                width: 100%;
+                height: 100%;
+                padding: 15px;
+                padding-bottom: 80px; /* Space for footer */
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
             }
 
             .doc-container {
-                border-radius: 0;
+                border-radius: 0 0 12px 12px;
                 box-shadow: none;
                 margin-bottom: 30px;
+                background: transparent; /* Seamless blend */
             }
 
             .doc-header {
-                padding: 20px;
-                text-align: center;
+                border-radius: 12px;
+                padding: 25px 20px;
+                margin-bottom: 20px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
             }
 
-            .doc-header h1 { font-size: 1.5rem; }
-            .credit-pill { top: 10px; right: 10px; font-size: 0.6rem; }
+            .doc-header h1 { font-size: 1.6rem; }
+            .credit-pill { top: 15px; right: 15px; font-size: 0.7rem; background: rgba(0,0,0,0.4); }
 
             .content-body {
-                padding: 15px;
+                padding: 0;
+                background: transparent;
             }
 
-            /* Step Blocks - Vertical Stack */
+            /* Enhanced Step Cards for Mobile */
             .step-block {
-                grid-template-columns: 1fr; /* Stack vertically */
-                gap: 10px;
+                display: block; /* Stack */
+                background: #fff;
+                border-radius: 12px;
+                padding: 20px;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.05), 0 10px 15px -3px rgba(0,0,0,0.1);
+                margin-bottom: 25px;
+                border-left: 4px solid var(--rlc-gold); /* Visual accent */
+                position: relative;
             }
 
-            .step-block::before {
-                display: none; /* Remove connector line as it breaks in stack mode */
-            }
+            .step-block::before { display: none; } /* Remove Desktop connector line */
 
             .step-marker {
-                margin: 0 auto; /* Center marker */
-                width: 40px;
-                height: 40px;
+                position: absolute;
+                top: -15px;
+                right: 15px;
+                width: 36px;
+                height: 36px;
                 font-size: 1rem;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.2);
             }
 
             .step-detail {
-                padding: 15px;
+                background: transparent;
+                border: none;
+                padding: 0;
+                box-shadow: none;
+            }
+            .step-detail:hover { transform: none; box-shadow: none; }
+
+            .step-title {
+                font-size: 1.2rem;
+                padding-right: 40px; /* Space for marker */
+                margin-top: 5px;
             }
 
-            /* Terminal & Tools */
-            .terminal-content { font-size: 0.75rem; }
+            /* Terminal - Horizontal Scroll */
+            .terminal-window {
+                margin: 15px -10px; /* Slightly wider */
+                width: calc(100% + 20px);
+                border-radius: 4px;
+                border-left: none; border-right: none;
+            }
             
-            /* Admin Panel Mobile */
-            #admin-panel {
-                width: 90%;
-                right: -100%;
+            .terminal-content {
+                font-size: 0.8rem;
+                overflow-x: auto;
+                white-space: pre; /* Keep code formatting */
+                padding: 10px;
             }
-            #admin-panel.open { right: 0; width: 100%; }
-        }
 
+            /* Footer adjustment */
+            .protected-footer {
+                padding-bottom: env(safe-area-inset-bottom);
+                font-size: 0.7rem;
+            }
+        }
     </style>
 </head>
 <body>
+
+    <header class="mobile-header">
+        <button class="mobile-menu-btn" onclick="toggleMobileNav()">
+            ☰
+        </button>
+        <div class="mobile-title">LSS Guides</div>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/e/ea/Cap_Badge_of_the_RLC.png" alt="RLC" class="mobile-logo">
+    </header>
+
+    <div class="mobile-overlay" id="mobile-overlay" onclick="toggleMobileNav()"></div>
 
     <div id="signature-lock-k-r-i-s-k-i-r-b-y"></div>
 
@@ -890,7 +929,7 @@
 
     <div id="app-container">
         
-        <nav class="sidebar">
+        <nav class="sidebar" id="sidebar-nav">
             <div class="sidebar-header">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/e/ea/Cap_Badge_of_the_RLC.png" alt="RLC" class="admin-trigger-logo" onclick="showAdminLogin()">
                 <div>
@@ -903,68 +942,68 @@
                 <div class="nav-group" id="group-create-issue">
                     <button class="nav-trigger" onclick="toggleNav(this)">1. Creating & Maint. <span class="arrow">▼</span></button>
                     <div class="nav-content">
-                        <a href="#" class="nav-link" onclick="showSection('create-issue')">1.1 Create Issue Pkg</a>
-                        <a href="#" class="nav-link" onclick="showSection('maintain-issue')">1.2 Maintain Issue</a>
-                        <a href="#" class="nav-link" onclick="showSection('maintain-package')">1.3 Maintain Package</a>
-                        <a href="#" class="nav-link" onclick="showSection('deployment-pkg')">1.4 Deployment Pkgs</a>
-                        <a href="#" class="nav-link" onclick="showSection('permanent-pkg')">1.5 Permanent Pkgs</a>
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('create-issue')">1.1 Create Issue Pkg</a>
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('maintain-issue')">1.2 Maintain Issue</a>
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('maintain-package')">1.3 Maintain Package</a>
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('deployment-pkg')">1.4 Deployment Pkgs</a>
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('permanent-pkg')">1.5 Permanent Pkgs</a>
                     </div>
                 </div>
 
                 <div class="nav-group" id="group-departures">
                     <button class="nav-trigger" onclick="toggleNav(this)">2. Departures <span class="arrow">▼</span></button>
                     <div class="nav-content">
-                        <a href="#" class="nav-link" onclick="showSection('direct-despatch-pdr')">2.1 Direct Despatch PDR</a>
-                        <a href="#" class="nav-link" onclick="showSection('direct-despatch-pkg')">2.2 Direct Despatch Pkg</a>
-                        <a href="#" class="nav-link" onclick="showSection('create-pdr')">2.3 Create PDR (1142)</a>
-                        <a href="#" class="nav-link" onclick="showSection('create-awb')">2.4 Create AWB (1380)</a>
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('direct-despatch-pdr')">2.1 Direct Despatch PDR</a>
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('direct-despatch-pkg')">2.2 Direct Despatch Pkg</a>
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('create-pdr')">2.3 Create PDR (1142)</a>
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('create-awb')">2.4 Create AWB (1380)</a>
                     </div>
                 </div>
 
                 <div class="nav-group" id="group-arrivals">
                     <button class="nav-trigger" onclick="toggleNav(this)">3. Arrivals <span class="arrow">▼</span></button>
                     <div class="nav-content">
-                        <a href="#" class="nav-link" onclick="showSection('record-arrival')">3.1 Record Arrival</a>
-                        <a href="#" class="nav-link" onclick="showSection('node-discrepancies')">3.2 Discrepancies (JSP886)</a>
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('record-arrival')">3.1 Record Arrival</a>
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('node-discrepancies')">3.2 Discrepancies (JSP886)</a>
                     </div>
                 </div>
 
                 <div class="nav-group" id="group-templocs">
                     <button class="nav-trigger" onclick="toggleNav(this)">4. Temp Locations <span class="arrow">▼</span></button>
                     <div class="nav-content">
-                        <a href="#" class="nav-link" onclick="showSection('temp-locs')">Manage Locations</a>
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('temp-locs')">Manage Locations</a>
                     </div>
                 </div>
 
                 <div class="nav-group" id="group-earlybird">
                     <button class="nav-trigger" onclick="toggleNav(this)">5. Early Bird <span class="arrow">▼</span></button>
                     <div class="nav-content">
-                        <a href="#" class="nav-link" onclick="showSection('early-bird')">Daily Routine</a>
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('early-bird')">Daily Routine</a>
                     </div>
                 </div>
 
                 <div class="nav-group" id="group-contracts">
                     <button class="nav-trigger" onclick="toggleNav(this)">6. Contracts <span class="arrow">▼</span></button>
                     <div class="nav-content">
-                        <a href="#" class="nav-link" onclick="showSection('contracts')">Leonardo & Safran</a>
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('contracts')">Leonardo & Safran</a>
                     </div>
                 </div>
 
                 <div class="nav-group" id="group-dscom">
                     <button class="nav-trigger" onclick="toggleNav(this)">7. DSCOM & USA <span class="arrow">▼</span></button>
                     <div class="nav-content">
-                        <a href="#" class="nav-link" onclick="showSection('dscom')">DSCOM Requests</a>
-                        <a href="#" class="nav-link" onclick="showSection('usa-returns')">USA Returns</a>
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('dscom')">DSCOM Requests</a>
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('usa-returns')">USA Returns</a>
                     </div>
                 </div>
 
                 <div class="nav-group" id="group-managerial">
                     <button class="nav-trigger" onclick="toggleNav(this)">8. Managerial <span class="arrow">▼</span></button>
                     <div class="nav-content">
-                        <a href="#" class="nav-link" onclick="showSection('kpis')">Weekly KPIs</a>
-                        <a href="#" class="nav-link" onclick="showSection('hhd')">Handheld Devices</a>
-                        <a href="#" class="nav-link" onclick="showSection('supervisor-docs')">Supervisor Annexes</a>
-                        <a href="#" class="nav-link" onclick="showSection('deletions')">Record Deletion</a>
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('kpis')">Weekly KPIs</a>
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('hhd')">Handheld Devices</a>
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('supervisor-docs')">Supervisor Annexes</a>
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('deletions')">Record Deletion</a>
                     </div>
                 </div>
             </div>
@@ -973,36 +1012,36 @@
                 <div class="nav-group">
                     <button class="nav-trigger" onclick="toggleNav(this)">Receipts & Issues <span class="arrow">▼</span></button>
                     <div class="nav-content open">
-                        <a href="#" class="nav-link" onclick="showSection('mjdi-receipts')">Receipts Guide</a>
-                        <a href="#" class="nav-link" onclick="showSection('mjdi-issues')">Issues Guide</a>
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('mjdi-receipts')">Receipts Guide</a>
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('mjdi-issues')">Issues Guide</a>
                     </div>
                 </div>
 
                 <div class="nav-group" id="group-mjdi-discrep">
                     <button class="nav-trigger" onclick="toggleNav(this)">Discrepancies <span class="arrow">▼</span></button>
                     <div class="nav-content">
-                        <a href="#" class="nav-link" onclick="showSection('mjdi-discrepancies')">Management Guide</a>
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('mjdi-discrepancies')">Management Guide</a>
                     </div>
                 </div>
 
                 <div class="nav-group" id="group-mjdi-loss">
                     <button class="nav-trigger" onclick="toggleNav(this)">Losses <span class="arrow">▼</span></button>
                     <div class="nav-content">
-                        <a href="#" class="nav-link" onclick="showSection('mjdi-losses')">Losses Guide</a>
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('mjdi-losses')">Losses Guide</a>
                     </div>
                 </div>
 
                 <div class="nav-group" id="group-mjdi-sandr">
                     <button class="nav-trigger" onclick="toggleNav(this)">S&R <span class="arrow">▼</span></button>
                     <div class="nav-content">
-                        <a href="#" class="nav-link" onclick="showSection('mjdi-sandr')">S&R Guide</a>
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('mjdi-sandr')">S&R Guide</a>
                     </div>
                 </div>
 
                 <div class="nav-group" id="group-mjdi-uaa">
                     <button class="nav-trigger" onclick="toggleNav(this)">UAA <span class="arrow">▼</span></button>
                     <div class="nav-content">
-                        <a href="#" class="nav-link" onclick="showSection('mjdi-uaa')">UAA Guide</a>
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('mjdi-uaa')">UAA Guide</a>
                     </div>
                 </div>
             </div>
@@ -1011,7 +1050,7 @@
                 <div class="nav-group" id="group-lsai">
                     <button class="nav-trigger" onclick="toggleNav(this)">LSA&I Tools <span class="arrow">▼</span></button>
                     <div class="nav-content open">
-                        <a href="#" class="nav-link" onclick="showSection('lsai-viewer')">Handbook Viewer</a>
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('lsai-viewer')">Handbook Viewer</a>
                     </div>
                 </div>
             </div>
@@ -1638,6 +1677,24 @@ Activity: TO</div>
             });
         });
 
+        // Mobile Nav Toggle
+        function toggleMobileNav() {
+            const sidebar = document.getElementById('sidebar-nav');
+            const overlay = document.getElementById('mobile-overlay');
+            sidebar.classList.toggle('mobile-open');
+            overlay.style.display = sidebar.classList.contains('mobile-open') ? 'block' : 'none';
+        }
+
+        // Close nav when clicking a link on mobile
+        function closeNavMobile() {
+            if (window.innerWidth <= 768) {
+                const sidebar = document.getElementById('sidebar-nav');
+                const overlay = document.getElementById('mobile-overlay');
+                sidebar.classList.remove('mobile-open');
+                overlay.style.display = 'none';
+            }
+        }
+
         function autoSave() {
             const indicator = document.getElementById('auto-save-indicator');
             indicator.style.opacity = '1';
@@ -1919,8 +1976,6 @@ Activity: TO</div>
                 
                 const groups = document.getElementById(activeContainerId).querySelectorAll('.nav-group');
                 if (groups[index]) {
-                    // Remove associated content sections first (basic cleanup)
-                    // Note: A robust system would track IDs, here we just remove the nav entry
                     groups[index].remove();
                     alert("Category deleted.");
                     populateCategoryDeleteSelect();
@@ -1956,7 +2011,7 @@ Activity: TO</div>
             navGroup.innerHTML = `
                 <button class="nav-trigger" onclick="toggleNav(this)">${title} <span class="arrow">▼</span></button>
                 <div class="nav-content">
-                    <a href="#" class="nav-link" onclick="showSection('${sectionId}')">${title} Overview</a>
+                    <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('${sectionId}')">${title} Overview</a>
                 </div>
             `;
             navContainer.appendChild(navGroup);
