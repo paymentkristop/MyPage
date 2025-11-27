@@ -12,28 +12,29 @@
             --rlc-blue: #0f1c3f;
             --rlc-gold: #d4af37;
             --rlc-red: #c00;
-           
+            
             --bg-app: #f0f2f5;
             --bg-panel: #ffffff;
             --bg-sidebar: #1a2236;
-           
+            
             --text-primary: #1f2937;
             --text-secondary: #6b7280;
             --text-light: #e5e7eb;
-           
+            
             --accent-blue: #3b82f6;
             --border-color: #e5e7eb;
-           
+            
             /* VITAL Terminal Theme */
             --term-bg: #0c0c0c;
             --term-text: #00ff00;
             --term-bar: #1f1f1f;
 
-            /* MJDI Terminal Theme (Cyan/Blue Console) */
-            --mjdi-term-bg: #002b36;
-            --mjdi-term-text: #2aa198;
-            --mjdi-term-highlight: #b58900;
-           
+            /* MJDI GUI Theme */
+            --mjdi-bg: #d4d0c8;
+            --mjdi-blue: #000080;
+            --mjdi-input: #ffffff;
+            --mjdi-border: #808080;
+            
             /* Transitions */
             --trans-speed: 0.4s;
         }
@@ -62,14 +63,483 @@
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
         /* ===========================
+           MJDI TERMINAL STYLES
+           =========================== */
+        .mjdi-window {
+            background: var(--mjdi-bg);
+            border: 2px solid #fff;
+            border-right-color: #404040;
+            border-bottom-color: #404040;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+            margin: 20px 0;
+            font-family: 'Tahoma', sans-serif;
+            font-size: 0.9rem;
+            color: #000;
+        }
+
+        .mjdi-header {
+            background: linear-gradient(to right, var(--mjdi-blue), #1084d0);
+            color: white;
+            padding: 4px 8px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .mjdi-toolbar {
+            background: #ece9d8;
+            border-bottom: 1px solid #a0a0a0;
+            padding: 5px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .mjdi-tool-btn {
+            border: 1px solid transparent;
+            padding: 2px 5px;
+            cursor: default;
+        }
+        .mjdi-tool-btn:hover { border: 1px solid #808080; background: #fff; }
+
+        .mjdi-body {
+            padding: 15px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .mjdi-field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .mjdi-field label {
+            font-size: 0.8rem;
+            margin-bottom: 2px;
+            color: #404040;
+        }
+
+        .mjdi-input {
+            border: 2px solid #808080;
+            border-right-color: #fff;
+            border-bottom-color: #fff;
+            background: var(--mjdi-input);
+            padding: 4px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+        }
+        
+        .mjdi-input.read-only { background: #e0e0e0; color: #555; }
+        .mjdi-input.focus { background: #ffffcc; border: 2px solid #000080; }
+
+        .mjdi-tab-bar {
+            display: flex;
+            padding: 5px 5px 0 5px;
+            border-bottom: 2px solid #fff;
+        }
+        .mjdi-tab {
+            padding: 4px 12px;
+            background: #d4d0c8;
+            border: 1px solid #808080;
+            border-bottom: none;
+            margin-right: 2px;
+            border-radius: 3px 3px 0 0;
+            font-size: 0.8rem;
+        }
+        .mjdi-tab.active {
+            background: #fff;
+            font-weight: bold;
+            margin-top: -2px;
+            padding-top: 6px;
+        }
+
+        /* ===========================
+           COVER PAGE
+           =========================== */
+        #cover-page {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, #162a5a 0%, #080e1f 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 5000;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 20px;
+        }
+
+        #cover-page.hidden {
+            opacity: 0;
+            transform: scale(1.1);
+            pointer-events: none;
+        }
+
+        .rlc-badge-container {
+            margin-bottom: 30px;
+            animation: bounce 3s infinite ease-in-out;
+            filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.4));
+        }
+
+        .rlc-badge-container img { width: 180px; height: auto; }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .cover-title {
+            font-size: 3.5rem;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            font-weight: 800;
+            background: linear-gradient(to right, #fff, var(--rlc-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0;
+            text-shadow: 0 10px 20px rgba(0,0,0,0.5);
+            text-align: center;
+        }
+
+        .cover-subtitle {
+            color: var(--rlc-gold);
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-top: 10px;
+            margin-bottom: 50px;
+            border-bottom: 1px solid var(--rlc-gold);
+            padding-bottom: 5px;
+            text-align: center;
+        }
+
+        .launch-grid {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+
+        .launch-btn {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 20px 40px;
+            color: #fff;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+            min-width: 200px;
+        }
+
+        .launch-btn:hover {
+            background: var(--rlc-gold);
+            color: var(--rlc-blue);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.3);
+        }
+
+        .launch-btn::after {
+            content: '→';
+            position: absolute;
+            right: 20px;
+            opacity: 0;
+            transform: translateX(-10px);
+            transition: all 0.3s;
+        }
+
+        .launch-btn:hover::after {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .lsai-btn-container {
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        /* TEST CHALLENGE BOX */
+        .test-challenge-box {
+            margin-top: 40px;
+            padding: 15px 40px;
+            border: 2px solid var(--rlc-gold);
+            background: rgba(15, 28, 63, 0.6);
+            color: var(--rlc-gold);
+            font-family: 'Consolas', monospace;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+            border-radius: 4px;
+        }
+
+        .test-challenge-box:hover {
+            background: var(--rlc-gold);
+            color: var(--rlc-blue);
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.6);
+            transform: scale(1.05);
+        }
+
+        .test-challenge-box::before { content: '[ '; margin-right: 10px; }
+        .test-challenge-box::after { content: ' ]'; margin-left: 10px; }
+
+        /* ===========================
+           TEST HUB & UI
+           =========================== */
+        #test-hub {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #080e1f;
+            z-index: 6000;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        #test-hub.visible { display: flex; opacity: 1; }
+
+        .hub-title {
+            color: #fff; font-size: 2rem; margin-bottom: 50px; 
+            text-transform: uppercase; letter-spacing: 5px;
+            text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+        }
+
+        .hub-cards { display: flex; gap: 40px; }
+
+        .hub-card {
+            width: 250px; height: 300px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.4s;
+            position: relative;
+        }
+
+        .hub-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255,255,255,0.1);
+            border-color: var(--rlc-gold);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+
+        .hub-card h3 { color: #fff; font-size: 1.5rem; margin-top: 20px; }
+        .hub-card-icon { font-size: 3rem; color: var(--rlc-gold); }
+        
+        /* Vital Test UI */
+        #vital-test-container, #mjdi-test-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 7000;
+            display: none;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        /* VITAL SPECIFIC (Green Screen) */
+        #vital-test-container {
+            background: #000;
+            color: #0f0;
+            font-family: 'Consolas', monospace;
+        }
+        
+        /* MJDI SPECIFIC (Blue GUI) */
+        #mjdi-test-container {
+            background: #d4d0c8;
+            color: #000;
+            font-family: 'Tahoma', sans-serif;
+        }
+
+        /* MJDI TEST HEADER */
+        .mjdi-test-header {
+            background: linear-gradient(to right, #000080, #4169e1);
+            color: white;
+            padding: 10px;
+            border-radius: 4px 4px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .vt-header {
+            border-bottom: 2px solid #0f0;
+            padding-bottom: 10px;
+            display: flex; justify-content: space-between;
+            margin-bottom: 30px;
+            position: relative; z-index: 2;
+        }
+        
+        .vt-content {
+            flex: 1;
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
+            display: flex; flex-direction: column; gap: 20px;
+            position: relative; z-index: 2;
+            overflow-y: auto;
+        }
+
+        /* MJDI Question Box Style */
+        .mjdi-question-box {
+            background: #fff;
+            border: 1px solid #808080;
+            padding: 20px;
+            box-shadow: inset 2px 2px 5px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+
+        .vt-question-box {
+            border: 1px solid #333;
+            background: #111;
+            padding: 20px;
+            border-radius: 4px;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.1);
+        }
+
+        .vt-question-text { font-size: 1.2rem; color: #fff; margin-bottom: 20px; line-height: 1.5; }
+        .mjdi-question-text { font-size: 1.2rem; color: #000; margin-bottom: 20px; font-weight: bold; }
+        
+        .vt-question-image { max-width: 100%; max-height: 250px; border: 1px solid #333; margin-bottom: 15px; display: block; }
+
+        .vt-options { display: flex; flex-direction: column; gap: 10px; }
+
+        .vt-option-btn {
+            background: #000;
+            border: 1px solid #0f0;
+            color: #0f0;
+            padding: 15px;
+            text-align: left;
+            cursor: pointer;
+            font-family: 'Consolas', monospace;
+            transition: all 0.2s;
+        }
+        .vt-option-btn:hover { background: rgba(0, 255, 0, 0.2); }
+        .vt-option-btn.correct { background: #0f0; color: #000; border-color: #0f0; }
+        .vt-option-btn.wrong { background: #c00; color: #fff; border-color: #c00; animation: shake 0.5s; }
+
+        /* MJDI Options */
+        .mjdi-option-btn {
+            background: #f0f0f0;
+            border: 1px solid #808080;
+            color: #000;
+            padding: 12px;
+            text-align: left;
+            cursor: pointer;
+            box-shadow: 2px 2px 0px #000;
+            transition: all 0.1s;
+        }
+        .mjdi-option-btn:active { box-shadow: inset 2px 2px 0px #000; transform: translate(1px, 1px); }
+        .mjdi-option-btn.correct { background: #90ee90; border-color: #006400; }
+        .mjdi-option-btn.wrong { background: #ffcccb; border-color: #8b0000; animation: shake 0.5s; }
+
+        .vt-terminal-input {
+            background: #000;
+            border: none;
+            border-bottom: 2px solid #0f0;
+            color: #0f0;
+            width: 100%;
+            padding: 10px;
+            font-family: 'Consolas', monospace;
+            font-size: 1.2rem;
+            margin-top: 10px;
+        }
+        
+        .vt-next-btn {
+            align-self: flex-end;
+            background: #0f0;
+            color: #000;
+            border: none;
+            padding: 10px 30px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            display: none; /* Hidden until answered */
+        }
+
+        .crt-effect {
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+            position: absolute; top:0; left:0; width:100%; height:100%;
+            z-index: 1;
+        }
+
+        @keyframes shake {
+            0% { transform: translateX(0); } 25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); } 75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
+
+        /* ===========================
+           TEST ADMIN (HIDDEN)
+           =========================== */
+        .vt-admin-trigger {
+            position: absolute; bottom: 0; right: 0; width: 30px; height: 30px; z-index: 9999; cursor: pointer;
+        }
+        
+        #vt-admin-panel {
+            position: absolute; top: 5%; left: 5%; width: 90%; height: 90%;
+            background: #050505; border: 2px solid #0f0;
+            z-index: 8000; display: none; padding: 20px;
+            flex-direction: column; box-shadow: 0 0 50px rgba(0,255,0,0.2);
+        }
+
+        #vt-admin-panel h2 { color: #0f0; border-bottom: 1px solid #333; padding-bottom: 10px; margin-top: 0; }
+        
+        .vt-admin-grid { display: grid; grid-template-columns: 300px 1fr; gap: 20px; height: 100%; overflow: hidden; }
+        
+        .vt-admin-list { overflow-y: auto; border-right: 1px solid #333; padding-right: 10px; }
+        .vt-admin-item { 
+            padding: 10px; border-bottom: 1px solid #222; cursor: pointer; color: #888; display: flex; justify-content: space-between;
+        }
+        .vt-admin-item:hover { color: #fff; background: #111; }
+        .vt-admin-item.active { color: #0f0; background: #1a1a1a; border-left: 3px solid #0f0; }
+
+        .vt-admin-form { overflow-y: auto; padding: 10px; }
+        
+        .vt-form-group { margin-bottom: 15px; }
+        .vt-form-group label { display: block; color: #0f0; margin-bottom: 5px; font-size: 0.8rem; }
+        .vt-form-group input, .vt-form-group select, .vt-form-group textarea {
+            width: 100%; background: #111; border: 1px solid #333; color: #fff; padding: 8px; font-family: 'Consolas', monospace;
+        }
+        .vt-form-group input:focus { border-color: #0f0; }
+
+        .vt-btn { padding: 8px 15px; border: 1px solid #0f0; background: transparent; color: #0f0; cursor: pointer; font-family: 'Consolas', monospace; margin-right: 10px; }
+        .vt-btn:hover { background: #0f0; color: #000; }
+        .vt-btn.danger { border-color: #c00; color: #c00; }
+        .vt-btn.danger:hover { background: #c00; color: #fff; }
+
+        /* ===========================
            APP LAYOUT
            =========================== */
         #app-container {
             display: flex;
             height: 100vh;
-            opacity: 1; /* Visible by default for this update */
-            transform: scale(1);
+            opacity: 0;
+            transform: scale(0.98);
             transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        #app-container.visible {
+            opacity: 1;
+            transform: scale(1);
         }
 
         /* Mobile Header */
@@ -79,7 +549,7 @@
             top: 0; left: 0; width: 100%;
             height: 60px;
             background: var(--rlc-blue);
-            z-index: 3000;
+            z-index: 3000; 
             align-items: center;
             justify-content: space-between;
             padding: 0 15px;
@@ -92,13 +562,25 @@
             color: var(--rlc-gold);
             font-size: 1.5rem;
             cursor: pointer;
-            padding: 10px;
+            padding: 10px; 
         }
 
         .mobile-title {
             color: #fff;
             font-weight: bold;
             font-size: 1.1rem;
+        }
+
+        .mobile-logo { height: 35px; width: auto; }
+
+        /* Mobile Overlay Mask */
+        .mobile-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 2000;
+            display: none;
+            backdrop-filter: blur(3px);
+            transition: opacity 0.3s;
         }
 
         /* SIDEBAR NAVIGATION */
@@ -123,6 +605,15 @@
             gap: 15px;
         }
 
+        .admin-trigger-logo { 
+            width: 40px; 
+            height: auto; 
+            cursor: pointer; 
+            opacity: 0.9;
+            transition: opacity 0.2s;
+        }
+        .admin-trigger-logo:hover { opacity: 1; }
+
         .sidebar-header h2 { margin: 0; font-size: 1.2rem; font-weight: 700; color: #fff; cursor: default; }
         .sidebar-header span { font-size: 0.7rem; color: var(--rlc-gold); text-transform: uppercase; display: block; cursor: default; }
 
@@ -130,8 +621,14 @@
             flex: 1;
             overflow-y: auto;
             padding: 15px;
-            display: block; /* Active by default */
+            display: none; 
         }
+        
+        .nav-scroll-area.active {
+            display: block;
+        }
+
+        .nav-group { margin-bottom: 10px; }
 
         .nav-trigger {
             width: 100%;
@@ -148,14 +645,58 @@
             align-items: center;
             border-radius: 6px;
             transition: all 0.2s;
-            margin-bottom: 5px;
         }
 
-        .nav-trigger:hover, .nav-trigger.active {
-            background: rgba(255,255,255,0.05);
-            color: #fff;
+        .nav-trigger:hover { background: rgba(255,255,255,0.05); color: #fff; }
+
+        .nav-trigger.active {
+            background: linear-gradient(90deg, var(--rlc-blue), rgba(15, 28, 63, 0));
+            color: var(--rlc-gold);
             border-left: 3px solid var(--rlc-gold);
         }
+
+        .nav-trigger .arrow { font-size: 0.7rem; transition: transform 0.3s; }
+        .nav-trigger.active .arrow { transform: rotate(180deg); }
+
+        .nav-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out;
+            padding-left: 15px;
+        }
+
+        .nav-content.open { max-height: 1000px; }
+
+        .nav-link {
+            display: block;
+            padding: 10px 15px;
+            color: #9ca3af;
+            text-decoration: none;
+            font-size: 0.85rem;
+            border-left: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.2s;
+        }
+
+        .nav-link:hover {
+            color: #fff;
+            border-left-color: var(--rlc-gold);
+            background: rgba(255,255,255,0.02);
+        }
+
+        .home-btn {
+            margin: 15px;
+            padding: 12px;
+            background: var(--rlc-red);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: background 0.2s;
+        }
+        .home-btn:hover { background: #b91c1c; }
 
         /* MAIN CONTENT */
         .main-viewport {
@@ -165,10 +706,6 @@
             background-color: #f3f4f6;
             position: relative;
         }
-
-        .guide-section { display: none; animation: fadeIn 0.5s; }
-        .guide-section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         .doc-container {
             max-width: 1000px;
@@ -185,14 +722,34 @@
             color: #fff;
             padding: 40px;
             position: relative;
+            overflow: hidden;
         }
 
-        .doc-header h1 { margin: 0; font-size: 2rem; position: relative; z-index: 1; }
-        .doc-header p { color: rgba(255,255,255,0.7); position: relative; z-index: 1; margin-top: 10px; }
+        .doc-header::after {
+            content: '';
+            position: absolute;
+            top: 0; right: 0; bottom: 0; left: 0;
+            background: repeating-linear-gradient(45deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 10px, transparent 10px, transparent 20px);
+        }
+
+        .doc-header h1 { margin: 0; font-size: 2rem; z-index: 1; position: relative; }
+        .doc-header p { color: rgba(255,255,255,0.7); z-index: 1; position: relative; }
+        .credit-pill {
+            position: absolute;
+            top: 20px; right: 20px;
+            background: rgba(212, 175, 55, 0.2);
+            border: 1px solid var(--rlc-gold);
+            color: var(--rlc-gold);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            z-index: 2;
+        }
 
         .content-body { padding: 40px; }
 
-        /* Step Blocks */
+        /* STEP CARDS */
         .step-block {
             display: grid;
             grid-template-columns: 50px 1fr;
@@ -200,614 +757,1402 @@
             margin-bottom: 40px;
             position: relative;
         }
+
+        .step-block::before {
+            content: '';
+            position: absolute;
+            left: 24px;
+            top: 50px;
+            bottom: -30px;
+            width: 2px;
+            background: #e5e7eb;
+            z-index: 0;
+        }
+
+        .step-block:last-child::before { display: none; }
+
         .step-marker {
-            width: 50px; height: 50px;
+            width: 50px;
+            height: 50px;
             background: var(--rlc-blue);
             color: #fff;
             border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-weight: bold; font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            box-shadow: 0 4px 10px rgba(15, 28, 63, 0.3);
             z-index: 1;
+            position: relative;
         }
+
         .step-detail {
             background: #fff;
             border: 1px solid #e5e7eb;
             border-radius: 8px;
             padding: 25px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
         }
-        .step-title { font-size: 1.1rem; font-weight: 700; color: var(--rlc-blue); margin-bottom: 10px; display: block; }
-        .step-text { color: #4b5563; line-height: 1.6; margin-bottom: 15px; }
 
-        /* MJDI TERMINAL STYLES (New) */
-        .mjdi-terminal-window {
-            background: var(--mjdi-term-bg);
+        .step-detail:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            border-color: var(--accent-blue);
+        }
+
+        .step-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--rlc-blue);
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .step-text {
+            color: #4b5563;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        /* TERMINAL SIMULATOR */
+        .terminal-window {
+            background: var(--term-bg);
             border-radius: 6px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.4);
             overflow: hidden;
             margin: 20px 0;
             font-family: 'Consolas', 'Monaco', monospace;
-            border: 1px solid #073642;
+            border: 1px solid #333;
         }
 
-        .mjdi-terminal-bar {
-            background: #073642;
+        .terminal-bar {
+            background: var(--term-bar);
             padding: 5px 10px;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #002b36;
-            color: #93a1a1;
-            font-size: 0.8rem;
+            gap: 6px;
+            border-bottom: 1px solid #333;
         }
 
-        .mjdi-terminal-content {
-            padding: 20px;
-            color: var(--mjdi-term-text);
-            font-size: 0.9rem;
-            line-height: 1.5;
-            white-space: pre-wrap;
-            min-height: 300px;
-        }
+        .term-dot { width: 10px; height: 10px; border-radius: 50%; }
+        .red { background: #ff5f56; }
+        .yellow { background: #ffbd2e; }
+        .green { background: #27c93f; }
 
-        .mjdi-prompt { color: #859900; font-weight: bold; margin-right: 10px; }
-        .mjdi-input { 
-            background: transparent; 
-            border: none; 
-            color: #fff; 
-            font-family: inherit; 
-            font-size: inherit; 
-            width: 60%;
-        }
-        .mjdi-output { color: #93a1a1; margin-bottom: 15px; display: block; }
-        .mjdi-btn {
-            background: #2aa198; color: #002b36; border: none; 
-            padding: 5px 10px; cursor: pointer; font-weight: bold; margin-top: 10px;
-            font-size: 0.8rem;
-        }
-        .mjdi-btn:hover { background: #268bd2; color: #fff; }
-
-        /* TEST UI GENERIC (Shared Logic) */
-        #mjdi-test-container, #vital-test-container {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #002b36; /* Dark Cyan for MJDI, overridden for Vital */
-            z-index: 7000;
-            display: none;
-            flex-direction: column;
-            color: #eee;
-            font-family: 'Consolas', monospace;
-            padding: 20px;
-        }
-
-        /* Specific Override for VITAL Test to keep original look */
-        #vital-test-container { background: #000; color: #0f0; }
-
-        .test-header {
-            border-bottom: 2px solid rgba(255,255,255,0.1);
-            padding-bottom: 10px;
-            display: flex; justify-content: space-between;
-            margin-bottom: 30px;
-        }
-
-        .test-content {
-            flex: 1; max-width: 800px; margin: 0 auto; width: 100%;
-            display: flex; flex-direction: column; gap: 20px; overflow-y: auto;
-        }
-
-        .question-box {
-            background: rgba(0,0,0,0.2);
-            padding: 20px;
-            border-radius: 4px;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .option-btn {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            color: #fff;
+        .terminal-content {
             padding: 15px;
-            text-align: left;
-            cursor: pointer;
-            width: 100%;
-            margin-bottom: 8px;
-            transition: all 0.2s;
+            color: var(--term-text);
+            font-size: 0.85rem;
+            line-height: 1.4;
+            white-space: pre-wrap;
         }
-        .option-btn:hover { background: rgba(255,255,255,0.1); }
-        .option-btn.correct { background: #27c93f; color: #fff; border-color: #27c93f; }
-        .option-btn.wrong { background: #ff5f56; color: #fff; border-color: #ff5f56; }
 
-        /* Media Queries */
+        .term-hl { color: #fff; font-weight: bold; background: rgba(255,255,255,0.2); }
+        .term-cursor {
+            display: inline-block;
+            width: 8px;
+            height: 15px;
+            background: var(--term-text);
+            animation: blink 1s infinite;
+            vertical-align: middle;
+        }
+
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* UPLOAD AREA */
+        .upload-zone {
+            border: 2px dashed #cbd5e1;
+            background: #f9fafb;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 15px;
+            position: relative;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        
+        .upload-zone img {
+            max-width: 100%;
+            max-height: 300px;
+            display: none;
+            border-radius: 4px;
+        }
+
+        .upload-text { font-size: 0.85rem; color: #6b7280; font-weight: 600; }
+        .upload-icon { font-size: 1.5rem; color: #9ca3af; margin-bottom: 10px; }
+
+        /* DOCUMENT VIEWER FOR LSA&I */
+        .doc-viewer-container {
+            margin-top: 20px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            background: #fff;
+            height: 600px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            position: relative;
+        }
+        .doc-viewer-frame { width: 100%; height: 100%; border: none; border-radius: 8px; }
+        .doc-viewer-placeholder { text-align: center; padding: 40px; color: #6b7280; }
+
+        /* KEYBOARD SHORTCUTS */
+        kbd {
+            background: #f3f4f6;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 0.8em;
+            font-weight: 600;
+            color: #374151;
+            box-shadow: 0 1px 0 #d1d5db;
+        }
+
+        /* FOOTER */
+        .protected-footer {
+            position: fixed;
+            bottom: 0; left: 0; width: 100%;
+            background: rgba(15, 28, 63, 0.95);
+            color: var(--rlc-gold);
+            text-align: center;
+            padding: 10px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            border-top: 1px solid var(--rlc-gold);
+            z-index: 9999;
+            backdrop-filter: blur(5px);
+            pointer-events: none;
+        }
+
+        h3 {
+            color: var(--rlc-blue);
+            border-bottom: 2px solid var(--rlc-gold);
+            padding-bottom: 10px;
+            margin-top: 40px;
+            font-size: 1.5rem;
+        }
+
+        /* INVISIBLE ADMIN TRIGGER (Bottom Right) */
+        .admin-trigger-secret {
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            width: 20px;
+            height: 20px;
+            background: transparent;
+            z-index: 10000;
+            cursor: default;
+        }
+
+        /* ADMIN PANEL & UTILS */
+        #signature-lock-k-r-i-s-k-i-r-b-y { display: none; visibility: hidden; }
+        
+        #admin-login-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); z-index: 10000;
+            display: none; justify-content: center; align-items: center;
+        }
+        .login-box {
+            background: #fff; padding: 30px; border-radius: 8px; text-align: center;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+        .login-box input {
+            padding: 10px; font-size: 1.2rem; text-align: center; letter-spacing: 5px; width: 150px;
+            margin-bottom: 15px; border: 2px solid #333; border-radius: 4px;
+        }
+        .login-box button {
+            padding: 10px 20px; background: var(--rlc-blue); color: #fff; border: none;
+            border-radius: 4px; cursor: pointer; font-weight: bold;
+        }
+
+        #admin-panel {
+            position: fixed; top: 0; right: -400px; width: 350px; height: 100%;
+            background: #2d3748; color: #fff; z-index: 9999;
+            box-shadow: -5px 0 15px rgba(0,0,0,0.3);
+            transition: right 0.3s ease; padding: 20px; overflow-y: auto;
+        }
+        #admin-panel.open { right: 0; }
+        
+        .admin-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 20px; border-bottom: 1px solid #4a5568; padding-bottom: 10px;
+        }
+        
+        .admin-section {
+            margin-bottom: 20px; padding: 15px; background: #1a202c; border-radius: 6px;
+        }
+        .admin-section h4 { margin-top: 0; color: var(--rlc-gold); border-bottom: 1px solid #4a5568; padding-bottom: 5px; }
+        
+        .admin-form-group { margin-bottom: 10px; }
+        .admin-form-group label { display: block; font-size: 0.8rem; margin-bottom: 5px; color: #a0aec0; }
+        .admin-form-group input, .admin-form-group select, .admin-form-group textarea {
+            width: 100%; padding: 8px; background: #2d3748; border: 1px solid #4a5568;
+            color: #fff; border-radius: 4px;
+        }
+        .admin-form-group input:focus { border-color: #0f0; }
+
+        .admin-btn {
+            width: 100%; padding: 10px; background: var(--accent-blue); border: none;
+            color: #fff; font-weight: bold; border-radius: 4px; cursor: pointer; margin-top: 5px;
+        }
+        .admin-btn.save { background: #48bb78; margin-top: 20px; }
+        .admin-btn.export { background: #ed8936; margin-top: 10px; }
+        .admin-btn.close { background: #f56565; width: auto; padding: 5px 10px; }
+        .admin-btn.delete-cat { background: #e53e3e; margin-top: 10px; }
+
+        .editable { border: 2px dashed transparent; }
+        body.editing .editable { border-color: var(--accent-blue); cursor: text; }
+        body.editing .editable:hover { background: rgba(59, 130, 246, 0.1); }
+        .delete-step-btn {
+            position: absolute; top: 10px; right: 10px;
+            background: #f56565; color: white; border: none;
+            border-radius: 4px; padding: 5px 10px; cursor: pointer;
+            font-size: 0.8rem; display: none;
+        }
+        body.editing .delete-step-btn { display: block; }
+
+        .guide-section { display: none; animation: fadeIn 0.5s; }
+        .guide-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* ==========================================================================
+           MOBILE
+           ========================================================================== */
         @media screen and (max-width: 768px) {
+            #app-container { 
+                transform: none !important; 
+                opacity: 1 !important;
+                display: block; 
+                padding-top: 60px;
+                height: 100%;
+                overflow: hidden;
+            }
+
             .mobile-header { display: flex; }
-            .sidebar { position: fixed; left: -100%; top: 60px; height: calc(100% - 60px); z-index: 2500; }
-            .sidebar.open { left: 0; }
-            .main-viewport { padding-top: 80px; }
+
+            .cover-title { font-size: 2.5rem; line-height: 1.1; margin-bottom: 15px; }
+            .cover-subtitle { font-size: 0.9rem; margin-bottom: 30px; width: 90%; margin-left: auto; margin-right: auto; }
+            .launch-grid { flex-direction: column; width: 100%; gap: 15px; }
+            .launch-btn { width: 100%; font-size: 1.1rem; padding: 18px; border-radius: 12px; }
+            .rlc-badge-container img { width: 140px; }
+
+            body { overflow: hidden; position: fixed; width: 100%; height: 100%; }
+
+            .sidebar {
+                position: fixed;
+                top: 60px;
+                left: -100%;
+                width: 80%;
+                height: calc(100% - 60px);
+                border-right: none;
+                background: rgba(26, 34, 54, 0.98);
+                backdrop-filter: none;
+                z-index: 2500; 
+                box-shadow: 10px 0 20px rgba(0,0,0,0.5);
+            }
+
+            .sidebar.mobile-open { left: 0; }
+
+            .sidebar-header { display: none; }
+            .nav-scroll-area { padding-bottom: 100px; }
+
+            .main-viewport {
+                width: 100%;
+                height: 100%;
+                padding: 15px;
+                padding-bottom: 80px; 
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .doc-container {
+                border-radius: 0 0 12px 12px;
+                box-shadow: none;
+                margin-bottom: 30px;
+                background: transparent; 
+            }
+
+            .doc-header {
+                border-radius: 12px;
+                padding: 25px 20px;
+                margin-bottom: 20px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            }
+
+            .doc-header h1 { font-size: 1.6rem; }
+            .credit-pill { top: 15px; right: 15px; font-size: 0.7rem; background: rgba(0,0,0,0.4); }
+
+            .content-body { padding: 0; background: transparent; }
+
+            .step-block {
+                display: block; 
+                background: #fff;
+                border-radius: 12px;
+                padding: 20px;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.05), 0 10px 15px -3px rgba(0,0,0,0.1);
+                margin-bottom: 25px;
+                border-left: 4px solid var(--rlc-gold);
+                position: relative;
+            }
+
+            .step-block::before { display: none; }
+
+            .step-marker {
+                position: absolute;
+                top: -15px;
+                right: 15px;
+                width: 36px;
+                height: 36px;
+                font-size: 1rem;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            }
+
+            .step-detail { background: transparent; border: none; padding: 0; box-shadow: none; }
+            .step-detail:hover { transform: none; box-shadow: none; }
+
+            .step-title { font-size: 1.2rem; padding-right: 40px; margin-top: 5px; }
+
+            .terminal-window, .mjdi-window {
+                margin: 15px -10px;
+                width: calc(100% + 20px);
+                border-radius: 4px;
+                border-left: none; border-right: none;
+            }
+            
+            .terminal-content, .mjdi-body {
+                font-size: 0.8rem;
+                overflow-x: auto;
+                white-space: pre; 
+                padding: 10px;
+            }
+
+            .protected-footer { padding-bottom: env(safe-area-inset-bottom); font-size: 0.7rem; }
+            
+            .hub-cards { flex-direction: column; }
         }
     </style>
 </head>
 <body>
 
     <header class="mobile-header">
-        <button class="mobile-menu-btn" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰</button>
-        <span class="mobile-title">LSS GUIDES</span>
-        <div style="width: 40px;"></div>
+        <button class="mobile-menu-btn" onclick="toggleMobileNav()">
+            ☰
+        </button>
+        <div class="mobile-title">LSS Guides</div>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/e/ea/Cap_Badge_of_the_RLC.png" alt="RLC" class="mobile-logo">
     </header>
 
-    <div id="app-container">
-        <nav class="sidebar">
-            <div class="sidebar-header">
-                <div>
-                    <h2>LSS GUIDES</h2>
-                    <span>Supply Chain Ops</span>
-                </div>
-            </div>
-            
-            <div class="nav-scroll-area">
-                <div class="nav-group">
-                    <button class="nav-trigger" onclick="showSection('vital-guide')">
-                        VITAL Guide <span class="arrow">›</span>
-                    </button>
-                </div>
+    <div class="mobile-overlay" id="mobile-overlay" onclick="toggleMobileNav()"></div>
 
-                <div class="nav-group">
-                    <button class="nav-trigger active" onclick="showSection('mjdi-guide')">
-                        MJDI Guide <span class="arrow">›</span>
-                    </button>
-                </div>
+    <div id="signature-lock-k-r-i-s-k-i-r-b-y"></div>
 
-                <div class="nav-group">
-                    <button class="nav-trigger" onclick="showSection('admin-panel')">
-                        Admin Tools <span class="arrow">›</span>
-                    </button>
-                </div>
+    <div class="admin-trigger-secret" onclick="showAdminLogin()" title=""></div>
 
-                <div style="margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">
-                    <button class="nav-trigger" style="color: #27c93f;" onclick="startVitalTest()">
-                        [ TEST: VITAL ]
-                    </button>
-                    <button class="nav-trigger" style="color: #2aa198;" onclick="startMjdiTest()">
-                        [ TEST: MJDI ]
-                    </button>
-                </div>
-            </div>
-        </nav>
-
-        <main class="main-viewport">
-            
-            <section id="vital-guide" class="guide-section">
-                <div class="doc-container">
-                    <div class="doc-header">
-                        <span class="credit-pill">VITAL v5.2</span>
-                        <h1>VITAL System Guide</h1>
-                        <p>Visibility In Transit Asset Logging</p>
-                    </div>
-                    <div class="content-body">
-                        <p><em>(Existing VITAL Guide content preserved as per instructions...)</em></p>
-                        <div class="terminal-window">
-                            <div class="terminal-bar">
-                                <div class="term-dot red"></div>
-                                <div class="term-dot yellow"></div>
-                                <div class="term-dot green"></div>
-                                <span>VITAL_SYS_V5.EXE</span>
-                            </div>
-                            <div class="terminal-content">
-                                <div>Welcome to VITAL System.</div>
-                                <div>Type 'HELP' for commands.</div>
-                                <br>
-                                <span style="color:#0f0">USER@LSS-TERM:~#</span> <span class="term-cursor"></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section id="mjdi-guide" class="guide-section active">
-                <div class="doc-container">
-                    <div class="doc-header" style="background: linear-gradient(135deg, #073642 0%, #002b36 100%);">
-                        <span class="credit-pill">SCSI V7.8</span>
-                        <h1>MJDI Handbook</h1>
-                        <p>Management of the Joint Deployed Inventory</p>
-                    </div>
-                    
-                    <div class="content-body">
-                        <div class="step-block">
-                            <div class="step-marker">1</div>
-                            <div class="step-detail">
-                                <span class="step-title">Account Structure & Configuration</span>
-                                <p class="step-text">MJDI manages inventory through a hierarchy of accounts. Understanding the generic structure is vital for all transactions.</p>
-                                <ul style="color: #4b5563; line-height: 1.6;">
-                                    <li><strong>Unit Level Accounts (Central):</strong>
-                                        <ul>
-                                            <li><strong>*E (Entitlements):</strong> Holds authorized Equipment Table (ET) items.</li>
-                                            <li><strong>*M (Maintenance):</strong> Holds C, L, and P class materiel for general maintenance.</li>
-                                            <li><strong>*F (FLIG):</strong> Fuels, Lubricants, and Industrial Gases.</li>
-                                            <li><strong>*C (Ammunition):</strong> Dedicated account for munitions.</li>
-                                            <li><strong>*L (Loans):</strong> Used to issue items on loan to other units.</li>
-                                        </ul>
-                                    </li>
-                                    <li><strong>Articles in Use (AinU):</strong>
-                                        <ul>
-                                            <li><strong>Consuming AinU:</strong> For items consumed on issue (e.g., tape, screws). No dues-in created.</li>
-                                            <li><strong>Non-Consuming AinU:</strong> For P & L class items (e.g., tools, weapons) that remain on the account record.</li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div class="step-block">
-                            <div class="step-marker">2</div>
-                            <div class="step-detail">
-                                <span class="step-title">Core Transactions</span>
-                                <p class="step-text">Key transaction codes used daily by the Material Accountant (MA):</p>
-                                <table style="width:100%; border-collapse: collapse; font-size: 0.9rem;">
-                                    <tr style="background:#f3f4f6; text-align:left;"><th style="padding:8px;">Code</th><th style="padding:8px;">Function</th></tr>
-                                    <tr><td style="padding:8px; border-bottom:1px solid #eee;"><strong>ISS</strong></td><td style="padding:8px; border-bottom:1px solid #eee;">Issue item to AinU or External Unit.</td></tr>
-                                    <tr><td style="padding:8px; border-bottom:1px solid #eee;"><strong>REC</strong></td><td style="padding:8px; border-bottom:1px solid #eee;">Receipt item from Depot or Supplier.</td></tr>
-                                    <tr><td style="padding:8px; border-bottom:1px solid #eee;"><strong>DNR</strong></td><td style="padding:8px; border-bottom:1px solid #eee;">Recurring Demand (Creates Dues Out).</td></tr>
-                                    <tr><td style="padding:8px; border-bottom:1px solid #eee;"><strong>GXD</strong></td><td style="padding:8px; border-bottom:1px solid #eee;">On-Unit Disposal (Strike off charge).</td></tr>
-                                    <tr><td style="padding:8px; border-bottom:1px solid #eee;"><strong>ENQ</strong></td><td style="padding:8px; border-bottom:1px solid #eee;">Stock Enquiry (Check balances).</td></tr>
-                                </table>
-                            </div>
-                        </div>
-
-                        <div class="step-block">
-                            <div class="step-marker">3</div>
-                            <div class="step-detail">
-                                <span class="step-title">MJDI Transaction Simulator</span>
-                                <p class="step-text">Use this console to practice basic MJDI workflows. Try issuing stock or checking balances.</p>
-                                
-                                <div class="mjdi-terminal-window">
-                                    <div class="mjdi-terminal-bar">
-                                        <span>MJDI CLIENT [Logged in: USER1]</span>
-                                        <span>UIN: A1234A</span>
-                                    </div>
-                                    <div class="mjdi-terminal-content" id="mjdi-console-output">
-                                        <div><strong>MJDI MAIN MENU</strong></div>
-                                        <div>Select a function code:</div>
-                                        <br>
-                                        <div>1. <span style="color:#b58900">ENQ</span> - Stock Enquiry</div>
-                                        <div>2. <span style="color:#b58900">ISS</span> - Issue to AinU</div>
-                                        <div>3. <span style="color:#b58900">REC</span> - Receipt from Depot</div>
-                                        <br>
-                                        <div id="mjdi-interaction-line">
-                                            <span class="mjdi-prompt">ENTER CODE ></span>
-                                            <input type="text" class="mjdi-input" id="mjdi-input" autocomplete="off" onkeypress="handleMjdiInput(event)">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div style="margin-top: 10px; font-size: 0.85rem; color: #666;">
-                                    <small>Hint: Type <strong>ENQ</strong> to check stock, or <strong>ISS</strong> to practice issuing items.</small>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="step-block">
-                            <div class="step-marker">4</div>
-                            <div class="step-detail">
-                                <span class="step-title">Commodity Specifics</span>
-                                <p class="step-text">Specific rules apply to certain item types:</p>
-                                <ul style="color: #4b5563; line-height: 1.6;">
-                                    <li><strong>Ammunition (*C):</strong> Managed via UAMS. Issues require AF G8227. Returns must segregate live rounds, empty cases (brass), and packaging.</li>
-                                    <li><strong>Clothing:</strong> Issued to Personal Holding Records (PHR). De-kitting involves returning items to store (MatCon A2) or disposal (GXD) if unserviceable.</li>
-                                    <li><strong>Planned Repair (PR):</strong> Repairable items (P Class) tracked via DIINs. Must be returned to depot or repair loop. Do not dispose locally without authority.</li>
-                                </ul>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </section>
-
-            <section id="admin-panel" class="guide-section">
-                <div class="doc-container">
-                    <div class="doc-header" style="background: #374151;">
-                        <h1>Admin Panel</h1>
-                    </div>
-                    <div class="content-body">
-                        <p>Admin tools functionality preserved.</p>
-                    </div>
-                </div>
-            </section>
-
-        </main>
+    <div id="admin-login-overlay">
+        <div class="login-box">
+            <h3>Admin Access</h3>
+            <input type="password" id="admin-pin" placeholder="PIN" maxlength="4">
+            <br>
+            <button onclick="checkAdminPin()">Login</button>
+            <button onclick="closeAdminLogin()" style="background:#666; margin-left:10px;">Cancel</button>
+        </div>
     </div>
 
-    <div id="mjdi-test-container">
-        <div class="test-header">
-            <span>MJDI COMPETENCY ASSESSMENT</span>
-            <span id="mjdi-score">Score: 0/0</span>
+    <div id="admin-panel">
+        <div class="admin-header">
+            <h3>Admin Panel</h3>
+            <button class="admin-btn close" onclick="toggleAdminPanel()">X</button>
         </div>
-        <div class="test-content" id="mjdi-question-area">
+
+        <div class="admin-section">
+            <h4>Edit Mode</h4>
+            <p style="font-size: 0.8rem; color: #a0aec0;">Click text in the guide to edit inline.</p>
+            <button class="admin-btn" id="toggle-edit-btn" onclick="toggleEditMode()">Enable Text Editing</button>
+        </div>
+
+        <div class="admin-section">
+            <h4>Add Category/Section</h4>
+            <div class="admin-form-group">
+                <label>Target Guide</label>
+                <select id="target-guide-select">
+                    <option value="nav-content-vital">VITAL Guide</option>
+                    <option value="nav-content-mjdi">MJDI Guide</option>
+                    <option value="nav-content-lsai">LSA&I Tool</option>
+                </select>
             </div>
-        <div style="margin-top: 20px; text-align: right;">
-            <button class="mjdi-btn" onclick="closeMjdiTest()">EXIT TEST</button>
+            <div class="admin-form-group">
+                <label>Category Title</label>
+                <input type="text" id="new-category-title" placeholder="e.g., 9. New Process">
+            </div>
+            <button class="admin-btn" onclick="addNewCategory()">Add Category</button>
         </div>
+
+        <div class="admin-section">
+            <h4>Add Content Step</h4>
+            <div class="admin-form-group">
+                <label>Target Section</label>
+                <select id="target-section-select">
+                </select>
+            </div>
+            <div class="admin-form-group">
+                <label>Step Number</label>
+                <input type="text" id="new-step-num" placeholder="e.g. 4">
+            </div>
+            <div class="admin-form-group">
+                <label>Step Title</label>
+                <input type="text" id="new-step-title" placeholder="Step Title">
+            </div>
+            <div class="admin-form-group">
+                <label>Instructions</label>
+                <textarea id="new-step-text" rows="3"></textarea>
+            </div>
+            <div class="admin-form-group">
+                <label>Include Terminal Box?</label>
+                <select id="include-term">
+                    <option value="no">No</option>
+                    <option value="yes">Yes (VITAL)</option>
+                    <option value="mjdi">Yes (MJDI GUI)</option>
+                </select>
+            </div>
+            <button class="admin-btn" onclick="addNewStep()">Add Step</button>
+        </div>
+
+        <button class="admin-btn save" onclick="saveChanges()">Save to Browser Memory</button>
+        <button class="admin-btn export" onclick="downloadHtml()">Download Updated HTML</button>
+    </div>
+
+    <div id="cover-page">
+        <div class="rlc-badge-container">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/e/ea/Cap_Badge_of_the_RLC.png" alt="RLC Cap Badge">
+        </div>
+        <h1 class="cover-title">Sgt Kirby's</h1>
+        <div class="cover-subtitle">Logistic Supply Specialist (LSS) Guides</div>
+        
+        <div class="launch-grid">
+            <button class="launch-btn" onclick="enterSystem('vital')">VITAL</button>
+            <button class="launch-btn" onclick="enterSystem('mjdi')">MJDI</button>
+        </div>
+
+        <div class="lsai-btn-container">
+            <button class="launch-btn" onclick="enterSystem('mjdi-lsai')">Latest LSA&I Question Set</button>
+        </div>
+
+        <div class="test-challenge-box" onclick="openTestHub()">
+            Test Your Knowledge
+        </div>
+
+        <div class="protected-footer">Created by Kris Kirby</div>
+    </div>
+
+    <div id="test-hub">
+        <div class="hub-title">Select Challenge</div>
+        <div class="hub-cards">
+            <div class="hub-card" onclick="startMjdiTest()">
+                <div class="hub-card-icon">💻</div>
+                <h3>MJDI Test</h3>
+                <span style="color:#48bb78; font-size:0.8rem; margin-top:10px;">Ready</span>
+            </div>
+            <div class="hub-card" onclick="startVitalTest()">
+                <div class="hub-card-icon">⚡</div>
+                <h3>VITAL Test</h3>
+                <span style="color:#48bb78; font-size:0.8rem; margin-top:10px;">Ready</span>
+            </div>
+        </div>
+        <button onclick="closeTestHub()" class="home-btn" style="margin-top:50px;">Return to Menu</button>
     </div>
 
     <div id="vital-test-container">
-        <div class="test-header">
-            <span>VITAL SYSTEM TEST</span>
-            <span id="vital-score">Score: 0/0</span>
+        <div class="crt-effect"></div>
+        <div class="vt-header">
+            <div>VITAL TERMINAL SIMULATION v2.4</div>
+            <div id="vt-score">SCORE: 0/5</div>
         </div>
-        <div class="test-content" id="vital-question-area"></div>
-        <div style="margin-top: 20px; text-align: right;">
-            <button style="background:transparent; color:red; border:1px solid red; padding:10px;" onclick="document.getElementById('vital-test-container').style.display='none'">ABORT</button>
+        <div class="vt-content" id="vt-game-area"></div>
+        <div class="vt-admin-trigger" onclick="openVtAdmin('vital')"></div>
+        <button onclick="closeVitalTest()" class="home-btn" style="position: absolute; bottom: 20px; right: 20px; z-index: 7001;">Exit Test</button>
+    </div>
+
+    <div id="mjdi-test-container">
+        <div class="mjdi-test-header">
+            <div>MJDI TRAINING ENVIRONMENT v7.8</div>
+            <div id="mjdi-score">SCORE: 0/5</div>
+        </div>
+        <div class="vt-content" id="mjdi-game-area" style="padding:20px;"></div>
+        <div class="vt-admin-trigger" onclick="openVtAdmin('mjdi')"></div>
+        <button onclick="closeMjdiTest()" class="home-btn" style="position: absolute; bottom: 20px; right: 20px; z-index: 7001;">Exit Test</button>
+    </div>
+
+    <div id="vt-admin-panel">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h2 id="test-admin-title">ROOT ACCESS // TEST CONFIGURATION</h2>
+            <button class="vt-btn danger" onclick="closeVtAdmin()">EXIT ADMIN</button>
+        </div>
+        <div class="vt-form-group">
+            <label style="color:#fff;">Target Test Database</label>
+            <select id="vt-target-db" onchange="renderAdminQuestionList()">
+                <option value="vital">VITAL</option>
+                <option value="mjdi">MJDI</option>
+            </select>
+        </div>
+        <div class="vt-admin-grid">
+            <div class="vt-admin-list" id="vt-q-list"></div>
+            <div class="vt-admin-form">
+                <input type="hidden" id="vt-edit-index" value="-1">
+                <div class="vt-form-group">
+                    <label>Question Type</label>
+                    <select id="vt-type" onchange="toggleVtFields()">
+                        <option value="mc">Multiple Choice</option>
+                        <option value="terminal">Simulated Input</option>
+                    </select>
+                </div>
+                <div class="vt-form-group">
+                    <label>Question Text</label>
+                    <textarea id="vt-qtext" rows="3"></textarea>
+                </div>
+                
+                <div id="vt-group-mc">
+                    <div class="vt-form-group">
+                        <label>Options (Comma Separated)</label>
+                        <input type="text" id="vt-options" placeholder="Option 1, Option 2, Option 3, Option 4">
+                    </div>
+                    <div class="vt-form-group">
+                        <label>Correct Option Index (0-3)</label>
+                        <input type="number" id="vt-correct-idx" min="0" max="3">
+                    </div>
+                </div>
+
+                <div id="vt-group-ans" style="display:none;">
+                    <div class="vt-form-group">
+                        <label>Correct Answer / Command</label>
+                        <input type="text" id="vt-answer" placeholder="e.g. CTRL+P or F2">
+                    </div>
+                </div>
+
+                <div style="margin-top:20px;">
+                    <button class="vt-btn" onclick="saveQuestionData()">SAVE QUESTION</button>
+                    <button class="vt-btn" onclick="clearVtForm()">NEW QUESTION</button>
+                    <button class="vt-btn danger" onclick="deleteQuestionData()">DELETE</button>
+                </div>
+            </div>
         </div>
     </div>
 
-<script>
-    // NAVIGATION LOGIC
-    function showSection(sectionId) {
-        // Hide all sections
-        document.querySelectorAll('.guide-section').forEach(el => el.classList.remove('active'));
-        document.querySelectorAll('.nav-trigger').forEach(el => el.classList.remove('active'));
+    <div id="app-container">
         
-        // Show target
-        const target = document.getElementById(sectionId);
-        if(target) target.classList.add('active');
+        <nav class="sidebar" id="sidebar-nav">
+            <div class="sidebar-header">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/e/ea/Cap_Badge_of_the_RLC.png" alt="RLC" class="admin-trigger-logo" onclick="showAdminLogin()">
+                <div>
+                    <h2 id="guide-title" class="editable">System Guide</h2>
+                    <span>For Dummies</span>
+                </div>
+            </div>
 
-        // Update Nav State
-        // Simple logic to highlight the button clicked - in a real app would use IDs
-        const buttons = document.querySelectorAll('.nav-trigger');
-        if (sectionId === 'mjdi-guide') buttons[1].classList.add('active');
-        if (sectionId === 'vital-guide') buttons[0].classList.add('active');
-        if (sectionId === 'admin-panel') buttons[2].classList.add('active');
+            <div class="nav-scroll-area" id="nav-content-vital">
+                <div class="nav-group"><button class="nav-trigger" onclick="toggleNav(this)">1. Issues & Packages <span class="arrow">▼</span></button><div class="nav-content"><a href="#" class="nav-link" onclick="closeNavMobile(); showSection('create-issue')">1.1 Create Issue Pkg</a><a href="#" class="nav-link" onclick="closeNavMobile(); showSection('maintain-issue')">1.2 Maintain Issue</a><a href="#" class="nav-link" onclick="closeNavMobile(); showSection('maintain-package')">1.3 Maintain Package</a></div></div>
+                <div class="nav-group"><button class="nav-trigger" onclick="toggleNav(this)">2. Departures <span class="arrow">▼</span></button><div class="nav-content"><a href="#" class="nav-link" onclick="closeNavMobile(); showSection('direct-despatch-pdr')">2.1 Direct Despatch PDR</a><a href="#" class="nav-link" onclick="closeNavMobile(); showSection('create-awb')">2.4 Create AWB</a></div></div>
+                <div class="nav-group"><button class="nav-trigger" onclick="toggleNav(this)">3. Arrivals <span class="arrow">▼</span></button><div class="nav-content"><a href="#" class="nav-link" onclick="closeNavMobile(); showSection('record-arrival')">3.1 Record Arrival</a><a href="#" class="nav-link" onclick="closeNavMobile(); showSection('node-discrepancies')">3.2 Discrepancies</a></div></div>
+            </div>
 
-        // Mobile sidebar close on selection
-        if (window.innerWidth <= 768) {
-            document.querySelector('.sidebar').classList.remove('open');
-        }
-    }
+            <div class="nav-scroll-area" id="nav-content-mjdi">
+                <div class="nav-group">
+                    <button class="nav-trigger" onclick="toggleNav(this)">1. Intro & Config <span class="arrow">▼</span></button>
+                    <div class="nav-content">
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('mjdi-intro')">Introduction & Roles</a>
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('mjdi-config')">Account Configuration</a>
+                    </div>
+                </div>
+                <div class="nav-group">
+                    <button class="nav-trigger" onclick="toggleNav(this)">2. Inventory Mgmt <span class="arrow">▼</span></button>
+                    <div class="nav-content">
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('mjdi-provision')">Provisioning</a>
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('mjdi-stocktaking')">Stocktaking</a>
+                    </div>
+                </div>
+                <div class="nav-group">
+                    <button class="nav-trigger" onclick="toggleNav(this)">3. Issues & Receipts <span class="arrow">▼</span></button>
+                    <div class="nav-content">
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('mjdi-issues')">Issues</a>
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('mjdi-receipts')">Receipts</a>
+                    </div>
+                </div>
+                <div class="nav-group">
+                    <button class="nav-trigger" onclick="toggleNav(this)">4. Demands <span class="arrow">▼</span></button>
+                    <div class="nav-content">
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('mjdi-demands')">Creation & CP&F</a>
+                    </div>
+                </div>
+                <div class="nav-group">
+                    <button class="nav-trigger" onclick="toggleNav(this)">5. Discrepancies <span class="arrow">▼</span></button>
+                    <div class="nav-content">
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('mjdi-dr-in')">DR In (Receipts)</a>
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('mjdi-dr-out')">DR Out</a>
+                    </div>
+                </div>
+                <div class="nav-group">
+                    <button class="nav-trigger" onclick="toggleNav(this)">6. Losses <span class="arrow">▼</span></button>
+                    <div class="nav-content">
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('mjdi-losses')">Loss Management</a>
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('mjdi-writeoff')">Write Off Action</a>
+                    </div>
+                </div>
+                <div class="nav-group">
+                    <button class="nav-trigger" onclick="toggleNav(this)">7. ES Materiel <span class="arrow">▼</span></button>
+                    <div class="nav-content">
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('mjdi-esmat')">Planned Repair</a>
+                    </div>
+                </div>
+                <div class="nav-group">
+                    <button class="nav-trigger" onclick="toggleNav(this)">8. Disposals <span class="arrow">▼</span></button>
+                    <div class="nav-content">
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('mjdi-disposals')">Backloading & Scrap</a>
+                    </div>
+                </div>
+            </div>
 
-    // ==========================================
-    // MJDI TERMINAL LOGIC
-    // ==========================================
-    let mjdiState = 'MENU'; // MENU, ENQ_NSN, ISS_UIN, ISS_QTY
-    let mjdiTaskCompleted = {
-        enquiry: false,
-        issue: false
-    };
+            <div class="nav-scroll-area" id="nav-content-lsai">
+                <div class="nav-group" id="group-lsai">
+                    <button class="nav-trigger" onclick="toggleNav(this)">LSA&I Tools <span class="arrow">▼</span></button>
+                    <div class="nav-content open">
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('lsai-viewer')">Handbook Viewer</a>
+                    </div>
+                </div>
+            </div>
 
-    function handleMjdiInput(event) {
-        if (event.key === 'Enter') {
-            const input = event.target.value.toUpperCase().trim();
-            const outputDiv = document.getElementById('mjdi-console-output');
-            const interactionLine = document.getElementById('mjdi-interaction-line');
-            
-            // Print user input
-            const userLine = document.createElement('div');
-            userLine.innerHTML = `<span style="color:#b58900">> ${input}</span>`;
-            outputDiv.insertBefore(userLine, interactionLine);
-            
-            // Logic Branch
-            processMjdiCommand(input, outputDiv);
-            
-            // Clear input and scroll
-            event.target.value = '';
-            outputDiv.scrollTop = outputDiv.scrollHeight;
-        }
-    }
+            <button class="home-btn" onclick="goHome()">Exit System</button>
+        </nav>
 
-    function processMjdiCommand(input, outputDiv) {
-        const print = (text, color = '#2aa198') => {
-            const div = document.createElement('div');
-            div.style.color = color;
-            div.innerHTML = text;
-            const interactionLine = document.getElementById('mjdi-interaction-line');
-            outputDiv.insertBefore(div, interactionLine);
-        };
+        <div class="main-viewport">
+            <div class="doc-container">
+                <div class="doc-header">
+                    <div class="credit-pill">Sgt Kirby</div>
+                    <h1 id="header-main" class="editable">System Handover</h1>
+                    <p id="header-sub" class="editable">Procedural Guide</p>
+                </div>
 
-        if (input === 'MENU' || input === 'EXIT') {
-            mjdiState = 'MENU';
-            print("---------------------------------");
-            print("1. ENQ - Stock Enquiry");
-            print("2. ISS - Issue to AinU");
-            print("3. REC - Receipt");
-            return;
-        }
+                <div class="content-body">
+                    
+                    <div id="section-welcome" class="guide-section active">
+                        <h3 class="editable">Welcome to VITAL</h3>
+                        <p class="editable">Select a procedure from the sidebar to begin.</p>
+                    </div>
 
-        switch (mjdiState) {
-            case 'MENU':
-                if (input === 'ENQ' || input === '1') {
-                    mjdiState = 'ENQ_NSN';
-                    print("STOCK ENQUIRY SELECTED", "#fff");
-                    print("ENTER NSN (e.g., 1234-99-123-4567):");
-                } else if (input === 'ISS' || input === '2') {
-                    mjdiState = 'ISS_AINU';
-                    print("ISSUE TRANSACTION SELECTED", "#fff");
-                    print("ENTER DESTINATION AINU (e.g., AINU01):");
-                } else if (input === 'REC' || input === '3') {
-                    print("RECEIPT MODULE LOADING...", "#cb4b16");
-                    print("Error: No Dues-In found for current UIN.");
-                    mjdiState = 'MENU';
-                } else {
-                    print("Invalid Selection. Type MENU for options.", "#dc322f");
-                }
-                break;
+                    <div id="section-create-issue" class="guide-section">
+                        <h3 class="editable">1.1 Create Issue Package</h3>
+                        <div class="step-block">
+                            <div class="step-marker">1</div>
+                            <div class="step-detail">
+                                <span class="step-title editable">Input Voucher Data</span>
+                                <p class="step-text editable">Menu 1, Seq 1. Enter UIN, Date, Vch No.</p>
+                                <div class="terminal-window"><div class="terminal-bar"><div class="term-dot red"></div></div><div class="terminal-content">UIN: F7751A   Date: 161123   Vch No: 000018245</div></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="section-mjdi-intro" class="guide-section">
+                        <h3 class="editable">MJDI Introduction</h3>
+                        <div class="step-block">
+                            <div class="step-marker">ℹ</div>
+                            <div class="step-detail">
+                                <span class="step-title">Overview</span>
+                                <p class="step-text">MJDI (Management of the Joint Deployed Inventory) provides material accounting for the Land Environment. It standardizes functionality across Front Line Commands.
+                                <br><br><strong>Key References:</strong> SCSI V7.8, DLF, ACSO 9014.</p>
+                            </div>
+                        </div>
+                        <div class="step-block">
+                            <div class="step-marker">⚙</div>
+                            <div class="step-detail">
+                                <span class="step-title">Unit Config Settings</span>
+                                <p class="step-text">Ensure UAA settings are correct for your role:</p>
+                                <div class="mjdi-window">
+                                    <div class="mjdi-header">Unit Configuration</div>
+                                    <div class="mjdi-body">
+                                        <div class="mjdi-field"><label>Maintenance Period</label><input class="mjdi-input" value="30 Days" readonly></div>
+                                        <div class="mjdi-field"><label>Lead Time</label><input class="mjdi-input" value="15 Days (UK/NWE)" readonly></div>
+                                        <div class="mjdi-field"><label>Trend Limits</label><input class="mjdi-input" value="0 (Zero)" readonly></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-            case 'ENQ_NSN':
-                if (input.length > 5) {
-                    print("SEARCHING DATABASE...", "#fff");
-                    setTimeout(() => {
-                        print("NSN: " + input);
-                        print("DESC: HAMMER, GENERAL PURPOSE");
-                        print("LOC: STORE-A-01 | QTY: 15 | COND: A1");
-                        print("LOC: STORE-B-03 | QTY: 2  | COND: R4");
-                        print("Transaction Complete.", "#fff");
-                        mjdiTaskCompleted.enquiry = true; // Flag for test
-                        mjdiState = 'MENU';
-                        print("Ready. (Type MENU)", "#586e75");
-                    }, 500);
-                } else {
-                    print("Invalid NSN Format.", "#dc322f");
-                }
-                break;
+                    <div id="section-mjdi-demands" class="guide-section">
+                        <h3 class="editable">Demands</h3>
+                        <div class="step-block">
+                            <div class="step-marker">1</div>
+                            <div class="step-detail">
+                                <span class="step-title">CP&F Demands (Offline)</span>
+                                <p class="step-text">CP&F items must be accounted for on MJDI.
+                                <br>1. Create <strong>Recurring Demand (DNR)</strong> with RFD 1 against AinU.
+                                <br>2. Record Sub-Unit ref in Customer Ref.
+                                <br>3. Print MATDEM and forward to CP&F Authorised Demander.</p>
+                                <div class="mjdi-window">
+                                    <div class="mjdi-header">Demand Entry</div>
+                                    <div class="mjdi-toolbar">💾 🖨️</div>
+                                    <div class="mjdi-body">
+                                        <div class="mjdi-field"><label>Trans Type:</label><input class="mjdi-input" value="DNR - Recurring" readonly></div>
+                                        <div class="mjdi-field"><label>Reason For Demand:</label><input class="mjdi-input" value="1 - Initial/Maint" readonly></div>
+                                        <div class="mjdi-field"><label>Customer Ref:</label><input class="mjdi-input" value="SQN/REQ/001" readonly></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-            case 'ISS_AINU':
-                if (input.length > 0) {
-                    print("DESTINATION: " + input);
-                    print("ENTER NSN TO ISSUE:");
-                    mjdiState = 'ISS_NSN';
-                } else {
-                    print("Input Required.", "#dc322f");
-                }
-                break;
+                    <div id="section-mjdi-dr-in" class="guide-section">
+                        <h3 class="editable">Discrepancy Reports In (Receipts)</h3>
+                        <div class="step-block">
+                            <div class="step-marker">1</div>
+                            <div class="step-detail">
+                                <span class="step-title">Initial Action</span>
+                                <p class="step-text">On receipt of MOD Form 445 (DR), check timescales.
+                                <br><strong>Timescale:</strong> 21 Days (UK), 42 Days (Overseas).
+                                <br>Enter into DR In Register immediately.</p>
+                            </div>
+                        </div>
+                        <div class="step-block">
+                            <div class="step-marker">2</div>
+                            <div class="step-detail">
+                                <span class="step-title">Investigation</span>
+                                <p class="step-text">1. Check Transaction Record (Issues).
+                                <br>2. Physical check of stock locations.
+                                <br>3. Check VITAL/Trackers (Note: VITAL node arrival is NOT proof of delivery for DR purposes).</p>
+                            </div>
+                        </div>
+                        <div class="step-block">
+                            <div class="step-marker">3</div>
+                            <div class="step-detail">
+                                <span class="step-title">Resolution</span>
+                                <p class="step-text"><strong>Liability Admitted:</strong> Adjust store account (Certificate Receipt/Issue). Write off value in Losses Register. Annotate F445 "LIABILITY ADMITTED".
+                                <br><strong>Rejected:</strong> Annotate "TIME EXPIRED - CONSIGNEE LIABILITY" if outside window.</p>
+                            </div>
+                        </div>
+                    </div>
 
-            case 'ISS_NSN':
-                print("ITEM: 1234-99... BOOT, COMBAT HIGH");
-                print("ENTER QUANTITY:");
-                mjdiState = 'ISS_QTY';
-                break;
+                    <div id="section-mjdi-dr-out" class="guide-section">
+                        <h3 class="editable">Discrepancy Reports Out</h3>
+                        <div class="step-block">
+                            <div class="step-marker">1</div>
+                            <div class="step-detail">
+                                <span class="step-title">Trivial vs Non-Trivial</span>
+                                <p class="step-text"><strong>Trivial (TRIV):</strong> Value ≤ £250 (ex VAT). No F445 required unless trend analysis needed. Log in DR Out Register (TRIV Tab).
+                                <br><strong>Non-Trivial:</strong> Value > £250. Raise MOD Form 445. Log in DR Out Register.</p>
+                            </div>
+                        </div>
+                    </div>
 
-            case 'ISS_QTY':
-                if (!isNaN(input) && parseInt(input) > 0) {
-                    print("VALIDATING STOCK...", "#fff");
-                    setTimeout(() => {
-                        print("ISSUE CONFIRMED. VOUCHER: IV-99283");
-                        print("Stock balance updated.");
-                        mjdiTaskCompleted.issue = true; // Flag for test
-                        mjdiState = 'MENU';
-                        print("Ready. (Type MENU)", "#586e75");
-                    }, 600);
-                } else {
-                    print("Invalid Quantity.", "#dc322f");
-                }
-                break;
-        }
-    }
+                    <div id="section-mjdi-losses" class="guide-section">
+                        <h3 class="editable">Loss Management</h3>
+                        <div class="step-block">
+                            <div class="step-marker">1</div>
+                            <div class="step-detail">
+                                <span class="step-title">Preliminary Investigation</span>
+                                <p class="step-text">Determine if loss is Culpable (Theft/Fraud) or Non-Culpable.
+                                <br><strong>Criminal Activity:</strong> Report to SIB/RMP. Do not investigate further until directed.</p>
+                            </div>
+                        </div>
+                        <div class="step-block">
+                            <div class="step-marker">2</div>
+                            <div class="step-detail">
+                                <span class="step-title">Write Off Action</span>
+                                <p class="step-text"><strong>Trivial Loss (£250 or less):</strong> No F2260 required (unless fraud suspected). Aggregate quarterly on loss return (MLC 08).
+                                <br><strong>Non-Trivial:</strong> Raise MOD Form 2260. Formal investigation required.
+                                <br><strong>Major Loss (£300k+):</strong> Requires notification to DBSO/AMET.</p>
+                                <div class="mjdi-window">
+                                    <div class="mjdi-header">Account Adjustment (Loss)</div>
+                                    <div class="mjdi-body">
+                                        <div class="mjdi-field"><label>Txn Type:</label><input class="mjdi-input" value="GSA (Stock Adjust)" readonly></div>
+                                        <div class="mjdi-field"><label>Reason Code:</label><input class="mjdi-input" value="STOCKTAKE / LOSS" readonly></div>
+                                        <div class="mjdi-field"><label>Remarks:</label><input class="mjdi-input" value="Ref F2260/2025/001" readonly></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-    // ==========================================
-    // MJDI TEST LOGIC
-    // ==========================================
-    const mjdiQuestions = [
-        {
-            q: "Which MJDI account code is used for Fuel, Lubricants and Industrial Gases?",
-            options: ["*E", "*M", "*F", "*L"],
-            answer: 2 // *F
-        },
-        {
-            q: "When issuing items to a 'Consuming AinU', what happens to the stock?",
-            options: [
-                "It remains on the account ledger as assets.",
-                "It is removed from the account and treated as consumed.",
-                "It creates a Dues-In record automatically.",
-                "It is transferred to the *L account."
-            ],
-            answer: 1
-        },
-        {
-            q: "Which transaction code is used to Receipt an item from a depot?",
-            options: ["ISS", "DNR", "REC", "GXD"],
-            answer: 2
-        },
-        {
-            q: "INTERACTIVE TASK: Use the MJDI Terminal in the guide to perform a Stock Enquiry (ENQ) for any NSN. Have you done this?",
-            options: ["Yes, I have completed the enquiry.", "No, not yet."],
-            answer: 0,
-            checkTask: 'enquiry' // Links to mjdiTaskCompleted.enquiry
-        },
-        {
-            q: "What is the correct action for unserviceable clothing returned during a De-Kit?",
-            options: [
-                "Issue to another soldier immediately.",
-                "Place in the bin.",
-                "Condition as E0 and request disposal (GXD).",
-                "Return to *E account as new."
-            ],
-            answer: 2
-        }
-    ];
+                    <div id="section-mjdi-esmat" class="guide-section">
+                        <h3 class="editable">Planned Repair (PR) & ES Mat</h3>
+                        <div class="step-block">
+                            <div class="step-marker">1</div>
+                            <div class="step-detail">
+                                <span class="step-title">Identification</span>
+                                <p class="step-text">PR items are Permanent (P Class). Look for Inventory Classification Codes (ICC):
+                                <br><strong>B:</strong> Repairable, tracked by qty.
+                                <br><strong>S:</strong> CLS Repairable.</p>
+                            </div>
+                        </div>
+                        <div class="step-block">
+                            <div class="step-marker">2</div>
+                            <div class="step-detail">
+                                <span class="step-title">The Repair Loop (DIINs)</span>
+                                <p class="step-text">All PR items due into depot generate a DIIN (Dues In ID Number).
+                                <br><strong>Prefixes:</strong>
+                                <br>A = Demand Generated
+                                <br>Y = Unit Disposal Request
+                                <br>X = DT Disposal Request
+                                <br>PR = Direct to Repair (DTR)</p>
+                            </div>
+                        </div>
+                        <div class="step-block">
+                            <div class="step-marker">3</div>
+                            <div class="step-detail">
+                                <span class="step-title">MIR226 Management</span>
+                                <p class="step-text">Units MUST monitor the VERITAS MIR226 report.
+                                <br>1. Upload Issue Voucher (IV) details to clear the line.
+                                <br>2. Upload VITAL references.
+                                <br>3. If cleared receipt not received, follow Hastening process.</p>
+                            </div>
+                        </div>
+                    </div>
 
-    let currentMjdiQ = 0;
-    let mjdiScoreVal = 0;
+                    <div id="section-mjdi-disposals" class="guide-section">
+                        <h3 class="editable">Disposals</h3>
+                        <div class="step-block">
+                            <div class="step-marker">1</div>
+                            <div class="step-detail">
+                                <span class="step-title">Application</span>
+                                <p class="step-text">1. Condition item (E0).
+                                <br>2. Request Disposal Instructions via MJDI.
+                                <br>3. Wait for U053 (Disposal Instruction Response).</p>
+                            </div>
+                        </div>
+                        <div class="step-block">
+                            <div class="step-marker">2</div>
+                            <div class="step-detail">
+                                <span class="step-title">Responses</span>
+                                <p class="step-text"><strong>Backload:</strong> Issue to Depot (Creates DIIN).
+                                <br><strong>On Unit Disposal (AF G8609):</strong> Strike off charge (GXD). Use local scrap metal contract or DRDT if specified.</p>
+                                <div class="mjdi-window">
+                                    <div class="mjdi-header">Issue Transaction</div>
+                                    <div class="mjdi-body">
+                                        <div class="mjdi-field"><label>Type:</label><input class="mjdi-input" value="GXD - On Unit Disposal" readonly></div>
+                                        <div class="mjdi-field"><label>Auth:</label><input class="mjdi-input" value="U053 / 8609 Received" readonly></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-    function startMjdiTest() {
-        document.getElementById('mjdi-test-container').style.display = 'flex';
-        currentMjdiQ = 0;
-        mjdiScoreVal = 0;
-        loadMjdiQuestion();
-    }
+                    <div id="section-lsai-viewer" class="guide-section">
+                        <h3 class="editable">LSA&I Handbook Viewer</h3>
+                        <div class="step-block">
+                            <div class="step-marker">📁</div>
+                            <div class="step-detail">
+                                <span class="step-title">Load Handbook Document</span>
+                                <p class="step-text">Upload the LSA&I Handbook (.docx or .pdf) to view it in the frame below.</p>
+                                <input type="file" id="lsai-file-input" accept=".pdf,.docx" onchange="loadLsaiDocument(this)" style="margin-bottom: 15px;">
+                                <div id="lsai-doc-container" class="doc-viewer-container">
+                                    <div class="doc-viewer-placeholder">
+                                        <p>No document loaded.</p>
+                                        <p style="font-size:0.8em">Select a file above to view.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-    function closeMjdiTest() {
-        document.getElementById('mjdi-test-container').style.display = 'none';
-    }
+                </div>
+            </div>
+        </div>
+    </div>
 
-    function loadMjdiQuestion() {
-        const area = document.getElementById('mjdi-question-area');
-        const qData = mjdiQuestions[currentMjdiQ];
-        
-        if (!qData) {
-            // End of test
-            area.innerHTML = `<div class="question-box">
-                <h3>Assessment Complete</h3>
-                <p>You scored ${mjdiScoreVal} out of ${mjdiQuestions.length}</p>
-                <p>${mjdiScoreVal === mjdiQuestions.length ? "Excellent knowledge of MJDI procedures." : "Review the MJDI Guide and try again."}</p>
-            </div>`;
-            return;
-        }
-
-        let html = `<div class="question-box">
-            <p style="font-size:1.1rem; margin-bottom:15px;">Question ${currentMjdiQ + 1}: ${qData.q}</p>
-            <div style="display:flex; flex-direction:column; gap:10px;">`;
-
-        qData.options.forEach((opt, idx) => {
-            html += `<button class="option-btn" onclick="checkMjdiAnswer(${idx})">${opt}</button>`;
+    <script>
+        // CORE FUNCTIONALITY
+        document.addEventListener('keydown', function(e) {
+            if(e.key === 'F12') { e.preventDefault(); return false; }
+            if(e.ctrlKey && (e.key === 'u' || e.key === 'U')) { e.preventDefault(); return false; }
+            if(e.ctrlKey && e.shiftKey && (e.key === 'i' || e.key === 'I')) { e.preventDefault(); return false; }
+            if(e.ctrlKey && (e.key === 's' || e.key === 'S')) { e.preventDefault(); return false; }
         });
 
-        html += `</div></div>`;
+        document.addEventListener('contextmenu', event => event.preventDefault());
         
-        // If it's the interactive question, add a hint if task not done
-        if (qData.checkTask && !mjdiTaskCompleted[qData.checkTask]) {
-            html += `<p style="color:#ff5f56; margin-top:10px;">Warning: The system detects you haven't performed the required action in the terminal yet.</p>`;
+        console.log("LSS Guide System v3.0 - Authorized Use Only - Developed by K.R.I.S. K.I.R.B.Y");
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadTestConfig();
+        });
+
+        function toggleMobileNav() {
+            const sidebar = document.getElementById('sidebar-nav');
+            const overlay = document.getElementById('mobile-overlay');
+            sidebar.classList.toggle('mobile-open');
+            overlay.style.display = sidebar.classList.contains('mobile-open') ? 'block' : 'none';
         }
 
-        area.innerHTML = html;
-        document.getElementById('mjdi-score').innerText = `Score: ${mjdiScoreVal}/${mjdiQuestions.length}`;
-    }
-
-    function checkMjdiAnswer(selectedIdx) {
-        const qData = mjdiQuestions[currentMjdiQ];
-        const buttons = document.querySelectorAll('.option-btn');
-        
-        // Special check for interactive tasks
-        if (qData.checkTask) {
-            if (!mjdiTaskCompleted[qData.checkTask]) {
-                alert("You must perform the action in the MJDI Terminal before answering 'Yes'.");
-                buttons[selectedIdx].classList.add('wrong');
-                return; // Don't proceed
+        function closeNavMobile() {
+            if (window.innerWidth <= 768) {
+                const sidebar = document.getElementById('sidebar-nav');
+                const overlay = document.getElementById('mobile-overlay');
+                sidebar.classList.remove('mobile-open');
+                overlay.style.display = 'none';
             }
         }
 
-        if (selectedIdx === qData.answer) {
-            buttons[selectedIdx].classList.add('correct');
-            mjdiScoreVal++;
-        } else {
-            buttons[selectedIdx].classList.add('wrong');
-            buttons[qData.answer].classList.add('correct');
+        function downloadHtml() {
+            const htmlContent = document.documentElement.outerHTML;
+            const blob = new Blob([htmlContent], {type: 'text/html'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'Sgt_Kirbys_LSS_Guides_v3.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
         }
 
-        // Disable clicks
-        buttons.forEach(btn => btn.onclick = null);
+        function enterSystem(system) {
+            document.getElementById('cover-page').classList.add('hidden');
+            setTimeout(() => {
+                document.getElementById('app-container').classList.add('visible');
+                document.getElementById('nav-content-vital').style.display = 'none';
+                document.getElementById('nav-content-mjdi').style.display = 'none';
+                document.getElementById('nav-content-lsai').style.display = 'none';
 
-        // Next Q delay
-        setTimeout(() => {
-            currentMjdiQ++;
-            loadMjdiQuestion();
-        }, 1500);
-    }
+                if (system === 'mjdi-lsai') {
+                    document.getElementById('nav-content-lsai').style.display = 'block';
+                    document.getElementById('guide-title').innerText = 'LSA&I Tool';
+                    showSection('lsai-viewer');
+                } else if (system === 'mjdi') {
+                    document.getElementById('nav-content-mjdi').style.display = 'block';
+                    document.getElementById('guide-title').innerText = 'MJDI Guide';
+                    showSection('mjdi-intro'); 
+                } else {
+                    document.getElementById('nav-content-vital').style.display = 'block';
+                    document.getElementById('guide-title').innerText = 'VITAL Guide';
+                    showSection('welcome');
+                }
+            }, 300);
+        }
 
-    // ==========================================
-    // VITAL TEST PLACEHOLDER (Functionality Preserved)
-    // ==========================================
-    function startVitalTest() {
-        document.getElementById('vital-test-container').style.display = 'flex';
-        document.getElementById('vital-question-area').innerHTML = "<div class='question-box'>VITAL Test Functionality preserved. (Simulated start)</div>";
-        // Note: The original logic for VITAL test would be here. 
-        // Since I am updating the code structure, I assume the original script 
-        // was inline or I should leave this hook for the existing system.
-        // For the purpose of this task, I ensure the button works to open the overlay.
-    }
+        function goHome() {
+            document.getElementById('app-container').classList.remove('visible');
+            setTimeout(() => {
+                document.getElementById('cover-page').classList.remove('hidden');
+            }, 300);
+        }
 
-</script>
+        function toggleNav(button) {
+            button.classList.toggle('active');
+            var content = button.nextElementSibling;
+            content.classList.toggle('open');
+        }
+
+        function showSection(sectionId) {
+            var sections = document.querySelectorAll('.guide-section');
+            sections.forEach(s => s.classList.remove('active'));
+            var target = document.getElementById('section-' + sectionId);
+            if(target) {
+                target.classList.add('active');
+                document.querySelector('.main-viewport').scrollTop = 0;
+            }
+        }
+
+        // ================= TEST SYSTEM =================
+        let testScore = 0;
+        let currentQuestion = 0;
+        let activeTestType = 'vital'; // 'vital' or 'mjdi'
+        let questionBank = {
+            vital: [
+                { type: 'mc', question: 'What is the standard VITAL shortcut to display the "List of Nodes" popup?', options: ['F1', 'F3', 'F10', 'Ctrl + P'], correct: 1 },
+                { type: 'terminal', question: 'SIMULATION: You are creating an Issue Package. The system asks for "Final Node". Enter the code for Bicester.', answer: 'BIC' }
+            ],
+            mjdi: [
+                { type: 'mc', question: 'What is the limit for a Trivial Discrepancy?', options: ['£100', '£250', '£500', '£1000'], correct: 1 },
+                { type: 'mc', question: 'Which form is used to report a Non-Trivial Loss?', options: ['F445', 'F2260', 'F1033', 'F7767'], correct: 1 },
+                { type: 'terminal', question: 'SIMULATION: Enter the DIIN Prefix for a Demand Generated Return.', answer: 'A' },
+                { type: 'mc', question: 'What Inventory Classification Code (ICC) denotes a Repairable Item?', options: ['C', 'L', 'B', 'P'], correct: 2 }
+            ]
+        };
+
+        function loadTestConfig() {
+            const saved = localStorage.getItem('lss-tests');
+            if (saved) questionBank = JSON.parse(saved);
+        }
+
+        function saveTestConfig() {
+            localStorage.setItem('lss-tests', JSON.stringify(questionBank));
+            renderAdminQuestionList();
+        }
+
+        function openTestHub() {
+            document.getElementById('cover-page').classList.add('hidden');
+            const hub = document.getElementById('test-hub');
+            hub.style.display = 'flex';
+            setTimeout(() => { hub.classList.add('visible'); }, 100);
+        }
+
+        function closeTestHub() {
+            const hub = document.getElementById('test-hub');
+            hub.classList.remove('visible');
+            setTimeout(() => { 
+                hub.style.display = 'none'; 
+                document.getElementById('cover-page').classList.remove('hidden');
+            }, 500);
+        }
+
+        function startVitalTest() {
+            activeTestType = 'vital';
+            launchTest('vital-test-container', 'vt-game-area', 'vt-score');
+        }
+
+        function startMjdiTest() {
+            activeTestType = 'mjdi';
+            launchTest('mjdi-test-container', 'mjdi-game-area', 'mjdi-score');
+        }
+
+        function launchTest(containerId, areaId, scoreId) {
+            document.getElementById('test-hub').classList.remove('visible');
+            setTimeout(() => { document.getElementById('test-hub').style.display = 'none'; }, 500);
+            document.getElementById(containerId).style.display = 'flex';
+            
+            testScore = 0;
+            currentQuestion = 0;
+            updateScore(scoreId);
+            renderQuestion(areaId);
+        }
+
+        function closeVitalTest() {
+            document.getElementById('vital-test-container').style.display = 'none';
+            openTestHub();
+        }
+
+        function closeMjdiTest() {
+            document.getElementById('mjdi-test-container').style.display = 'none';
+            openTestHub();
+        }
+
+        function updateScore(scoreId) {
+            document.getElementById(scoreId).innerText = `SCORE: ${testScore}/${questionBank[activeTestType].length}`;
+        }
+
+        function renderQuestion(areaId) {
+            const qData = questionBank[activeTestType][currentQuestion];
+            const area = document.getElementById(areaId);
+            area.innerHTML = ''; 
+
+            const qBox = document.createElement('div');
+            // Style depends on test type
+            qBox.className = activeTestType === 'vital' ? 'vt-question-box' : 'mjdi-question-box';
+            
+            let html = `<div class="${activeTestType === 'vital' ? 'vt' : 'mjdi'}-question-text">Q${currentQuestion + 1}: ${qData.question}</div>`;
+            qBox.innerHTML = html;
+            
+            if (qData.type === 'mc') {
+                const optsDiv = document.createElement('div');
+                optsDiv.className = 'vt-options'; // Reusing flex layout
+                qData.options.forEach((opt, idx) => {
+                    const btn = document.createElement('button');
+                    btn.className = activeTestType === 'vital' ? 'vt-option-btn' : 'mjdi-option-btn';
+                    btn.innerText = opt;
+                    btn.onclick = () => checkAnswer(idx, qData.correct, btn, areaId);
+                    optsDiv.appendChild(btn);
+                });
+                qBox.appendChild(optsDiv);
+            } else if (qData.type === 'terminal') {
+                if(activeTestType === 'vital'){
+                    qBox.innerHTML += `
+                        <div style="color:#aaa; font-size:0.9rem; margin-bottom:5px;">TERMINAL INPUT_</div>
+                        <input type="text" class="vt-terminal-input" id="curr-input" placeholder="Type command..." autocomplete="off">
+                        <button class="vt-next-btn" id="curr-submit" style="display:inline-block;" onclick="checkTermAnswer('${qData.answer}', '${areaId}')">SUBMIT</button>
+                        <div id="curr-feedback" style="margin-top:10px; font-weight:bold;"></div>
+                    `;
+                } else {
+                    qBox.innerHTML += `
+                        <div style="margin-top:15px; border:1px solid #999; padding:10px; background:#e0e0e0;">
+                            <label style="font-size:0.8rem; font-weight:bold;">INPUT REQUIRED:</label><br>
+                            <input type="text" id="curr-input" style="width:100%; border:1px solid #000080; padding:5px; margin-top:5px; font-family:Tahoma;" autocomplete="off">
+                            <button id="curr-submit" onclick="checkTermAnswer('${qData.answer}', '${areaId}')" style="margin-top:10px; padding:5px 15px;">Enter</button>
+                            <div id="curr-feedback" style="margin-top:10px; font-weight:bold;"></div>
+                        </div>
+                    `;
+                }
+            }
+
+            area.appendChild(qBox);
+
+            const nextBtn = document.createElement('button');
+            nextBtn.id = 'global-next-btn';
+            nextBtn.className = 'vt-next-btn'; // Generic green button style works for both
+            nextBtn.innerText = 'NEXT QUESTION >>';
+            nextBtn.style.display = 'none';
+            nextBtn.onclick = () => nextQuestion(areaId);
+            area.appendChild(nextBtn);
+        }
+
+        function checkAnswer(selectedIdx, correctIdx, btn, areaId) {
+            const btnClass = activeTestType === 'vital' ? '.vt-option-btn' : '.mjdi-option-btn';
+            const allBtns = document.querySelectorAll(btnClass);
+            allBtns.forEach(b => b.disabled = true);
+            
+            if (selectedIdx === parseInt(correctIdx)) {
+                btn.classList.add('correct');
+                testScore++;
+            } else {
+                btn.classList.add('wrong');
+                if(allBtns[correctIdx]) allBtns[correctIdx].classList.add('correct');
+            }
+            updateScore(activeTestType === 'vital' ? 'vt-score' : 'mjdi-score');
+            document.getElementById('global-next-btn').style.display = 'block';
+        }
+
+        function checkTermAnswer(correctAnswer, areaId) {
+            const input = document.getElementById('curr-input');
+            const feedback = document.getElementById('curr-feedback');
+            const userVal = input.value.toUpperCase().replace(/\s/g, '');
+            const correctVal = correctAnswer.toUpperCase().replace(/\s/g, '');
+
+            if (userVal === correctVal) {
+                feedback.style.color = activeTestType === 'vital' ? '#0f0' : 'green';
+                feedback.innerText = 'CORRECT.';
+                testScore++;
+            } else {
+                feedback.style.color = '#c00';
+                feedback.innerText = `INCORRECT. ANSWER: ${correctAnswer}`;
+            }
+            document.getElementById('curr-submit').disabled = true;
+            input.disabled = true;
+            updateScore(activeTestType === 'vital' ? 'vt-score' : 'mjdi-score');
+            document.getElementById('global-next-btn').style.display = 'block';
+        }
+
+        function nextQuestion(areaId) {
+            currentQuestion++;
+            if (currentQuestion < questionBank[activeTestType].length) {
+                renderQuestion(areaId);
+            } else {
+                const area = document.getElementById(areaId);
+                area.innerHTML = `
+                    <div style="text-align:center; padding:40px; color:${activeTestType === 'vital' ? '#0f0' : '#000'}">
+                        <h2>TEST COMPLETE</h2>
+                        <div style="font-size:4rem; margin:20px 0;">${testScore} / ${questionBank[activeTestType].length}</div>
+                        <p>${testScore >= (questionBank[activeTestType].length * 0.8) ? 'EXCELLENT WORK.' : 'REVISION REQUIRED.'}</p>
+                    </div>
+                `;
+            }
+        }
+
+        /* ===========================
+           TEST ADMIN
+           =========================== */
+        function openVtAdmin(type) {
+            const pin = prompt("ENTER ROOT PIN:");
+            if (pin === '1134') {
+                document.getElementById('vt-target-db').value = type;
+                document.getElementById('vt-admin-panel').style.display = 'flex';
+                renderAdminQuestionList();
+            }
+        }
+
+        function closeVtAdmin() {
+            document.getElementById('vt-admin-panel').style.display = 'none';
+        }
+
+        function renderAdminQuestionList() {
+            const type = document.getElementById('vt-target-db').value;
+            const list = document.getElementById('vt-q-list');
+            list.innerHTML = '';
+            questionBank[type].forEach((q, idx) => {
+                const item = document.createElement('div');
+                item.className = 'vt-admin-item';
+                item.innerHTML = `<span>${idx + 1}. ${q.question.substring(0, 30)}...</span> <span>[${q.type}]</span>`;
+                item.onclick = () => loadQuestionForEdit(idx);
+                list.appendChild(item);
+            });
+        }
+
+        function toggleVtFields() {
+            const type = document.getElementById('vt-type').value;
+            document.getElementById('vt-group-mc').style.display = type === 'mc' ? 'block' : 'none';
+            document.getElementById('vt-group-ans').style.display = type !== 'mc' ? 'block' : 'none';
+        }
+
+        function clearVtForm() {
+            document.getElementById('vt-edit-index').value = "-1";
+            document.getElementById('vt-qtext').value = "";
+            document.getElementById('vt-options').value = "";
+            document.getElementById('vt-correct-idx').value = "";
+            document.getElementById('vt-answer').value = "";
+            document.querySelectorAll('.vt-admin-item').forEach(i => i.classList.remove('active'));
+            toggleVtFields();
+        }
+
+        function loadQuestionForEdit(idx) {
+            const type = document.getElementById('vt-target-db').value;
+            const q = questionBank[type][idx];
+            clearVtForm();
+            
+            document.getElementById('vt-edit-index').value = idx;
+            document.getElementById('vt-type').value = q.type;
+            document.getElementById('vt-qtext').value = q.question;
+            toggleVtFields();
+
+            if (q.type === 'mc') {
+                document.getElementById('vt-options').value = q.options.join(', ');
+                document.getElementById('vt-correct-idx').value = q.correct;
+            } else {
+                document.getElementById('vt-answer').value = q.answer;
+            }
+        }
+
+        function saveQuestionData() {
+            const dbType = document.getElementById('vt-target-db').value;
+            const idx = parseInt(document.getElementById('vt-edit-index').value);
+            const type = document.getElementById('vt-type').value;
+            const qtext = document.getElementById('vt-qtext').value;
+
+            if (!qtext) { alert("Question text required"); return; }
+
+            const newQ = { type: type, question: qtext };
+
+            if (type === 'mc') {
+                const opts = document.getElementById('vt-options').value.split(',').map(s => s.trim());
+                const correct = parseInt(document.getElementById('vt-correct-idx').value);
+                if (opts.length < 2) { alert("Need at least 2 options"); return; }
+                newQ.options = opts;
+                newQ.correct = correct;
+            } else {
+                newQ.answer = document.getElementById('vt-answer').value;
+            }
+
+            if (idx === -1) {
+                questionBank[dbType].push(newQ);
+            } else {
+                questionBank[dbType][idx] = newQ;
+            }
+
+            saveTestConfig();
+            alert("Question Saved.");
+            clearVtForm();
+        }
+
+        function deleteQuestionData() {
+            const dbType = document.getElementById('vt-target-db').value;
+            const idx = parseInt(document.getElementById('vt-edit-index').value);
+            if (idx === -1) return;
+            if (confirm("Delete this question?")) {
+                questionBank[dbType].splice(idx, 1);
+                saveTestConfig();
+                clearVtForm();
+            }
+        }
+
+        // ================= MAIN ADMIN =================
+        function showAdminLogin() {
+            document.getElementById('admin-login-overlay').style.display = 'flex';
+            document.getElementById('admin-pin').value = '';
+            document.getElementById('admin-pin').focus();
+        }
+
+        function closeAdminLogin() {
+            document.getElementById('admin-login-overlay').style.display = 'none';
+        }
+
+        function checkAdminPin() {
+            const pin = document.getElementById('admin-pin').value;
+            if (pin === '1134') {
+                closeAdminLogin();
+                document.getElementById('admin-panel').classList.add('open');
+            } else {
+                alert('Access Denied.');
+            }
+        }
+
+        function toggleAdminPanel() {
+            document.getElementById('admin-panel').classList.toggle('open');
+        }
+
+        function toggleEditMode() {
+            document.body.classList.toggle('editing');
+            const btn = document.getElementById('toggle-edit-btn');
+            if (document.body.classList.contains('editing')) {
+                btn.innerText = "Disable Text Editing";
+                btn.style.background = "#f56565";
+                document.querySelectorAll('.editable').forEach(el => el.contentEditable = "true");
+            } else {
+                btn.innerText = "Enable Text Editing";
+                btn.style.background = "#3b82f6";
+                document.querySelectorAll('.editable').forEach(el => el.contentEditable = "false");
+            }
+        }
+
+        function addNewCategory() {
+            const guideSelect = document.getElementById('target-guide-select').value;
+            const title = document.getElementById('new-category-title').value;
+            if (!title) return;
+            
+            const navContainer = document.getElementById(guideSelect);
+            const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+            const sectionId = 'section-' + slug;
+            
+            const navGroup = document.createElement('div');
+            navGroup.className = 'nav-group';
+            navGroup.innerHTML = `<button class="nav-trigger" onclick="toggleNav(this)">${title} <span class="arrow">▼</span></button><div class="nav-content"><a href="#" class="nav-link" onclick="closeNavMobile(); showSection('${sectionId}')">Overview</a></div>`;
+            navContainer.appendChild(navGroup);
+            
+            const contentBody = document.querySelector('.content-body');
+            const newSection = document.createElement('div');
+            newSection.id = sectionId;
+            newSection.className = 'guide-section';
+            newSection.innerHTML = `<h3 class="editable">${title}</h3>`;
+            contentBody.appendChild(newSection);
+            alert('Category added!');
+        }
+
+        function addNewStep() {
+            const sectionId = document.getElementById('target-section-select').value;
+            const num = document.getElementById('new-step-num').value;
+            const title = document.getElementById('new-step-title').value;
+            const text = document.getElementById('new-step-text').value;
+            const includeTerm = document.getElementById('include-term').value; // no, yes, mjdi
+
+            if (!sectionId) return;
+            const section = document.getElementById(sectionId);
+            
+            const stepBlock = document.createElement('div');
+            stepBlock.className = 'step-block';
+            
+            let html = `
+                <div class="step-marker">${num}</div>
+                <div class="step-detail">
+                    <button class="delete-step-btn" onclick="deleteStep(this)">Delete</button>
+                    <span class="step-title editable">${title}</span>
+                    <p class="step-text editable">${text}</p>
+            `;
+
+            if (includeTerm === 'yes') {
+                html += `<div class="terminal-window"><div class="terminal-bar"><div class="term-dot red"></div></div><div class="terminal-content editable">VITAL COMMAND...</div></div>`;
+            } else if (includeTerm === 'mjdi') {
+                html += `<div class="mjdi-window"><div class="mjdi-header">MJDI Screen</div><div class="mjdi-body"><div class="mjdi-field"><label>Field:</label><input class="mjdi-input" value="Data"></div></div></div>`;
+            }
+
+            html += `</div>`;
+            stepBlock.innerHTML = html;
+            section.appendChild(stepBlock);
+            if (document.body.classList.contains('editing')) {
+                stepBlock.querySelectorAll('.editable').forEach(el => el.contentEditable = "true");
+            }
+        }
+
+        function deleteStep(btn) {
+            if (confirm('Delete step?')) {
+                btn.closest('.step-block').remove();
+            }
+        }
+
+        function saveChanges() {
+            alert('Changes applied to session.');
+        }
+    </script>
 </body>
 </html>
+
