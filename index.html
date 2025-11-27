@@ -301,6 +301,337 @@
         .vt-option-btn.correct { background: #0f0; color: #000; border-color: #0f0; }
         .vt-option-btn.wrong { background: #c00; color: #fff; border-color: #c00; animation: shake 0.5s; }
 
+        /* MJDI Test UI */
+        #mjdi-test-container {
+            position: fixed;
+            inset: 0;
+            background: #0b1120;
+            color: #e2e8f0;
+            font-family: "Consolas", "Courier New", monospace;
+            display: none;
+            flex-direction: column;
+            padding: 18px;
+            z-index: 7000;
+        }
+        .mjdi-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 1px solid #4b5563;
+            padding-bottom: 8px;
+            margin-bottom: 10px;
+        }
+        .mjdi-header-title {
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #93c5fd;
+        }
+        .mjdi-header-sub {
+            font-size: 0.8rem;
+            color: #9ca3af;
+            margin-top: 4px;
+            max-width: 520px;
+        }
+        .mjdi-header-meta {
+            text-align: right;
+            font-size: 0.85rem;
+        }
+        #mjdi-score {
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+        #mjdi-candidate {
+            background: #020617;
+            border: 1px solid #4b5563;
+            border-radius: 3px;
+            color: #e5e7eb;
+            padding: 5px 8px;
+            font-size: 0.85rem;
+            width: 210px;
+        }
+        .mjdi-exit-btn {
+            margin-top: 8px;
+            padding: 6px 14px;
+            border-radius: 4px;
+            border: 1px solid #4b5563;
+            background: #111827;
+            color: #e5e7eb;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        .mjdi-exit-btn:hover {
+            background: #b91c1c;
+            border-color: #fecaca;
+        }
+        .mjdi-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+        .mjdi-menu-bar {
+            display: flex;
+            gap: 10px;
+            padding: 7px 12px;
+            background: #111827;
+            border-radius: 4px 4px 0 0;
+            border: 1px solid #4b5563;
+            border-bottom: none;
+        }
+        .mjdi-menu-bar .menu-item {
+            font-size: 0.82rem;
+            padding: 3px 8px;
+            border-radius: 3px;
+            color: #9ca3af;
+        }
+        .mjdi-menu-bar .menu-item.active {
+            background: #1d4ed8;
+            color: #f9fafb;
+        }
+        .mjdi-screen {
+            flex: 1;
+            border: 1px solid #4b5563;
+            border-radius: 0 4px 4px 4px;
+            background: radial-gradient(circle at top left, #1f2937 0, #020617 60%);
+            padding: 14px 16px;
+            overflow: auto;
+            box-shadow: inset 0 0 25px rgba(0,0,0,0.7);
+        }
+        .mjdi-question-meta {
+            font-size: 0.8rem;
+            color: #9ca3af;
+            margin-bottom: 6px;
+        }
+        .mjdi-question-box {
+            background: rgba(15,23,42,0.9);
+            border-radius: 4px;
+            padding: 14px 16px;
+            border: 1px solid #4b5563;
+        }
+        .mjdi-question-text {
+            font-size: 1.05rem;
+            margin-bottom: 10px;
+        }
+        .mjdi-options {
+            margin-top: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .mjdi-option-btn {
+            background: #020617;
+            border: 1px solid #4b5563;
+            color: #e5e7eb;
+            padding: 8px 10px;
+            text-align: left;
+            cursor: pointer;
+            font-size: 0.9rem;
+            border-radius: 3px;
+        }
+        .mjdi-option-btn:hover {
+            background: #111827;
+            border-color: #60a5fa;
+        }
+        .mjdi-option-btn.correct {
+            background: #065f46;
+            border-color: #34d399;
+        }
+        .mjdi-option-btn.wrong {
+            background: #7f1d1d;
+            border-color: #fca5a5;
+        }
+        .mjdi-written-input {
+            width: 100%;
+            padding: 7px 9px;
+            border-radius: 3px;
+            border: 1px solid #4b5563;
+            background: #020617;
+            color: #e5e7eb;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+        .mjdi-check-btn {
+            padding: 7px 14px;
+            border-radius: 4px;
+            border: 1px solid #4b5563;
+            background: #1d4ed8;
+            color: #f9fafb;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+        .mjdi-check-btn:hover {
+            background: #2563eb;
+        }
+        .mjdi-feedback {
+            margin-top: 8px;
+            font-size: 0.85rem;
+        }
+        .mjdi-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+            font-size: 0.85rem;
+        }
+        .mjdi-nav-btn, .mjdi-cert-btn {
+            padding: 6px 16px;
+            border-radius: 4px;
+            border: 1px solid #4b5563;
+            background: #111827;
+            color: #e5e7eb;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        .mjdi-nav-btn:hover {
+            background: #1f2937;
+        }
+        .mjdi-cert-btn {
+            background: #15803d;
+            border-color: #22c55e;
+        }
+        .mjdi-cert-btn:hover {
+            background: #16a34a;
+        }
+        .mjdi-admin-trigger {
+            position: absolute;
+            bottom: 4px;
+            left: 4px;
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+            border-radius: 50%;
+            border: 1px solid rgba(148,163,184,0.4);
+        }
+
+        /* MJDI Test Admin Panel */
+        #mjdi-admin-panel {
+            position: fixed;
+            top: 5%;
+            left: 5%;
+            width: 90%;
+            height: 90%;
+            background: #f7fafc;
+            color: #1a202c;
+            box-shadow: 0 0 35px rgba(0,0,0,0.5);
+            border-radius: 8px;
+            padding: 18px;
+            display: none;
+            z-index: 8000;
+            flex-direction: column;
+        }
+        .mjdi-admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #cbd5e0;
+        }
+        .mjdi-admin-grid {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            gap: 14px;
+            height: 100%;
+            min-height: 0;
+        }
+        .mjdi-admin-list {
+            border-right: 1px solid #e2e8f0;
+            padding-right: 10px;
+            overflow-y: auto;
+        }
+        .mjdi-admin-item {
+            padding: 6px 8px;
+            border-radius: 4px;
+            border: 1px solid transparent;
+            background: #edf2f7;
+            font-size: 0.85rem;
+            margin-bottom: 6px;
+            cursor: pointer;
+        }
+        .mjdi-admin-item.active {
+            border-color: #3182ce;
+            background: #bfdbfe;
+        }
+        .mjdi-admin-form {
+            overflow-y: auto;
+        }
+        .mjdi-form-group {
+            margin-bottom: 8px;
+        }
+        .mjdi-form-group label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+        .mjdi-form-group input,
+        .mjdi-form-group textarea,
+        .mjdi-form-group select {
+            width: 100%;
+            padding: 6px 8px;
+            border-radius: 4px;
+            border: 1px solid #cbd5e0;
+            font-size: 0.85rem;
+        }
+        .mjdi-form-group textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+        .mjdi-admin-actions {
+            margin-top: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .mjdi-btn {
+            padding: 6px 12px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+        .mjdi-btn.primary {
+            background: #3182ce;
+            color: #fff;
+        }
+        .mjdi-btn.danger {
+            background: #c53030;
+            color: #fff;
+        }
+        .mjdi-btn.secondary {
+            background: #e2e8f0;
+            color: #1a202c;
+        }
+        .mjdi-cert {
+            width: 800px;
+            margin: 0 auto;
+            padding: 40px;
+            border: 4px double #2d3748;
+            background: #f7fafc;
+            text-align: center;
+            font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            color: #1a202c;
+        }
+        .mjdi-cert h1 {
+            font-size: 2rem;
+            margin-bottom: 0.3rem;
+        }
+        .mjdi-cert h2 {
+            font-size: 1.1rem;
+            margin-top: 0;
+            color: #4b5563;
+        }
+        .mjdi-cert .name {
+            font-size: 1.5rem;
+            margin: 18px 0;
+            font-weight: 700;
+        }
+        .mjdi-cert .meta {
+            margin-top: 24px;
+            font-size: 0.9rem;
+        }
+
         .vt-terminal-input {
             background: #000;
             border: none;
@@ -1325,10 +1656,10 @@
     <div id="test-hub">
         <div class="hub-title">Select Challenge</div>
         <div class="hub-cards">
-            <div class="hub-card" style="opacity: 0.5; cursor: not-allowed;">
-                <div class="hub-card-icon">📚</div>
+            <div class="hub-card" onclick="startMjdiTest()">
+                <div class="hub-card-icon">📊</div>
                 <h3>MJDI Test</h3>
-                <span style="color:#aaa; font-size:0.8rem; margin-top:10px;">(Coming Soon)</span>
+                <span style="color:#63b3ed; font-size:0.8rem; margin-top:10px;">Ready</span>
             </div>
             <div class="hub-card" onclick="startVitalTest()">
                 <div class="hub-card-icon">⚡</div>
@@ -1339,7 +1670,113 @@
         <button onclick="closeTestHub()" class="home-btn" style="margin-top:50px;">Return to Menu</button>
     </div>
 
-    <div id="vital-test-container">
+    
+    <!-- MJDI TEST CONTAINER -->
+    <div id="mjdi-test-container">
+        <div class="mjdi-header">
+            <div>
+                <div class="mjdi-header-title">MJDI // COMPETENCY ASSESSMENT</div>
+                <div class="mjdi-header-sub">
+                    Simulated MJDI interface. Work through each question using what you have learned in the MJDI guide.
+                    Mixed multiple choice and written answers. A certificate will be available once you have completed all questions.
+                </div>
+            </div>
+            <div class="mjdi-header-meta">
+                <div id="mjdi-score">SCORE: 0/0</div>
+                <input id="mjdi-candidate" type="text" placeholder="Name for certificate (optional)">
+                <button class="mjdi-exit-btn" onclick="closeMjdiTest()">Exit Test</button>
+            </div>
+        </div>
+
+        <div class="mjdi-body">
+            <div class="mjdi-menu-bar">
+                <span class="menu-item active">Transactions</span>
+                <span class="menu-item">Amendments</span>
+                <span class="menu-item">Interrogations</span>
+                <span class="menu-item">Reports</span>
+                <span class="menu-item">Management Control</span>
+            </div>
+            <div class="mjdi-screen">
+                <div id="mjdi-question-meta" class="mjdi-question-meta"></div>
+                <div id="mjdi-game-area" class="mjdi-game-area"></div>
+            </div>
+        </div>
+
+        <div class="mjdi-footer">
+            <div>
+                <button id="mjdi-prev-btn" class="mjdi-nav-btn" onclick="prevMjdiQuestion()">◀ Previous</button>
+                <button id="mjdi-next-btn" class="mjdi-nav-btn" onclick="nextMjdiQuestion()">Next ▶</button>
+            </div>
+            <button id="mjdi-cert-btn" class="mjdi-cert-btn" onclick="printMjdiCertificate()" style="display:none;">
+                Print Certificate
+            </button>
+        </div>
+
+        <div class="mjdi-admin-trigger" onclick="openMjdiAdmin()" title="MJDI Test Admin"></div>
+    </div>
+
+    <!-- MJDI TEST ADMIN PANEL -->
+    <div id="mjdi-admin-panel">
+        <div class="mjdi-admin-header">
+            <h2>MJDI Test Admin</h2>
+            <button class="mjdi-btn secondary" onclick="closeMjdiAdmin()">Close</button>
+        </div>
+        <div class="mjdi-admin-grid">
+            <div class="mjdi-admin-list" id="mjdi-q-list">
+                <!-- Questions rendered here -->
+            </div>
+            <div class="mjdi-admin-form">
+                <input type="hidden" id="mjdi-edit-index" value="-1">
+                <div class="mjdi-form-group">
+                    <label for="mjdi-type">Question Type</label>
+                    <select id="mjdi-type">
+                        <option value="mc">Multiple Choice</option>
+                        <option value="written">Written Answer</option>
+                    </select>
+                </div>
+                <div class="mjdi-form-group">
+                    <label for="mjdi-qtext">Question Text</label>
+                    <textarea id="mjdi-qtext" rows="3"></textarea>
+                </div>
+                <div class="mjdi-form-group">
+                    <label for="mjdi-options">Options (for multiple choice, separate with | )</label>
+                    <textarea id="mjdi-options" rows="2" placeholder="Example: Option A | Option B | Option C"></textarea>
+                </div>
+                <div class="mjdi-form-group">
+                    <label for="mjdi-answer">Correct Answer</label>
+                    <input id="mjdi-answer" type="text" placeholder="For MC, enter the exact option text. For written, enter the model answer.">
+                </div>
+                <div class="mjdi-form-group">
+                    <label for="mjdi-topic">Topic / Notes (optional)</label>
+                    <input id="mjdi-topic" type="text" placeholder="e.g. Transactions &gt; Issues, Unit Address Interrogation">
+                </div>
+                <div class="mjdi-admin-actions">
+                    <button class="mjdi-btn primary" onclick="saveMjdiQuestion()">Save / Update Question</button>
+                    <button class="mjdi-btn secondary" onclick="clearMjdiForm()">Clear Form</button>
+                    <button class="mjdi-btn danger" onclick="deleteMjdiQuestion()">Delete Selected</button>
+                    <button class="mjdi-btn secondary" onclick="resetMjdiToDefault()">Reset To Default Bank</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MJDI CERTIFICATE TEMPLATE (USED FOR PRINT) -->
+    <div id="mjdi-certificate-template" style="display:none;">
+        <div class="mjdi-cert">
+            <h1>MJDI Competence Certificate</h1>
+            <h2>Management of the Joint Deployed Inventory</h2>
+            <p>This certifies that</p>
+            <div class="name" id="mjdi-cert-name">MJDI Operator</div>
+            <p>has successfully completed the MJDI knowledge check and has demonstrated a working understanding of
+               the core MJDI user workflows as recorded in the unit guide.</p>
+            <div class="meta">
+                <div id="mjdi-cert-score">Score: 0 / 0</div>
+                <div id="mjdi-cert-date"></div>
+            </div>
+        </div>
+    </div>
+
+<div id="vital-test-container">
         <div class="crt-effect"></div>
         <div class="vt-header">
             <div>VITAL TERMINAL SIMULATION v2.4</div>
@@ -3718,6 +4155,477 @@ function saveChanges() {
             alert('Changes applied to current session. To make them permanent, you would need to save the HTML file.');
             console.log("Current HTML state ready for export.");
         }
-    </script>
+    
+    // ================================
+    // MJDI TEST LOGIC & ADMIN
+    // ================================
+    let mjdiQuestions = [];
+    let mjdiCurrentQuestion = 0;
+    let mjdiScore = 0;
+
+    const mjdiDefaultQuestions = [
+        {
+            type: "mc",
+            topic: "Transactions > Issues",
+            question: "Which MJDI menu path is used to raise an Issue against a Consignee?",
+            options: [
+                "Transactions > Asset Management > By Item",
+                "Transactions > Issues",
+                "Interrogations > Item Record",
+                "Reports > Demands"
+            ],
+            answer: "Transactions > Issues"
+        },
+        {
+            type: "mc",
+            topic: "Issues screen layout",
+            question: "On the Issues transaction, which pair of fields together identify the item being processed?",
+            options: [
+                "UIN and Account",
+                "NSC and NIIN",
+                "Consignee and Request/Voucher Number",
+                "MatCon and Quantity"
+            ],
+            answer: "NSC and NIIN"
+        },
+        {
+            type: "written",
+            topic: "Issue refusal",
+            question: "You are unable to issue a demanded item. What must you tick on the Issues transaction to correctly record this?",
+            answer: "Issue Refusal"
+        },
+        {
+            type: "mc",
+            topic: "Issue comments",
+            question: "Where should you record the reason for refusing an issue so that the requesting unit can see it?",
+            options: [
+                "In the MatCon field",
+                "In the Remarks box",
+                "In the Consignee field",
+                "No remark is required"
+            ],
+            answer: "In the Remarks box"
+        },
+        {
+            type: "mc",
+            topic: "Unit Address Interrogation",
+            question: "Which interrogation route is used to confirm a unit's UIN and address details?",
+            options: [
+                "Interrogations > Organisations > Address",
+                "Transactions > Demands",
+                "Reports > Stock Holdings",
+                "Management Control > Alerts"
+            ],
+            answer: "Interrogations > Organisations > Address"
+        },
+        {
+            type: "written",
+            topic: "Asset Management",
+            question: "Name the Asset Management function that lets you view holdings for a single NSN/NIIN.",
+            answer: "By Item"
+        },
+        {
+            type: "mc",
+            topic: "Basic navigation",
+            question: "From the MJDI top menu, where would you normally go to adjust stock MatCon?",
+            options: [
+                "Transactions > Asset Adjustment",
+                "Reports > Reconciliation",
+                "Interrogations > Item Record",
+                "Transactions > Issues"
+            ],
+            answer: "Transactions > Asset Adjustment"
+        },
+        {
+            type: "mc",
+            topic: "Demand management",
+            question: "Which area of MJDI allows you to monitor and manage open Demands on your account?",
+            options: [
+                "Transactions > Demands",
+                "Transactions > Issues",
+                "Interrogations > Job",
+                "Reports > Alerts"
+            ],
+            answer: "Transactions > Demands"
+        },
+        {
+            type: "written",
+            topic: "User identification",
+            question: "When taking screenshots or recording actions in MJDI, which identifier should you avoid capturing for security reasons?",
+            answer: "User ID"
+        },
+        {
+            type: "mc",
+            topic: "Good practice",
+            question: "Before processing an Issue for another unit, what is the best practice first step?",
+            options: [
+                "Raise an Asset Adjustment",
+                "Confirm the Consignee UIN and address in Unit Address Interrogation",
+                "Change the MatCon to A1",
+                "Run a full stocktaking report"
+            ],
+            answer: "Confirm the Consignee UIN and address in Unit Address Interrogation"
+        }
+    ];
+
+    function loadMjdiConfig() {
+        try {
+            const saved = localStorage.getItem("mjdi-questions");
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                if (Array.isArray(parsed) && parsed.length) {
+                    mjdiQuestions = parsed;
+                    return;
+                }
+            }
+        } catch (e) {
+            console.warn("MJDI questions load error", e);
+        }
+        mjdiQuestions = mjdiDefaultQuestions.slice();
+    }
+
+    function saveMjdiConfig() {
+        try {
+            localStorage.setItem("mjdi-questions", JSON.stringify(mjdiQuestions));
+        } catch (e) {
+            console.warn("MJDI questions save error", e);
+        }
+        renderMjdiAdminList();
+    }
+
+    function startMjdiTest() {
+        loadMjdiConfig();
+        mjdiScore = 0;
+        mjdiCurrentQuestion = 0;
+        const container = document.getElementById("mjdi-test-container");
+        const hub = document.getElementById("test-hub");
+        if (hub) hub.classList.add("hidden");
+        const cover = document.getElementById("cover-page");
+        if (cover) cover.classList.add("hidden");
+        if (container) {
+            container.style.display = "flex";
+        }
+        updateMjdiScore();
+        renderMjdiQuestion();
+    }
+
+    function closeMjdiTest() {
+        const container = document.getElementById("mjdi-test-container");
+        if (container) container.style.display = "none";
+        const hub = document.getElementById("test-hub");
+        if (hub) hub.classList.remove("hidden");
+        const cover = document.getElementById("cover-page");
+        if (cover) cover.classList.remove("hidden");
+    }
+
+    function updateMjdiScore() {
+        const scoreEl = document.getElementById("mjdi-score");
+        if (scoreEl) {
+            scoreEl.textContent = "SCORE: " + mjdiScore + " / " + (mjdiQuestions.length || 0);
+        }
+    }
+
+    function sanitizeHtml(str) {
+        if (str === undefined || str === null) return "";
+        return String(str)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#39;");
+    }
+
+    function renderMjdiQuestion() {
+        if (!mjdiQuestions.length) loadMjdiConfig();
+
+        const qIndex = Math.min(Math.max(mjdiCurrentQuestion, 0), mjdiQuestions.length - 1);
+        mjdiCurrentQuestion = qIndex;
+        const q = mjdiQuestions[qIndex];
+
+        const metaEl = document.getElementById("mjdi-question-meta");
+        const area = document.getElementById("mjdi-game-area");
+        const nextBtn = document.getElementById("mjdi-next-btn");
+        const prevBtn = document.getElementById("mjdi-prev-btn");
+        const certBtn = document.getElementById("mjdi-cert-btn");
+
+        if (!q || !area) return;
+
+        if (metaEl) {
+            metaEl.textContent = "Question " + (qIndex + 1) + " of " + mjdiQuestions.length +
+                (q.topic ? "  |  Topic: " + q.topic : "");
+        }
+
+        if (prevBtn) prevBtn.disabled = (qIndex === 0);
+        if (nextBtn) nextBtn.disabled = (qIndex >= mjdiQuestions.length - 1);
+
+        let html = '<div class="mjdi-question-box">';
+        html += '<div class="mjdi-question-text">' + sanitizeHtml(q.question) + "</div>";
+
+        if (q.type === "mc") {
+            html += '<div class="mjdi-options">';
+            (q.options || []).forEach(function(opt, idx) {
+                html += '<button type="button" class="mjdi-option-btn" onclick="checkMjdiMcAnswer(' +
+                        idx + ')">' + sanitizeHtml(opt) + "</button>";
+            });
+            html += "</div>";
+        } else {
+            html += '<input id="mjdi-written-answer" class="mjdi-written-input" placeholder="Type your answer here...">';
+            html += '<button type="button" class="mjdi-check-btn" onclick="checkMjdiWrittenAnswer()">Check Answer</button>';
+        }
+
+        html += '<div id="mjdi-feedback" class="mjdi-feedback"></div>';
+        html += "</div>";
+
+        area.innerHTML = html;
+
+        if (certBtn) {
+            certBtn.style.display = (mjdiScore >= mjdiQuestions.length && mjdiQuestions.length > 0)
+                ? "inline-block"
+                : "none";
+        }
+    }
+
+    function checkMjdiMcAnswer(selectedIndex) {
+        const q = mjdiQuestions[mjdiCurrentQuestion];
+        if (!q) return;
+
+        const buttons = Array.from(document.querySelectorAll("#mjdi-game-area .mjdi-option-btn"));
+        const feedback = document.getElementById("mjdi-feedback");
+        buttons.forEach(function(btn) { btn.disabled = true; });
+
+        const selected = q.options[selectedIndex];
+        const isCorrect = selected === q.answer;
+
+        if (buttons[selectedIndex]) {
+            buttons[selectedIndex].classList.add(isCorrect ? "correct" : "wrong");
+        }
+
+        const correctIndex = (q.options || []).findIndex(function(opt) { return opt === q.answer; });
+        if (!isCorrect && correctIndex >= 0 && buttons[correctIndex]) {
+            buttons[correctIndex].classList.add("correct");
+        }
+
+        if (feedback) {
+            feedback.textContent = isCorrect
+                ? "Correct. Good MJDI drills."
+                : "Incorrect. Correct answer: " + q.answer;
+            feedback.style.color = isCorrect ? "#22c55e" : "#f97316";
+        }
+
+        if (isCorrect) {
+            mjdiScore += 1;
+            updateMjdiScore();
+            if (mjdiScore >= mjdiQuestions.length) {
+                const certBtn = document.getElementById("mjdi-cert-btn");
+                if (certBtn) certBtn.style.display = "inline-block";
+            }
+        }
+    }
+
+    function checkMjdiWrittenAnswer() {
+        const q = mjdiQuestions[mjdiCurrentQuestion];
+        if (!q) return;
+        const field = document.getElementById("mjdi-written-answer");
+        const feedback = document.getElementById("mjdi-feedback");
+        if (!field || !feedback) return;
+
+        const userAnswer = (field.value || "").trim().toLowerCase();
+        const correct = (q.answer || "").trim().toLowerCase();
+
+        if (!userAnswer) {
+            feedback.textContent = "Enter an answer first.";
+            feedback.style.color = "#fbbf24";
+            return;
+        }
+
+        const isCorrect = userAnswer === correct;
+        field.disabled = true;
+
+        if (isCorrect) {
+            mjdiScore += 1;
+            updateMjdiScore();
+        }
+
+        feedback.textContent = (isCorrect ? "Correct." : "Model answer: " + q.answer);
+        feedback.style.color = isCorrect ? "#22c55e" : "#f97316";
+
+        const checkBtn = document.querySelector("#mjdi-game-area .mjdi-check-btn");
+        if (checkBtn) checkBtn.disabled = true;
+
+        if (mjdiScore >= mjdiQuestions.length) {
+            const certBtn = document.getElementById("mjdi-cert-btn");
+            if (certBtn) certBtn.style.display = "inline-block";
+        }
+    }
+
+    function nextMjdiQuestion() {
+        if (mjdiCurrentQuestion < mjdiQuestions.length - 1) {
+            mjdiCurrentQuestion += 1;
+            renderMjdiQuestion();
+        }
+    }
+
+    function prevMjdiQuestion() {
+        if (mjdiCurrentQuestion > 0) {
+            mjdiCurrentQuestion -= 1;
+            renderMjdiQuestion();
+        }
+    }
+
+    // ---- MJDI ADMIN ----
+    function openMjdiAdmin() {
+        const pin = prompt("Enter MJDI Test Admin PIN:");
+        if (pin !== "1134") {
+            if (pin !== null) {
+                alert("Incorrect PIN.");
+            }
+            return;
+        }
+        loadMjdiConfig();
+        const panel = document.getElementById("mjdi-admin-panel");
+        if (panel) {
+            panel.style.display = "flex";
+            renderMjdiAdminList();
+            clearMjdiForm();
+        }
+    }
+
+    function closeMjdiAdmin() {
+        const panel = document.getElementById("mjdi-admin-panel");
+        if (panel) panel.style.display = "none";
+    }
+
+    function renderMjdiAdminList() {
+        const wrap = document.getElementById("mjdi-q-list");
+        if (!wrap) return;
+        wrap.innerHTML = "";
+        mjdiQuestions.forEach(function(q, idx) {
+            const div = document.createElement("div");
+            div.className = "mjdi-admin-item";
+            div.dataset.index = String(idx);
+            div.textContent = String(idx + 1) + ". " + (q.question || "").slice(0, 80);
+            div.onclick = function() { loadMjdiForEdit(idx); };
+            wrap.appendChild(div);
+        });
+    }
+
+    function loadMjdiForEdit(index) {
+        const q = mjdiQuestions[index];
+        if (!q) return;
+        document.getElementById("mjdi-edit-index").value = String(index);
+        document.getElementById("mjdi-type").value = q.type || "mc";
+        document.getElementById("mjdi-qtext").value = q.question || "";
+        document.getElementById("mjdi-options").value = (q.options || []).join(" | ");
+        document.getElementById("mjdi-answer").value = q.answer || "";
+        document.getElementById("mjdi-topic").value = q.topic || "";
+
+        const items = document.querySelectorAll(".mjdi-admin-item");
+        items.forEach(function(el) {
+            el.classList.toggle("active", Number(el.dataset.index) === index);
+        });
+    }
+
+    function clearMjdiForm() {
+        document.getElementById("mjdi-edit-index").value = "-1";
+        document.getElementById("mjdi-qtext").value = "";
+        document.getElementById("mjdi-options").value = "";
+        document.getElementById("mjdi-answer").value = "";
+        document.getElementById("mjdi-topic").value = "";
+        const items = document.querySelectorAll(".mjdi-admin-item");
+        items.forEach(function(el) { el.classList.remove("active"); });
+    }
+
+    function saveMjdiQuestion() {
+        const idx = parseInt(document.getElementById("mjdi-edit-index").value, 10);
+        const type = document.getElementById("mjdi-type").value || "mc";
+        const question = document.getElementById("mjdi-qtext").value.trim();
+        const optionsRaw = document.getElementById("mjdi-options").value.trim();
+        const answer = document.getElementById("mjdi-answer").value.trim();
+        const topic = document.getElementById("mjdi-topic").value.trim();
+
+        if (!question) {
+            alert("Question text is required.");
+            return;
+        }
+        if (type === "mc" && (!optionsRaw || !answer)) {
+            alert("For multiple choice questions, options and a correct answer are required.");
+            return;
+        }
+
+        const options = optionsRaw
+            ? optionsRaw.split("|").map(function(s) { return s.trim(); }).filter(Boolean)
+            : [];
+
+        const payload = { type: type, question: question, answer: answer, topic: topic };
+        if (type === "mc") payload.options = options;
+
+        if (!Number.isNaN(idx) && idx >= 0 && idx < mjdiQuestions.length) {
+            mjdiQuestions[idx] = payload;
+        } else {
+            mjdiQuestions.push(payload);
+        }
+
+        saveMjdiConfig();
+        clearMjdiForm();
+    }
+
+    function deleteMjdiQuestion() {
+        const idx = parseInt(document.getElementById("mjdi-edit-index").value, 10);
+        if (Number.isNaN(idx) || idx < 0 || idx >= mjdiQuestions.length) {
+            alert("Select a question to delete first.");
+            return;
+        }
+        if (!confirm("Delete this question from the MJDI bank?")) return;
+        mjdiQuestions.splice(idx, 1);
+        saveMjdiConfig();
+        clearMjdiForm();
+    }
+
+    function resetMjdiToDefault() {
+        if (!confirm("Reset MJDI question bank to the default 10 questions? This will overwrite any custom questions you have added.")) {
+            return;
+        }
+        mjdiQuestions = mjdiDefaultQuestions.slice();
+        saveMjdiConfig();
+        clearMjdiForm();
+    }
+
+    function printMjdiCertificate() {
+        const candidate = (document.getElementById("mjdi-candidate").value || "").trim() || "MJDI Operator";
+        const scoreText = "Score: " + mjdiScore + " / " + (mjdiQuestions.length || 0);
+        const now = new Date();
+        const dateText = "Completed on: " + now.toLocaleDateString() + " " + now.toLocaleTimeString();
+
+        const nameEl = document.getElementById("mjdi-cert-name");
+        const scoreEl = document.getElementById("mjdi-cert-score");
+        const dateEl = document.getElementById("mjdi-cert-date");
+        if (nameEl) nameEl.textContent = candidate;
+        if (scoreEl) scoreEl.textContent = scoreText;
+        if (dateEl) dateEl.textContent = dateText;
+
+        const template = document.getElementById("mjdi-certificate-template");
+        if (!template) return;
+
+        const win = window.open("", "_blank", "width=900,height=650");
+        if (!win) return;
+
+        win.document.write("<html><head><title>MJDI Competence Certificate</title>");
+        win.document.write('<style>body{margin:0;padding:20px;background:#e5e7eb;}'+
+            '.mjdi-cert{width:800px;margin:0 auto;padding:40px;border:4px double #2d3748;background:#f7fafc;text-align:center;font-family:"Segoe UI",system-ui,-apple-system,BlinkMacSystemFont,sans-serif;color:#1a202c;}'+
+            '.mjdi-cert h1{font-size:2rem;margin-bottom:0.3rem;}'+
+            '.mjdi-cert h2{font-size:1.1rem;margin-top:0;color:#4b5563;}'+
+            '.mjdi-cert .name{font-size:1.5rem;margin:18px 0;font-weight:700;}'+
+            '.mjdi-cert .meta{margin-top:24px;font-size:0.9rem;}'+
+            '</style></head><body>');
+        win.document.write(template.innerHTML);
+        win.document.write("</body></html>");
+        win.document.close();
+        win.focus();
+        win.print();
+    }
+
+    // Ensure MJDI bank is initialised ready for use
+    loadMjdiConfig();
+</script>
 </body>
 </html>
