@@ -834,6 +834,73 @@
         .upload-text { font-size: 0.85rem; color: #6b7280; font-weight: 600; }
         .upload-icon { font-size: 1.5rem; color: #9ca3af; margin-bottom: 10px; }
 
+        .upload-insert-btn {
+            padding: 8px 14px;
+            border-radius: 6px;
+            border: 1px dashed #94a3b8;
+            background: #e5e7eb;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #374151;
+            cursor: pointer;
+        }
+        .upload-zone.has-image .upload-insert-btn {
+            display: none;
+        }
+        .upload-remove-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(239, 68, 68, 0.95);
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 3px 7px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            display: none;
+        }
+        body.editing .upload-remove-btn {
+            display: inline-block;
+        }
+
+        /* FLOATING TEXT TOOLBAR */
+        #text-toolbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -120%);
+            background: #111827;
+            color: #f9fafb;
+            border-radius: 6px;
+            padding: 6px 8px;
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.7);
+            display: none;
+            align-items: center;
+            gap: 6px;
+            z-index: 11000;
+        }
+        #text-toolbar button {
+            background: transparent;
+            border: none;
+            color: inherit;
+            padding: 4px 6px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        #text-toolbar button:hover {
+            background: rgba(55, 65, 81, 0.9);
+        }
+        #text-toolbar input[type="color"] {
+            width: 26px;
+            height: 26px;
+            border: none;
+            padding: 0;
+            background: transparent;
+            cursor: pointer;
+        }
+
         /* DOCUMENT VIEWER FOR LSA&I */
         .doc-viewer-container {
             margin-top: 20px;
@@ -1215,6 +1282,14 @@
             <div class="admin-form-group" id="term-content-group" style="display:none;">
                 <label>Terminal Content</label>
                 <textarea id="new-term-text" rows="3" placeholder="Green screen text..."></textarea>
+            </div>
+
+            <div class="admin-form-group">
+                <label>Include Image Upload Area?</label>
+                <select id="include-image">
+                    <option value="no">No</option>
+                    <option value="yes">Yes</option>
+                </select>
             </div>
             <button class="admin-btn" onclick="addNewStep()">Add Step</button>
         </div>
@@ -2749,6 +2824,14 @@ Record UAA appointments, configuration changes and key decisions in a local log,
         </div>
     </div>
 
+
+    <div id="text-toolbar">
+        <button type="button" data-cmd="bold"><strong>B</strong></button>
+        <button type="button" data-cmd="italic"><em>I</em></button>
+        <button type="button" data-cmd="strikeThrough"><span style="text-decoration: line-through;">S</span></button>
+        <input type="color" id="toolbar-color" title="Text colour">
+    </div>
+
     <script>
         // Prevent Context Menu
         document.addEventListener('contextmenu', event => event.preventDefault());
@@ -2758,13 +2841,30 @@ Record UAA appointments, configuration changes and key decisions in a local log,
 
         // Initialize listeners for drag and drop
         document.addEventListener('DOMContentLoaded', () => {
-            document.querySelectorAll('.upload-zone').forEach(addDragDropListeners);
+            document.querySelectorAll('.upload-zone').forEach(zone => {
+                addDragDropListeners(zone);
+                const img = zone.querySelector('img');
+                if (img && img.src) {
+                    zone.classList.add('has-image');
+                }
+                if (!zone.querySelector('.upload-remove-btn')) {
+                    const removeBtn = document.createElement('button');
+                    removeBtn.type = 'button';
+                    removeBtn.className = 'upload-remove-btn';
+                    removeBtn.textContent = 'Remove';
+                    removeBtn.addEventListener('click', function(event) {
+                        removeImage(this, event);
+                    });
+                    zone.appendChild(removeBtn);
+                }
+            });
             document.body.addEventListener('input', () => {
                 if (document.body.classList.contains('editing')) {
                     autoSave();
                 }
             });
             loadTestConfig(); // Load Saved Tests
+            initTextToolbar();
         });
 
         // Mobile Nav Toggle
@@ -2816,7 +2916,7 @@ Record UAA appointments, configuration changes and key decisions in a local log,
             }
         }
 
-        function handleFiles(files, zone) {
+                function handleFiles(files, zone) {
             if (files.length > 0) {
                 let file = files[0];
                 if (file.type.startsWith('image/')) {
@@ -2827,15 +2927,89 @@ Record UAA appointments, configuration changes and key decisions in a local log,
                         let text = zone.querySelector('.upload-text');
                         img.src = e.target.result;
                         img.style.display = 'block';
-                        icon.style.display = 'none';
-                        text.style.display = 'none';
+                        if (icon) icon.style.display = 'none';
+                        if (text) text.style.display = 'none';
+                        zone.classList.add('has-image');
                     }
                     reader.readAsDataURL(file);
                 }
             }
         }
 
-        function loadLsaiDocument(input) {
+
+        
+        function removeImage(btn, event) {
+            if (event) {
+                event.stopPropagation();
+            }
+            const zone = btn.closest('.upload-zone');
+            if (!zone) return;
+            const img = zone.querySelector('img');
+            const input = zone.querySelector('input[type="file"]');
+            const icon = zone.querySelector('.upload-icon');
+            const text = zone.querySelector('.upload-text');
+            if (img) {
+                img.src = '';
+                img.style.display = 'none';
+            }
+            if (input) {
+                input.value = '';
+            }
+            if (icon) icon.style.display = '';
+            if (text) text.style.display = '';
+            zone.classList.remove('has-image');
+            autoSave();
+        }
+
+
+        function initTextToolbar() {
+            const toolbar = document.getElementById('text-toolbar');
+            if (!toolbar) return;
+
+            // Prevent losing selection when clicking toolbar
+            toolbar.addEventListener('mousedown', function(e) {
+                e.preventDefault();
+            });
+
+            toolbar.querySelectorAll('[data-cmd]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const cmd = this.getAttribute('data-cmd');
+                    if (!cmd) return;
+                    document.execCommand(cmd, false, null);
+                });
+            });
+
+            const colourPicker = document.getElementById('toolbar-color');
+            if (colourPicker) {
+                colourPicker.addEventListener('input', function() {
+                    document.execCommand('foreColor', false, this.value);
+                });
+            }
+        }
+
+        document.addEventListener('selectionchange', function() {
+            if (!document.body.classList.contains('editing')) {
+                const tb = document.getElementById('text-toolbar');
+                if (tb) tb.style.display = 'none';
+                return;
+            }
+            const selection = window.getSelection();
+            const toolbar = document.getElementById('text-toolbar');
+            if (!toolbar || !selection.rangeCount || selection.isCollapsed) {
+                if (toolbar) toolbar.style.display = 'none';
+                return;
+            }
+            const range = selection.getRangeAt(0);
+            const rect = range.getBoundingClientRect();
+            if (!rect || (rect.top === 0 && rect.left === 0)) {
+                toolbar.style.display = 'none';
+                return;
+            }
+            toolbar.style.display = 'flex';
+            toolbar.style.top = (rect.top - 45) + 'px';
+            toolbar.style.left = (rect.left + (rect.width / 2)) + 'px';
+        });
+function loadLsaiDocument(input) {
             const container = document.getElementById('lsai-doc-container');
             if (input.files && input.files[0]) {
                 const file = input.files[0];
@@ -2927,7 +3101,7 @@ Record UAA appointments, configuration changes and key decisions in a local log,
             element.querySelector('input').click();
         }
 
-        function previewImage(input) {
+                function previewImage(input) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
                 reader.onload = function(e) {
@@ -2937,12 +3111,14 @@ Record UAA appointments, configuration changes and key decisions in a local log,
                     var text = zone.querySelector('.upload-text');
                     img.src = e.target.result;
                     img.style.display = 'block';
-                    icon.style.display = 'none';
-                    text.style.display = 'none';
+                    if (icon) icon.style.display = 'none';
+                    if (text) text.style.display = 'none';
+                    zone.classList.add('has-image');
                 }
                 reader.readAsDataURL(input.files[0]);
             }
         }
+
 
         /* =================================
            TEST SYSTEM LOGIC & ADMIN
@@ -3478,6 +3654,7 @@ Record UAA appointments, configuration changes and key decisions in a local log,
             populateCategoryDeleteSelect();
         }
 
+        
         function addNewStep() {
             const sectionId = document.getElementById('target-section-select').value;
             const num = document.getElementById('new-step-num').value;
@@ -3485,13 +3662,15 @@ Record UAA appointments, configuration changes and key decisions in a local log,
             const text = document.getElementById('new-step-text').value;
             const includeTerm = document.getElementById('include-term').value === 'yes';
             const termText = document.getElementById('new-term-text').value;
+            const includeImageSelect = document.getElementById('include-image');
+            const includeImage = includeImageSelect && includeImageSelect.value === 'yes';
 
             if (!sectionId) { alert('Please select a section.'); return; }
             const section = document.getElementById(sectionId);
-            
+
             const stepBlock = document.createElement('div');
             stepBlock.className = 'step-block';
-            
+
             let html = `
                 <div class="step-marker">${num}</div>
                 <div class="step-detail">
@@ -3504,21 +3683,38 @@ Record UAA appointments, configuration changes and key decisions in a local log,
                 html += `<div class="terminal-window"><div class="terminal-bar"><div class="term-dot red"></div></div><div class="terminal-content editable">${termText}</div></div>`;
             }
 
-            html += `<div class="upload-zone" onclick="triggerUpload(this)"><div class="upload-icon">📸</div><span class="upload-text">Click or Drag image here</span><input type="file" hidden accept="image/*" onchange="previewImage(this)"><img src=""></div></div>`;
+            if (includeImage) {
+                html += `
+                    <div class="upload-zone" onclick="triggerUpload(this)">
+                        <button type="button" class="upload-insert-btn">Insert Image</button>
+                        <input type="file" hidden accept="image/*" onchange="previewImage(this)">
+                        <img src="">
+                        <button type="button" class="upload-remove-btn" onclick="removeImage(this, event)">Remove</button>
+                    </div>
+                `;
+            }
+
+            html += `
+                </div>
+            `;
 
             stepBlock.innerHTML = html;
             section.appendChild(stepBlock);
-            addDragDropListeners(stepBlock.querySelector('.upload-zone'));
+
+            const zone = stepBlock.querySelector('.upload-zone');
+            if (zone) {
+                addDragDropListeners(zone);
+            }
 
             if (document.body.classList.contains('editing')) {
                 stepBlock.querySelectorAll('.editable').forEach(el => el.contentEditable = "true");
             }
-            
+
             autoSave();
             alert('Step added successfully!');
         }
 
-        function saveChanges() {
+function saveChanges() {
             alert('Changes applied to current session. To make them permanent, you would need to save the HTML file.');
             console.log("Current HTML state ready for export.");
         }
