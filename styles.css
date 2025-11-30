@@ -2498,3 +2498,9 @@ body.vital-body {
     font-family: sans-serif; font-size: 10px;
 }
 #vital-test-container:hover .vital-off-switch { bottom: 10px; transition: bottom 0.3s; }
+/* Add to bottom of styles.css */
+.mjdi-q-options button.selected {
+    background-color: #add8e6 !important; /* Light Blue */
+    border-color: #000080 !important;     /* Navy Border */
+    font-weight: bold;
+}

@@ -1239,7 +1239,7 @@ let mjdiSim = {
 };
 
 // Config
-const mjdiSimConfig = { pass: 80, rand: true, max: 0 };
+const mjdiSimConfig = { pass: 80, rand: true, max: 10 };
 const tabConfig = { amendItemTabs: ['Item', 'Location', 'Asset'] };
 
 // Full Question Bank
@@ -1265,6 +1265,104 @@ const mjdiSimQuestions = [
         options: ['05', '09', '16'],
         answer: 2
     },
+	{
+    "type": "mc",
+    "topic": "Transactions – Demands",
+    "text": "Which Reason for Demand (RFD) code is applied when MJDI creates a recurring replenishment demand after an accepted U642 recommendation?",
+    "options": ["RFD 1", "RFD 3", "RFD 7"],
+    "answer": 1
+	},
+	{
+    "type": "mc",
+    "topic": "Provisioning – U642",
+    "text": "How often must units retrieve and action the U642 Daily Provisioning Review report?",
+    "options": ["Weekly", "Daily", "Monthly"],
+    "answer": 1
+	},
+	{
+    "type": "mc",
+    "topic": "Materiel Condition",
+    "text": "What does MatCon R2 normally indicate?",
+    "options": ["Serviceable item", "Repairable item", "Unserviceable scrap item"],
+    "answer": 1
+	},
+	{
+    "type": "mc",
+    "topic": "Discrepancy Reporting",
+    "text": "Which discrepancies require a mandatory investigation under DLF rules?",
+    "options": ["Any quantity discrepancy under £50", "Any discrepancy above the trivial threshold or involving damage", "Any demand over 30 days old"],
+    "answer": 1
+	},
+	{
+    "type": "mc",
+    "topic": "Losses – DLF",
+    "text": "When a preliminary investigation confirms an item is lost, what is the next required action?",
+    "options": ["Raise a DNN demand", "Enter the details into the Materiel Loss Register", "Send a message to the DMC"],
+    "answer": 1
+	},
+	{
+    "type": "mc",
+    "topic": "Issues – External Issue",
+    "text": "Which option must be selected when issuing stores externally where no internal AINU has raised an Issue Request?",
+    "options": ["With Issue Request", "Without Issue Request", "Direct Issue"],
+    "answer": 1
+	},
+	{
+    "type": "mc",
+    "topic": "Interrogations – Item Record",
+    "text": "Which interrogation path is used to view an item's current stock levels and storage locations?",
+    "options": ["Interrogations > Item Record > Storage", "Transactions > Receipts", "Amendments > Item Record"],
+    "answer": 0
+	},
+	{
+    "type": "mc",
+    "topic": "Dues Management",
+    "text": "What does an internal Dues-In normally indicate?",
+    "options": ["A replenishment demand from depot", "An item issued from stock to an AinU but not yet receipted", "A cancelled demand awaiting closure"],
+    "answer": 1
+	},
+	{
+    "type": "mc",
+    "topic": "Progressions – FDA",
+    "text": "What does FDA (Future Date Availability) mean when viewed in OLIVER LTB?",
+    "options": ["Item cancelled", "Item is available immediately", "Item is not available and has been placed on Dues-In for a future date"],
+    "answer": 2
+	},
+	{
+    "type": "mc",
+    "topic": "CP&F Accounting",
+    "text": "Which items must be accounted for using CP&F processes on MJDI?",
+    "options": ["All items held as SAFI", "Items purchased using Public Funds through CP&F or ePC", "Any non-codified items only"],
+    "answer": 1
+	},
+{
+    "type": "mc",
+    "topic": "AinUs – Classification",
+    "text": "Which type of AinU records items expected to be returned to stock?",
+    "options": ["Consuming AinU", "Non-Consuming AinU", "Temporary AinU"],
+    "answer": 1
+	},
+	{
+    "type": "mc",
+    "topic": "Demand Cancellation",
+    "text": "What information is required to cancel a demand on MJDI?",
+    "options": ["NSN only", "NSN, Demand Number and Demand Date", "Demand Number only"],
+    "answer": 1
+	},
+	{
+    "type": "mc",
+    "topic": "Reports – Fallback",
+    "text": "Which user permission is required to run and export Oracle Fallback prints?",
+    "options": ["Any MJDI user", "UIN Administrator (UAA)", "Only the OC"],
+    "answer": 1
+	},
+	{
+    "type": "mc",
+    "topic": "Stocktaking",
+    "text": "Which type of check must be completed during a Handover/Takeover of a material account?",
+    "options": ["Type B Muster", "AinU Muster (Type A)", "No stocktake required"],
+    "answer": 1
+	},
     {
         type: 'mc',
         topic: 'Demand Book',
@@ -1375,7 +1473,12 @@ function mjdiSimLoadQ() {
     
     qBox.style.display = 'block';
     fb.innerText = '';
+    
+    // Reset buttons
+    btn.style.display = 'inline-block';
+    next.style.display = 'none';
     next.disabled = true;
+    
     mjdiSim.waitingPractical = false;
 
     if (mjdiSim.currentQ >= mjdiSim.questions.length) {
@@ -1393,25 +1496,27 @@ function mjdiSimLoadQ() {
     if (q.type.startsWith('practical')) {
         qBox.classList.remove('centered'); qBox.classList.add('corner');
         lock.style.display = 'none';
-        btn.style.display = 'none';
+        btn.style.display = 'none'; // Auto-submit on correct action
         qInput.innerHTML = '<em>Perform action in MJDI...</em>';
         mjdiSim.waitingPractical = true;
     } else {
         qBox.classList.remove('corner'); qBox.classList.add('centered');
         lock.style.display = 'block';
-        btn.style.display = 'inline-block';
+        
         if (q.type === 'mc') {
             q.options.forEach((opt, i) => {
                 const b = document.createElement('button');
                 b.innerText = opt;
+                // NEW: Use classList for selection
                 b.onclick = () => {
-                    document.querySelectorAll('#mjdi-sim-q-input button').forEach(x=>x.style.background='white');
-                    b.style.background='#add8e6'; b.dataset.idx = i;
+                    document.querySelectorAll('#mjdi-sim-q-input button').forEach(x => x.classList.remove('selected'));
+                    b.classList.add('selected'); 
+                    b.dataset.idx = i;
                 };
                 qInput.appendChild(b);
             });
         } else {
-            qInput.innerHTML = '<input type="text" id="mjdi-sim-ans-text" class="mjdi-input" style="width:100%; padding:5px;">';
+            qInput.innerHTML = '<input type="text" id="mjdi-sim-ans-text" class="mjdi-input inset-border" style="width:100%; padding:5px;">';
         }
     }
 }
@@ -1419,20 +1524,18 @@ function mjdiSimLoadQ() {
 function mjdiSimSubmit() {
     const q = mjdiSim.questions[mjdiSim.currentQ];
     let correct = false;
+    
     if (q.type === 'mc') {
-        const sel = document.querySelector('#mjdi-sim-q-input button[data-idx]');
-        // Visual selection fallback
-        if (sel && document.querySelector('#mjdi-sim-q-input button[style*="add8e6"]')) {
-             if (parseInt(sel.dataset.idx) === q.answer) correct = true;
-        }
-        // Fallback for visual selection if data-idx fails or wasn't set correctly by DOM
-        const allBtns = document.querySelectorAll('#mjdi-sim-q-input button');
-        for(let i=0; i<allBtns.length; i++) {
-            if(allBtns[i].style.background.includes('add8e6') && i === q.answer) correct = true;
+        // NEW: Check for the .selected class
+        const sel = document.querySelector('#mjdi-sim-q-input button.selected');
+        if (sel && parseInt(sel.dataset.idx) === q.answer) {
+            correct = true;
         }
     } else {
         const val = document.getElementById('mjdi-sim-ans-text').value;
-        if (val && val.toLowerCase().includes(String(q.answer).toLowerCase())) correct = true;
+        if (val && val.toLowerCase().includes(String(q.answer).toLowerCase())) {
+            correct = true;
+        }
     }
     mjdiSimResult(correct);
 }
@@ -1440,12 +1543,31 @@ function mjdiSimSubmit() {
 function mjdiSimResult(isCorrect) {
     mjdiSim.waitingPractical = false;
     const fb = document.getElementById('mjdi-sim-feedback');
-    if (isCorrect) { mjdiSim.score++; fb.innerText = "Correct!"; fb.style.color='green'; }
-    else { fb.innerText = "Incorrect."; fb.style.color='red'; }
     
-    document.getElementById('mjdi-sim-footer-score').innerText = `Score: ${mjdiSim.score}`;
-    document.getElementById('mjdi-sim-submit').style.display='none';
-    document.getElementById('mjdi-sim-next').disabled = false;
+    // Feedback Logic
+    if (isCorrect) { 
+        mjdiSim.score++; 
+        fb.innerText = "Correct!"; 
+        fb.style.color = 'green'; 
+    } else { 
+        fb.innerText = "Incorrect."; 
+        fb.style.color = 'red'; 
+    }
+    
+    // Update Footer Score
+    const footerScore = document.getElementById('mjdi-sim-footer-score');
+    if(footerScore) footerScore.innerText = `Score: ${mjdiSim.score}`;
+    
+    // UI Button Swap: Hide Submit, Show Next
+    const btnSubmit = document.getElementById('mjdi-sim-submit');
+    const btnNext = document.getElementById('mjdi-sim-next');
+    
+    if(btnSubmit) btnSubmit.style.display = 'none';
+    
+    if(btnNext) {
+        btnNext.style.display = 'inline-block'; // Make visible
+        btnNext.disabled = false;               // Enable clicking
+    }
 }
 
 function mjdiSimNext() {
@@ -1454,31 +1576,215 @@ function mjdiSimNext() {
     mjdiSimLoadQ();
 }
 
+/* ==========================================================================
+   MJDI CERTIFICATE & FINISH LOGIC
+   Replace existing mjdiSimFinish and printMjdiCert in script.js
+   ========================================================================== */
+
 function mjdiSimFinish() {
-    const pct = (mjdiSim.score / mjdiSim.questions.length) * 100;
+    const pct = Math.round((mjdiSim.score / mjdiSim.questions.length) * 100);
+    const passed = pct >= 80; // Pass mark 80%
     const qBody = document.getElementById('mjdi-sim-q-body');
-    
-    let html = `<h3>Complete</h3><p>Score: ${pct.toFixed(0)}%</p>`;
-    if (pct >= mjdiSimConfig.pass) {
-        html += '<p style="color:green;font-weight:bold">PASS</p>';
-        html += '<button class="mjdi-btn-std" onclick="printMjdiCert()">Print Certificate</button>';
-    } else {
-        html += '<p style="color:red;font-weight:bold">FAIL – Revision Required</p>';
-        html += '<button class="mjdi-btn-std" onclick="window.location.reload()">Re-Test</button>';
+    const footerStatus = document.getElementById('mjdi-sim-footer-status');
+
+    // Update Status Bar
+    if (footerStatus) {
+        footerStatus.innerText = passed ? "STATUS: QUALIFIED" : "STATUS: FAILED";
+        footerStatus.style.color = passed ? "green" : "red";
+        footerStatus.style.fontWeight = "bold";
     }
-    
+
+    let html = `
+        <div style="text-align:center; padding:10px;">
+            <h3 style="margin:5px 0; color:${passed ? '#008000' : '#cc0000'}; border-bottom:1px solid #ccc; padding-bottom:5px;">
+                ASSESSMENT COMPLETE
+            </h3>
+            
+            <div style="font-size:32px; font-weight:bold; margin:15px 0;">
+                ${pct}%
+            </div>
+            
+            <div style="font-size:12px; margin-bottom:15px;">
+                ${passed ? 'Congratulations. You have demonstrated competent knowledge of MJDI procedures.' : 'Standard not met. Please review the material and re-attempt.'}
+            </div>
+    `;
+
+    if (passed) {
+        html += `
+            <button class="mjdi-btn-std outset-border" onclick="printMjdiCert()" 
+                style="padding:8px 15px; font-weight:bold; width:100%; margin-bottom:5px;">
+                🖨️ PRINT CERTIFICATE
+            </button>
+        `;
+    } else {
+        html += `
+            <button class="mjdi-btn-std outset-border" onclick="window.location.reload()" 
+                style="padding:8px 15px; width:100%;">
+                RETAKE ASSESSMENT
+            </button>
+        `;
+    }
+
+    html += `</div>`;
+
     qBody.innerHTML = html;
+    
+    // Hide controls
     document.getElementById('mjdi-sim-q-input').innerHTML = '';
     document.getElementById('mjdi-sim-next').style.display = 'none';
-    document.getElementById('mjdi-sim-lock').style.display = 'block';
-    document.getElementById('mjdi-sim-prompt').classList.add('centered');
+    document.getElementById('mjdi-sim-submit').style.display = 'none';
+    
+    // Lock screen slightly to focus attention
+    const lock = document.getElementById('mjdi-sim-lock');
+    if (lock) lock.style.display = 'block';
+    
+    // Center the prompt
+    const prompt = document.getElementById('mjdi-sim-prompt');
+    if (prompt) {
+        prompt.classList.remove('corner');
+        prompt.classList.add('centered');
+    }
 }
 
 function printMjdiCert() {
-    const w = window.open('', '', 'width=900,height=700');
-    w.document.write(`<html><head><title>MJDI Competence Certificate</title><style>@page { size: landscape; margin: 0; } body { font-family: 'Times New Roman', serif; padding: 40px; text-align: center; border: 20px solid #0a246a; margin: 20px; height: 90vh; position: relative; background: #fff; } .bg-logo { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 500px; opacity: 0.1; filter: grayscale(100%); z-index: -1; } h1 { font-size: 48px; color: #0a246a; margin-bottom: 10px; text-transform: uppercase; } h2 { font-size: 24px; color: #555; margin-top: 0; } .cert-content { margin-top: 60px; font-size: 24px; line-height: 1.6; } .candidate { font-size: 36px; font-weight: bold; border-bottom: 2px solid #000; display: inline-block; min-width: 400px; margin: 20px 0; } .footer { margin-top: 100px; display: flex; justify-content: space-around; } .sig-line { border-top: 1px solid #000; width: 300px; padding-top: 10px; font-size: 18px; } </style></head><body><img src="https://upload.wikimedia.org/wikipedia/commons/e/ea/Cap_Badge_of_the_RLC.png" class="bg-logo"><h1>Certificate of Competence</h1><h2>Management of the Joint Deployed Inventory</h2><div class="cert-content"><p>This is to certify that</p><div class="candidate">${mjdiSession.rank} ${mjdiSession.name}</div><p>Has successfully passed the MJDI Unit Operator Assessment</p><p>Score: ${(mjdiSession.score/mjdiSession.questions.length*100).toFixed(0)}%</p></div><div class="footer"><div class="sig-line">Date: ${new Date().toLocaleDateString()}</div><div class="sig-line">Instructor Signature</div></div></body></html>`);
-    w.document.close();
-    setTimeout(() => w.print(), 500);
+    // 1. Get User Details (Already stored in mjdiSim object from login)
+    const rank = mjdiSim.rank || "Rank";
+    const name = mjdiSim.name || "Name";
+    const fullName = `${rank} ${name}`;
+    
+    // 2. Calculate Stats
+    const date = new Date().toLocaleDateString("en-GB", { day: 'numeric', month: 'long', year: 'numeric' });
+    const scorePct = Math.round((mjdiSim.score / mjdiSim.questions.length) * 100);
+
+    // 3. Generate Certificate Window
+    const win = window.open('', '', 'width=900,height=700');
+    win.document.write(`
+        <html>
+        <head>
+            <title>MJDI Competency Certificate</title>
+            <style>
+                @page { size: landscape; margin: 0; }
+                body {
+                    font-family: 'Times New Roman', serif;
+                    background: #fff;
+                    color: #000;
+                    padding: 40px;
+                    text-align: center;
+                    border: 15px double #0a246a; /* MJDI Blue Border */
+                    margin: 20px;
+                    height: 85vh;
+                    position: relative;
+                    -webkit-print-color-adjust: exact;
+                }
+                .watermark {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    opacity: 0.08;
+                    width: 400px;
+                    z-index: -1;
+                    filter: grayscale(100%);
+                }
+                h1 {
+                    font-size: 42px;
+                    margin: 20px 0 10px 0;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                    color: #0a246a;
+                }
+                h2 {
+                    font-size: 22px;
+                    margin-top: 0;
+                    color: #444;
+                    font-weight: normal;
+                    text-transform: uppercase;
+                    border-bottom: 1px solid #ccc;
+                    display: inline-block;
+                    padding-bottom: 10px;
+                }
+                .content {
+                    margin-top: 50px;
+                    font-size: 24px;
+                    line-height: 1.8;
+                }
+                .candidate {
+                    font-size: 40px;
+                    font-weight: bold;
+                    color: #000;
+                    margin: 20px 0;
+                    font-family: 'Courier New', monospace; /* Digital feel for MJDI */
+                    text-decoration: underline;
+                }
+                .stats-box {
+                    margin-top: 30px;
+                    font-size: 18px;
+                    color: #0a246a;
+                    font-weight: bold;
+                    border: 2px solid #0a246a;
+                    display: inline-block;
+                    padding: 10px 30px;
+                    background: #f0f8ff;
+                }
+                .footer {
+                    margin-top: 90px;
+                    display: flex;
+                    justify-content: space-around;
+                    align-items: flex-end;
+                }
+                .sig-line {
+                    border-top: 1px solid #000;
+                    width: 250px;
+                    padding-top: 5px;
+                    font-size: 14px;
+                    font-weight: bold;
+                    text-transform: uppercase;
+                }
+                .print-hide {
+                    position: fixed; top: 10px; right: 10px;
+                    padding: 10px 20px; cursor: pointer;
+                }
+            </style>
+        </head>
+        <body>
+            <button class="print-hide" onclick="window.print()">Print Certificate</button>
+            
+            <img src="https://upload.wikimedia.org/wikipedia/commons/e/ea/Cap_Badge_of_the_RLC.png" class="watermark">
+            
+            <h1>Certificate of Competence</h1>
+            <h2>Management of the Joint Deployed Inventory (MJDI)</h2>
+            
+            <div class="content">
+                <p>This is to certify that</p>
+                <div class="candidate">${fullName}</div>
+                <p>Has successfully passed the Unit Application Assessment</p>
+                
+                <div class="stats-box">
+                    SCORE: ${scorePct}% &nbsp;|&nbsp; MODULE: UNIT OPERATOR
+                </div>
+            </div>
+            
+            <div class="footer">
+                <div>
+                    <div style="font-size:18px; margin-bottom:5px;">${date}</div>
+                    <div class="sig-line">Date of Assessment</div>
+                </div>
+                <div>
+                    <div style="font-family:'Courier New', monospace; font-size:14px; color:#0a246a; margin-bottom:5px;">
+                        // SIG: Sgt K Kirby //
+                    </div>
+                    <div class="sig-line">Instructor / System Auth</div>
+                </div>
+            </div>
+            
+            <script>
+                // Auto print dialog on load
+                window.onload = function() { setTimeout(function(){ window.print(); }, 500); }
+            </script>
+        </body>
+        </html>
+    `);
+    win.document.close();
 }
 
 // NAVIGATION
