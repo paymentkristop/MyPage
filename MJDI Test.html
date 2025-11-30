@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MJDI Competency Test</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body class="mjdi-sim-body">
+
+<div id="mjdi-sim-container">
+    <div class="mjdi-desktop">
+        
+        <div id="mjdi-sim-login">
+            <div class="mjdi-login-box">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/e/ea/Cap_Badge_of_the_RLC.png" width="80" style="margin-bottom:10px;">
+                <h3 style="margin:0;">MJDI Log On</h3>
+                <div style="text-align:left; font-size:12px; font-weight:bold;">Rank:</div>
+                <select id="mjdi-sim-rank" class="mjdi-select" style="width:100%">
+                    <option value="">Select Rank.</option>
+                    <option value="Pte">Pte</option>
+                    <option value="LCpl">LCpl</option>
+                    <option value="Cpl">Cpl</option>
+                    <option value="Sgt">Sgt</option>
+                    <option value="SSgt">SSgt</option>
+                    <option value="WO2">WO2</option>
+                    <option value="WO1">WO1</option>
+                </select>
+                <div style="text-align:left; font-size:12px; font-weight:bold; margin-top:8px;">Name:</div>
+                <input type="text" id="mjdi-sim-name" class="mjdi-input" style="width:100%" placeholder="Last Name">
+                <button class="mjdi-btn-std" onclick="mjdiSimStart()" style="font-weight:bold; margin-top:10px; width:100%">Log On</button>
+            </div>
+        </div>
+
+        <div id="mjdi-sim-lock"></div>
+
+        <div id="mjdi-sim-alert">
+            <div class="mjdi-msg-box">
+                <div class="mjdi-win-header"><span>Message</span><button onclick="mjdiSimAlertClose()">X</button></div>
+                <div class="mjdi-msg-content">
+                    <div id="mjdi-sim-alert-text" style="margin-bottom:15px;"></div>
+                    <button class="mjdi-btn-std" onclick="mjdiSimAlertClose()">OK</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="mjdi-sim-help">
+            <div class="mjdi-msg-box" style="width:400px; text-align:left;">
+                <div class="mjdi-win-header"><span>Help</span><button onclick="document.getElementById('mjdi-sim-help').style.display='none'">X</button></div>
+                <div class="mjdi-win-content">
+                    <p><strong>Instructions:</strong></p>
+                    <ul>
+                        <li>Complete the questions as prompted.</li>
+                        <li>For Practical questions, use the MJDI menu system.</li>
+                        <li>Theory questions will lock the screen.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="mjdi-sim-pin">
+            <div class="mjdi-msg-box">
+                <p>Enter PIN:</p>
+                <input type="password" id="mjdi-sim-pin-input" class="mjdi-input" style="text-align:center">
+                <div style="margin-top:10px">
+                    <button class="mjdi-btn-std" onclick="mjdiSimAdminCheck()">OK</button>
+                    <button class="mjdi-btn-std" onclick="document.getElementById('mjdi-sim-pin').style.display='none'">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="mjdi-title-bar">
+            <span><div class="mjdi-title-icon"></div>MJDI Simulator</span>
+            <button class="mjdi-btn-std" style="height:16px; line-height:10px;" onclick="window.location.href='Test your knowledge.html'">X</button>
+        </div>
+
+        <div class="mjdi-menubar-container">
+            <div class="mjdi-menu-item">Transactions
+                <div class="mjdi-dropdown">
+                    <div class="mjdi-dd-item" onclick="mjdiSimMenu('menu-txn-demands', this)">Demands</div>
+                    <div class="mjdi-dd-item" onclick="mjdiSimMenu('menu-txn-issues', this)">Issues</div>
+                    <div class="mjdi-dd-item" onclick="mjdiSimMenu('menu-txn-receipts', this)">Receipts</div>
+                    <div class="mjdi-dd-item separator"></div>
+                    <div class="mjdi-dd-item">Asset Adjustment <span class="caret">▶</span>
+                        <div class="mjdi-submenu">
+                            <div class="mjdi-dd-item" onclick="mjdiSimMenu('menu-txn-asset-adjust', this)">Asset Change</div>
+                        </div>
+                    </div>
+                    <div class="mjdi-dd-item">Jobs <span class="caret">▶</span>
+                        <div class="mjdi-submenu">
+                            <div class="mjdi-dd-item" onclick="mjdiSimMenu('menu-txn-jobs-mgmt', this)">Job Management</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mjdi-menu-item">Amendments
+                <div class="mjdi-dropdown">
+                    <div class="mjdi-dd-item" onclick="mjdiSimMenu('menu-amend-item', this)">Item Record</div>
+                </div>
+            </div>
+            <div class="mjdi-menu-item">Interrogations
+                <div class="mjdi-dropdown">
+                    <div class="mjdi-dd-item" onclick="mjdiSimMenu('menu-int-item', this)">Item Record</div>
+                    <div class="mjdi-dd-item" onclick="mjdiSimMenu('menu-int-demands', this)">Demands</div>
+                    <div class="mjdi-dd-item">Organisations <span class="caret">▶</span>
+                        <div class="mjdi-submenu">
+                            <div class="mjdi-dd-item" onclick="mjdiSimMenu('menu-int-org-addr', this)">Address</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mjdi-menu-item">Reports
+                <div class="mjdi-dropdown">
+                    <div class="mjdi-dd-item" onclick="mjdiSimMenu('menu-rep-fallback', this)">Oracle Fallback</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mjdi-toolbar">
+            <button class="mjdi-tool-btn" title="Save" onclick="mjdiSimToolbar('save')">💾</button>
+            <div class="mjdi-tool-divider"></div>
+            <button class="mjdi-tool-btn" title="Help" onclick="mjdiSimToolbar('help')">❓</button>
+        </div>
+
+        <div class="mjdi-main-screen">
+            <div class="mjdi-main-screen-bg"><h1>MJDI</h1><p>Select function from menu.</p></div>
+
+            <div id="screen-demands" class="mjdi-internal-window">
+                <div class="mjdi-win-header"><span>Demands</span><span onclick="this.parentElement.parentElement.style.display='none'">X</span></div>
+                <div class="mjdi-win-content">
+                    <fieldset class="mjdi-fieldset">
+                        <legend>Item Details</legend>
+                        <div class="mjdi-form-row">
+                            <div class="mjdi-label">NSC</div><input type="text" class="mjdi-field" style="width:50px;" id="dem-nsc">
+                            <div class="mjdi-label" style="width:40px;">NIIN</div><input type="text" class="mjdi-field" style="width:100px;" id="dem-niin">
+                            <input type="text" class="mjdi-field" style="width:200px; background:#eee;" readonly id="dem-name" placeholder="Item Name">
+                        </div>
+                        <div class="mjdi-form-row">
+                            <div class="mjdi-label">Unit of Issue</div>
+                            <select class="mjdi-field" id="dem-uoi"><option>EA</option><option>PK</option><option>BX</option></select>
+                            <span>Each</span>
+                            <div class="mjdi-label">Item Manager</div><input type="text" class="mjdi-field" style="width:50px;" id="dem-im">
+                            <button class="mjdi-btn-std" style="margin-left:auto;" onclick="mjdiDemandsItemSearch()">Item Search</button>
+                        </div>
+                        <div class="mjdi-form-row">
+                            <div class="mjdi-label">Quantity</div><input type="number" class="mjdi-field" style="width:60px;" id="dem-qty">
+                        </div>
+                        <div class="mjdi-form-row">
+                            <div class="mjdi-label">Req Delivery Date</div><input type="text" class="mjdi-field" style="width:80px;" placeholder="DDMMYYYY" id="dem-rdd">
+                            <span class="mjdi-label" style="width:auto; margin-left:10px;">Operational Demand</span><input type="checkbox" class="mjdi-checkbox" id="dem-opd">
+                            <span class="mjdi-label" style="width:auto; margin-left:10px;">Special Activity Code</span><input type="text" class="mjdi-field" style="width:40px;" value="**66" id="dem-sac">
+                        </div>
+                        <div class="mjdi-form-row">
+                            <div class="mjdi-label">Standard Priority</div><input type="text" class="mjdi-field" style="width:40px;" id="dem-spc">
+                            <span class="mjdi-label" style="width:auto; margin-left:10px;">Stock Replenishment</span><input type="checkbox" class="mjdi-checkbox" id="dem-replen">
+                        </div>
+                    </fieldset>
+                    <div class="mjdi-form-row" style="margin-top:10px;">
+                        <div class="mjdi-label">Remarks</div><input type="text" class="mjdi-field" style="flex:1; background:#ffff00;" id="dem-remarks">
+                    </div>
+                </div>
+            </div>
+
+            <div id="screen-issues" class="mjdi-internal-window">
+                <div class="mjdi-win-header"><span>Issues</span><span onclick="this.parentElement.parentElement.style.display='none'">X</span></div>
+                <div class="mjdi-win-content">
+                    <fieldset class="mjdi-fieldset">
+                        <legend>Item Details</legend>
+                        <div class="mjdi-form-row">
+                            <div class="mjdi-label">NSC</div><input type="text" class="mjdi-field" style="width:60px;" id="iss-nsc">
+                            <div class="mjdi-label" style="width:40px;">NIIN</div><input type="text" class="mjdi-field" style="width:100px;" id="iss-niin">
+                            <input type="text" class="mjdi-field" style="flex:1; background:#eee;" readonly id="iss-name" placeholder="Item Name">
+                        </div>
+                        <div class="mjdi-form-row">
+                            <div class="mjdi-label">Quantity</div><input type="number" class="mjdi-field" style="width:70px;" id="iss-qty">
+                            <div class="mjdi-label">Unit of Issue</div><select class="mjdi-field" id="iss-uoi"><option>EA</option><option>PK</option><option>BX</option></select>
+                        </div>
+                    </fieldset>
+                    <fieldset class="mjdi-fieldset">
+                        <legend>Consignee & Accounting</legend>
+                        <div class="mjdi-form-row">
+                            <div class="mjdi-label">Consignee UIN</div><input type="text" class="mjdi-field" style="width:120px;" id="iss-consignee">
+                            <div class="mjdi-label">Reason for Issue</div><input type="text" class="mjdi-field" style="width:40px;" id="iss-reason" placeholder="A/C/M">
+                        </div>
+                        <div class="mjdi-form-row">
+                            <div class="mjdi-label">Standard Priority</div><input type="text" class="mjdi-field" style="width:40px;" id="iss-spc">
+                            <span class="mjdi-label" style="width:auto; margin-left:10px;">Charge</span><input type="checkbox" class="mjdi-checkbox" id="iss-charge">
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+
+            <div id="screen-receipts" class="mjdi-internal-window">
+                <div class="mjdi-win-header"><span>Receipts</span><span onclick="this.parentElement.parentElement.style.display='none'">X</span></div>
+                <div class="mjdi-win-content">
+                    <fieldset class="mjdi-fieldset">
+                        <legend>From Depot / Repair Agency</legend>
+                        <div class="mjdi-form-row">
+                            <div class="mjdi-label">NSC</div><input type="text" class="mjdi-field" style="width:60px;" id="rec-nsc">
+                            <div class="mjdi-label" style="width:40px;">NIIN</div><input type="text" class="mjdi-field" style="width:100px;" id="rec-niin">
+                        </div>
+                        <div class="mjdi-form-row">
+                            <div class="mjdi-label">Quantity</div><input type="number" class="mjdi-field" style="width:70px;" id="rec-qty">
+                            <div class="mjdi-label">MatCon</div><input type="text" class="mjdi-field" style="width:40px;" id="rec-matcon">
+                        </div>
+                        <div class="mjdi-form-row">
+                            <div class="mjdi-label">Consignor</div><input type="text" class="mjdi-field" style="width:150px;" id="rec-consignor">
+                            <span class="mjdi-label" style="width:auto; margin-left:10px;">Auto satisfy demands</span><input type="checkbox" class="mjdi-checkbox" id="rec-auto">
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+
+            <div id="screen-asset-item" class="mjdi-internal-window">
+                <div class="mjdi-win-header"><span>Asset Adjustment – Asset Change</span><span onclick="this.parentElement.parentElement.style.display='none'">X</span></div>
+                <div class="mjdi-win-content">
+                    <fieldset class="mjdi-fieldset">
+                        <legend>Item Selection</legend>
+                        <div class="mjdi-form-row">
+                            <div class="mjdi-label">NSC</div><input type="text" class="mjdi-field" style="width:60px;" id="asset-nsc">
+                            <div class="mjdi-label" style="width:40px;">NIIN</div><input type="text" class="mjdi-field" style="width:100px;" id="asset-niin">
+                            <input type="text" class="mjdi-field" style="flex:1; background:#eee;" readonly id="asset-name" placeholder="Item Name">
+                        </div>
+                    </fieldset>
+                    <fieldset class="mjdi-fieldset">
+                        <legend>Material Condition Change</legend>
+                        <div class="mjdi-form-row">
+                            <div class="mjdi-label">Current MatCon</div><input type="text" class="mjdi-field" style="width:40px;" id="asset-matcon-from">
+                            <div class="mjdi-label">New MatCon</div><input type="text" class="mjdi-field" style="width:40px;" id="asset-matcon-to">
+                        </div>
+                        <div class="mjdi-form-row">
+                            <div class="mjdi-label">Reason</div><input type="text" class="mjdi-field" style="flex:1;" id="asset-reason" placeholder="e.g. Sent to Repair Agency, Surveyed, etc.">
+                        </div>
+                    </fieldset>
+                    <fieldset class="mjdi-fieldset">
+                        <legend>On-Unit Disposal</legend>
+                        <div class="mjdi-form-row">
+                            <div class="mjdi-label">Disposal Method</div><input type="text" class="mjdi-field" style="width:120px;" id="asset-disposal-method" placeholder="e.g. Survey, Loss, Cast">
+                            <div class="mjdi-label">Qty</div><input type="number" class="mjdi-field" style="width:70px;" id="asset-disposal-qty">
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+
+            <div id="screen-amend-item" class="mjdi-internal-window">
+                <div class="mjdi-win-header"><span>Amendments – Item Record</span><span onclick="this.parentElement.parentElement.style.display='none'">X</span></div>
+                <div class="mjdi-win-content">
+                    <div class="mjdi-tabs">
+                        <div class="mjdi-tab active" onclick="mjdiSimTab('screen-amend-item', 1)">Item</div>
+                        <div class="mjdi-tab" onclick="mjdiSimTab('screen-amend-item', 2)">Location</div>
+                        <div class="mjdi-tab" onclick="mjdiSimTab('screen-amend-item', 3)">Asset</div>
+                    </div>
+                    <div class="mjdi-tab-page active">
+                        <fieldset class="mjdi-fieldset"><legend>Item Selection</legend>
+                            <div class="mjdi-form-row"><div class="mjdi-label">NSN</div><input type="text" class="mjdi-field" style="width:160px;" id="amend-nsn"><button class="mjdi-btn-std" style="margin-left:10px;" onclick="mjdiAmendItemSearch()">Item Search</button></div>
+                        </fieldset>
+                    </div>
+                    <div class="mjdi-tab-page">
+                        <fieldset class="mjdi-fieldset"><legend>Storage Locations</legend>
+                            <div class="mjdi-form-row"><div class="mjdi-label">Existing Location</div><input type="text" class="mjdi-field" style="width:120px;" id="amend-loc-old"><div class="mjdi-label">New Location</div><input type="text" class="mjdi-field" style="width:120px;" id="amend-loc-new"><button class="mjdi-btn-std" onclick="mjdiAmendAddStorage()">Add New Storage</button></div>
+                        </fieldset>
+                    </div>
+                    <div class="mjdi-tab-page">
+                        <fieldset class="mjdi-fieldset"><legend>Asset Details</legend>
+                            <div class="mjdi-form-row"><div class="mjdi-label">Asset No</div><input type="text" class="mjdi-field" style="width:160px;" id="amend-asset-no"><div class="mjdi-label">MatCon</div><input type="text" class="mjdi-field" style="width:40px;" id="amend-asset-matcon"></div>
+                            <div class="mjdi-form-row"><div class="mjdi-label">Remarks</div><input type="text" class="mjdi-field" style="flex:1;" id="amend-asset-remarks"></div>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+
+            <div id="screen-int-item" class="mjdi-internal-window">
+                <div class="mjdi-win-header"><span>Interrogations – Item Record</span><span onclick="this.parentElement.parentElement.style.display='none'">X</span></div>
+                <div class="mjdi-win-content">
+                    <fieldset class="mjdi-fieldset"><legend>Item Selection</legend>
+                        <div class="mjdi-form-row"><div class="mjdi-label">NSN</div><input type="text" class="mjdi-field" style="width:160px;" id="int-item-nsn"><button class="mjdi-btn-std" style="margin-left:10px;" onclick="mjdiIntItemInterrogate()">Interrogate</button></div>
+                    </fieldset>
+                    <fieldset class="mjdi-fieldset"><legend>Summary</legend>
+                        <div class="mjdi-form-row"><div class="mjdi-label">MatCon</div><input type="text" class="mjdi-field" style="width:40px;" id="int-item-matcon"><div class="mjdi-label">Stock on Hand</div><input type="text" class="mjdi-field" style="width:80px;" id="int-item-soh"></div>
+                        <div class="mjdi-form-row"><div class="mjdi-label">Storage</div><input type="text" class="mjdi-field" style="flex:1;" id="int-item-storage"></div>
+                    </fieldset>
+                </div>
+            </div>
+
+            <div id="screen-int-demands" class="mjdi-internal-window">
+                <div class="mjdi-win-header"><span>Interrogations – Demands</span><span onclick="this.parentElement.parentElement.style.display='none'">X</span></div>
+                <div class="mjdi-win-content">
+                    <fieldset class="mjdi-fieldset"><legend>Filter Criteria</legend>
+                        <div class="mjdi-form-row"><div class="mjdi-label">UIN</div><input type="text" class="mjdi-field" style="width:120px;" id="int-dem-uin"><div class="mjdi-label">NSN</div><input type="text" class="mjdi-field" style="width:160px;" id="int-dem-nsn"></div>
+                        <div class="mjdi-form-row"><div class="mjdi-label">From Date</div><input type="text" class="mjdi-field" style="width:80px;" id="int-dem-from"><div class="mjdi-label">To Date</div><input type="text" class="mjdi-field" style="width:80px;" id="int-dem-to"></div>
+                        <div class="mjdi-form-row"><div class="mjdi-label">Hastening Summary</div><input type="checkbox" class="mjdi-checkbox" id="int-dem-hastening"></div>
+                    </fieldset>
+                </div>
+            </div>
+
+            <div id="screen-org-addr" class="mjdi-internal-window">
+                <div class="mjdi-win-header"><span>Interrogations – Address</span><span onclick="this.parentElement.parentElement.style.display='none'">X</span></div>
+                <div class="mjdi-win-content">
+                    <fieldset class="mjdi-fieldset"><legend>Search</legend>
+                        <div class="mjdi-form-row"><div class="mjdi-label">UIN / NCAGE</div><input type="text" class="mjdi-field" style="width:160px;" id="org-addr-uin"><button class="mjdi-btn-std" style="margin-left:10px;" onclick="mjdiOrgAddrFind()">Find</button></div>
+                    </fieldset>
+                    <fieldset class="mjdi-fieldset"><legend>Address</legend>
+                        <textarea class="mjdi-field" id="org-addr-text" style="width:100%; height:100px; resize:none;"></textarea>
+                    </fieldset>
+                </div>
+            </div>
+
+            <div id="screen-job-mgmt" class="mjdi-internal-window">
+                <div class="mjdi-win-header"><span>Jobs – Job Management</span><span onclick="this.parentElement.parentElement.style.display='none'">X</span></div>
+                <div class="mjdi-win-content">
+                    <fieldset class="mjdi-fieldset"><legend>Demand / Job Selection</legend>
+                        <div class="mjdi-form-row"><div class="mjdi-label">Requisition No</div><input type="text" class="mjdi-field" style="width:150px;" id="job-reqn"><div class="mjdi-label">UIN</div><input type="text" class="mjdi-field" style="width:120px;" id="job-uin"></div>
+                    </fieldset>
+                    <fieldset class="mjdi-fieldset"><legend>Actions</legend>
+                        <div class="mjdi-form-row"><button class="mjdi-btn-std" onclick="mjdiJobIssueStock()">Issue Stock</button><button class="mjdi-btn-std" onclick="mjdiJobClearEarmark()">Clear Earmark</button><span id="job-status" style="font-size:10px; margin-left:10px;"></span></div>
+                    </fieldset>
+                </div>
+            </div>
+
+            <div id="screen-rep-fallback" class="mjdi-internal-window">
+                <div class="mjdi-win-header"><span>Reports – Oracle Fallback</span><span onclick="this.parentElement.parentElement.style.display='none'">X</span></div>
+                <div class="mjdi-win-content"><p>Fallback reports screen (simulation).</p></div>
+            </div>
+
+        </div>
+
+        <div class="mjdi-footer-bar">
+            <div id="mjdi-sim-footer-status">Ready</div>
+            <div id="mjdi-sim-footer-user">User: .</div>
+            <div id="mjdi-sim-footer-score">Score: 0/0</div>
+        </div>
+
+        <div id="mjdi-sim-prompt">
+            <div class="mjdi-q-header"><span>Question</span><span id="mjdi-sim-q-num">Q1</span></div>
+            <div class="mjdi-q-body" id="mjdi-sim-q-body">...</div>
+            <div class="mjdi-q-options" id="mjdi-sim-q-input"></div>
+            <div style="text-align:right; padding:5px;">
+                <button id="mjdi-sim-submit" class="mjdi-btn-std" onclick="mjdiSimSubmit()">Submit</button>
+                <button id="mjdi-sim-next" class="mjdi-btn-std" onclick="mjdiSimNext()" disabled>Next ▶</button>
+            </div>
+            <div id="mjdi-sim-feedback" style="padding:5px; font-weight:bold;"></div>
+        </div>
+
+        <div class="mjdi-admin-trigger" onclick="mjdiSimAdminOpen()" style="position:absolute; bottom:2px; left:2px; width:10px; height:10px;"></div>
+    </div>
+
+    <button class="mjdi-btn-std" onclick="window.location.href='Test your knowledge.html'" 
+            style="position:absolute; bottom:20px; right:20px; z-index:8000; padding:10px 20px; font-weight:bold; box-shadow:0 0 10px black;">
+        Exit Test
+    </button>
+</div>
+
+<div id="mjdi-sim-admin">
+    <div class="mjdi-title-bar"><span>Admin</span><button onclick="document.getElementById('mjdi-sim-admin').style.display='none'">X</button></div>
+    <div style="display:flex; flex:1; padding:10px; gap:10px; overflow:hidden;">
+        <div id="mjdi-admin-qlist" style="width:250px; background:white; border:1px solid gray; overflow-y:auto;"></div>
+        <div style="flex:1; overflow-y:auto; padding-right:10px;">
+            <h3>Editor</h3>
+            <label>Question:</label><textarea id="mjdi-adm-qtext" style="width:100%; height:50px;"></textarea>
+            <div class="adm-group"><label>Topic:</label><input id="mjdi-adm-topic" class="mjdi-input"></div>
+            <div class="adm-group"><label>Type:</label>
+                <select id="mjdi-adm-type" class="mjdi-select" onchange="updateAdminFields()">
+                    <option value="mc">MC</option><option value="written">Written</option>
+                    <option value="practical_nav">Prac Nav</option><option value="practical_form">Prac Form</option>
+                </select>
+            </div>
+            <div id="adm-group-options" class="adm-group"><label>Options (comma sep):</label><textarea id="mjdi-adm-options" style="width:100%"></textarea></div>
+            <div id="adm-group-answer" class="adm-group"><label>Answer/Index:</label><input id="mjdi-adm-answer" class="mjdi-input"></div>
+            <div id="adm-group-nav" class="adm-group" style="display:none"><label>Target Menu ID:</label><select id="mjdi-adm-nav-target" class="mjdi-select">
+                <option value="menu-txn-demands">Txn > Demands</option>
+                <option value="menu-txn-issues">Txn > Issues</option>
+                <option value="menu-txn-receipts">Txn > Receipts</option>
+                <option value="menu-txn-asset-adjust">Txn > Asset Adjust</option>
+                <option value="menu-txn-jobs-mgmt">Txn > Jobs</option>
+                <option value="menu-amend-item">Amend > Item</option>
+                <option value="menu-int-item">Int > Item</option>
+                <option value="menu-int-demands">Int > Demands</option>
+                <option value="menu-int-org-addr">Int > Address</option>
+                <option value="menu-rep-fallback">Rep > Fallback</option>
+            </select></div>
+            <div id="adm-group-form" class="adm-group" style="display:none"><label>Form ID:</label><input id="mjdi-adm-form-id" class="mjdi-input"><label>Data JSON:</label><textarea id="mjdi-adm-form-data" style="width:100%"></textarea></div>
+            
+            <hr style="margin:10px 0;">
+            <h3>Test Settings</h3>
+            <div class="adm-group"><label>Pass Mark (%):</label><input type="number" id="mjdi-adm-passmark" class="mjdi-input" min="0" max="100"></div>
+            <div class="adm-group"><label>Randomise:</label><select id="mjdi-adm-randomise" class="mjdi-select"><option value="yes">Yes</option><option value="no">No</option></select></div>
+            <div class="adm-group"><label>Max Questions (0=all):</label><input type="number" id="mjdi-adm-maxq" class="mjdi-input"></div>
+            <button class="mjdi-btn-std" onclick="mjdiAdmApplyConfig()">Apply Config</button>
+
+            <hr style="margin:10px 0;">
+            <h3>Tab Settings</h3>
+            <div style="display:flex; gap:5px;">
+                <input id="tab-amend-1" class="mjdi-input" placeholder="Tab 1">
+                <input id="tab-amend-2" class="mjdi-input" placeholder="Tab 2">
+                <input id="tab-amend-3" class="mjdi-input" placeholder="Tab 3">
+            </div>
+            <button class="mjdi-btn-std" onclick="mjdiAdmApplyTabs()" style="margin-top:5px;">Apply Tabs</button>
+
+            <div style="margin-top:20px; display:flex; gap:10px;">
+                <button class="mjdi-btn-std" onclick="mjdiAdmSave()">Save Question</button>
+                <button class="mjdi-btn-std" onclick="mjdiAdmDelete()" style="background:#ffcccc;">Delete</button>
+                <button class="mjdi-btn-std" onclick="mjdiAdmNew()">New Question</button>
+                <button class="mjdi-btn-std" onclick="mjdiAdmReset()">Reset All</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
