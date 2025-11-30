@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="author" content="Kris Kirby">
+    <meta name="copyright" content="LSS Guides developed by K.R.I.S K.I.R.B.Y">
+    <title>VITAL Test</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div id="vital-test-container">
+        <div class="crt-effect"></div>
+        <div class="vt-header">
+            <div>VITAL TERMINAL SIMULATION v2.4</div>
+            <div id="vt-score">SCORE: 0/5</div>
+        </div>
+        
+        <div class="vt-content" id="vt-game-area">
+            </div>
+
+        <div class="vt-admin-trigger" onclick="openVtAdmin()"></div>
+        
+        <button onclick="closeVitalTest()" class="home-btn" style="position: absolute; bottom: 20px; right: 20px; z-index: 7001;">Exit Test</button>
+    </div>
+
+    <div id="vt-admin-panel">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h2>ROOT ACCESS // TEST CONFIGURATION</h2>
+            <button class="vt-btn danger" onclick="closeVtAdmin()">EXIT ADMIN</button>
+        </div>
+        <div class="vt-admin-grid">
+            <div class="vt-admin-list" id="vt-q-list">
+                </div>
+            <div class="vt-admin-form">
+                <input type="hidden" id="vt-edit-index" value="-1">
+                <div class="vt-form-group">
+                    <label>Question Type</label>
+                    <select id="vt-type" onchange="toggleVtFields()">
+                        <option value="mc">Multiple Choice</option>
+                        <option value="terminal">Terminal Simulation</option>
+                        <option value="hotkey">Hotkey Challenge</option>
+                    </select>
+                </div>
+                <div class="vt-form-group">
+                    <label>Question Text</label>
+                    <textarea id="vt-qtext" rows="3"></textarea>
+                </div>
+                
+                <div class="vt-form-group">
+                    <label>Question Image (Optional)</label>
+                    <input type="text" id="vt-img-url" placeholder="Paste Image URL">
+                    <div style="margin-top:5px; color:#666; font-size:0.8rem;">OR Upload (Auto-converts to Base64 - Keep small!)</div>
+                    <input type="file" id="vt-img-upload" accept="image/*" onchange="handleVtImageUpload(this)">
+                </div>
+
+                <div id="vt-group-mc">
+                    <div class="vt-form-group">
+                        <label>Options (Comma Separated)</label>
+                        <input type="text" id="vt-options" placeholder="Option 1, Option 2, Option 3, Option 4">
+                    </div>
+                    <div class="vt-form-group">
+                        <label>Correct Option Index (0-3)</label>
+                        <input type="number" id="vt-correct-idx" min="0" max="3">
+                    </div>
+                </div>
+
+                <div id="vt-group-ans" style="display:none;">
+                    <div class="vt-form-group">
+                        <label>Correct Answer / Key</label>
+                        <input type="text" id="vt-answer" placeholder="e.g. CTRL+P or F2">
+                    </div>
+                </div>
+
+                <div style="margin-top:20px;">
+                    <button class="vt-btn" onclick="saveQuestionData()">SAVE QUESTION</button>
+                    <button class="vt-btn" onclick="clearVtForm()">NEW QUESTION</button>
+                    <button class="vt-btn danger" onclick="deleteQuestionData()">DELETE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
