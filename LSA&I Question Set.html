@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="author" content="Kris Kirby">
+    <meta name="copyright" content="LSS Guides developed by K.R.I.S K.I.R.B.Y">
+    <title>LSA&I Tool</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <header class="mobile-header">
+        <button class="mobile-menu-btn" onclick="toggleMobileNav()">
+            ☰
+        </button>
+        <div class="mobile-title">LSA&I Tool</div>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/e/ea/Cap_Badge_of_the_RLC.png" alt="RLC" class="mobile-logo">
+    </header>
+
+    <div class="mobile-overlay" id="mobile-overlay" onclick="toggleMobileNav()"></div>
+
+    <div id="admin-login-overlay">
+        <div class="login-box">
+            <h3>Admin Access</h3>
+            <input type="password" id="admin-pin" placeholder="PIN" maxlength="4">
+            <br>
+            <button onclick="checkAdminPin()">Login</button>
+            <button onclick="closeAdminLogin()" style="background:#666; margin-left:10px;">Cancel</button>
+        </div>
+    </div>
+
+    <div id="admin-panel">
+        <div class="admin-header">
+            <h3>Admin Panel</h3>
+            <button class="admin-btn close" onclick="toggleAdminPanel()">X</button>
+        </div>
+
+        <div class="admin-section">
+            <h4>Edit Mode</h4>
+            <p style="font-size: 0.8rem; color: #a0aec0;">Click text in the guide to edit inline.</p>
+            <button class="admin-btn" id="toggle-edit-btn" onclick="toggleEditMode()">Enable Text Editing</button>
+        </div>
+
+        <div class="admin-section">
+            <h4>Add Category/Section</h4>
+            <div class="admin-form-group">
+                <label>Target Guide</label>
+                <select id="target-guide-select">
+                    <option value="nav-content-lsai" selected>LSA&I Tool</option>
+                </select>
+            </div>
+            <div class="admin-form-group">
+                <label>Category Title</label>
+                <input type="text" id="new-category-title" placeholder="e.g., New Tool Section">
+            </div>
+            <button class="admin-btn" onclick="addNewCategory()">Add Category</button>
+        </div>
+
+        <div class="admin-section">
+            <h4>Manage Categories</h4>
+            <div class="admin-form-group">
+                <label>Select Category to Delete</label>
+                <select id="delete-category-select">
+                    </select>
+            </div>
+            <button class="admin-btn delete-cat" onclick="deleteCategory()">Delete Category</button>
+        </div>
+
+        <div class="admin-section">
+            <h4>Add Content Step</h4>
+            <div class="admin-form-group">
+                <label>Target Section</label>
+                <select id="target-section-select">
+                    </select>
+            </div>
+            <div class="admin-form-group">
+                <label>Step Number</label>
+                <input type="text" id="new-step-num" placeholder="e.g. 4">
+            </div>
+            <div class="admin-form-group">
+                <label>Step Title</label>
+                <input type="text" id="new-step-title" placeholder="Step Title">
+            </div>
+            <div class="admin-form-group">
+                <label>Instructions</label>
+                <textarea id="new-step-text" rows="3"></textarea>
+            </div>
+            <div class="admin-form-group">
+                <label>Include Terminal Box?</label>
+                <select id="include-term">
+                    <option value="no">No</option>
+                    <option value="yes">Yes</option>
+                </select>
+            </div>
+            <div class="admin-form-group" id="term-content-group" style="display:none;">
+                <label>Terminal Content</label>
+                <textarea id="new-term-text" rows="3" placeholder="Green screen text..."></textarea>
+            </div>
+
+            <div class="admin-form-group">
+                <label>Include Image Upload Area?</label>
+                <select id="include-image">
+                    <option value="no">No</option>
+                    <option value="yes">Yes</option>
+                </select>
+            </div>
+            <button class="admin-btn" onclick="addNewStep()">Add Step</button>
+        </div>
+
+        <button class="admin-btn save" onclick="saveChanges()">Save to Browser Memory</button>
+        <button class="admin-btn export" onclick="downloadHtml()">Download Updated HTML</button>
+        <div id="auto-save-indicator" style="color: #48bb78; font-size: 0.8rem; text-align: center; margin-top: 10px; opacity: 0; transition: opacity 0.5s;">Autosaved</div>
+    </div>
+
+    <div id="app-container" class="visible">
+        
+        <nav class="sidebar" id="sidebar-nav">
+            <div class="sidebar-header">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/e/ea/Cap_Badge_of_the_RLC.png" alt="RLC" class="admin-trigger-logo" onclick="showAdminLogin()">
+                <div>
+                    <h2 id="guide-title" class="editable">LSA&I Tool</h2>
+                    <span>Handbook Viewer</span>
+                </div>
+            </div>
+
+            <div class="nav-scroll-area" id="nav-content-vital" style="display:none;"></div>
+
+            <div class="nav-scroll-area" id="nav-content-mjdi" style="display:none;"></div>
+
+            <div class="nav-scroll-area active" id="nav-content-lsai" style="display:block;">
+                <div class="nav-group" id="group-lsai">
+                    <button class="nav-trigger" onclick="toggleNav(this)">LSA&I Tools <span class="arrow">▼</span></button>
+                    <div class="nav-content open">
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('lsai-viewer')">Handbook Viewer</a>
+                    </div>
+                </div>
+            </div>
+
+            <button class="home-btn" onclick="window.location.href='index.html'">Exit System</button>
+        </nav>
+
+        <div class="main-viewport">
+            <div class="doc-container">
+                
+                <div class="doc-header">
+                    <div class="credit-pill">Sgt Kirby</div>
+                    <h1 id="header-main" class="editable">LSA&I Tool</h1>
+                    <p id="header-sub" class="editable">Logistics Support Analysis & Instructions</p>
+                </div>
+
+                <div class="content-body">
+                    
+                    <div id="section-lsai-viewer" class="guide-section active">
+                        <h3 class="editable">LSA&I Handbook Viewer</h3>
+                        <div class="step-block">
+                            <div class="step-marker">📁</div>
+                            <div class="step-detail">
+                                <span class="step-title">Load Handbook Document</span>
+                                <p class="step-text">Upload the LSA&I Handbook (.docx or .pdf) to view it in the frame below.</p>
+                                <input type="file" id="lsai-file-input" accept=".pdf,.docx" onchange="loadLsaiDocument(this)" style="margin-bottom: 15px;">
+                                <div id="lsai-doc-container" class="doc-viewer-container">
+                                    <div class="doc-viewer-placeholder">
+                                        <p>No document loaded.</p>
+                                        <p style="font-size:0.8em">Select a file above to view.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="text-toolbar">
+        <button type="button" data-cmd="bold"><strong>B</strong></button>
+        <button type="button" data-cmd="italic"><em>I</em></button>
+        <button type="button" data-cmd="strikeThrough"><span style="text-decoration: line-through;">S</span></button>
+        <input type="color" id="toolbar-color" title="Text colour">
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
