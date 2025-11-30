@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="author" content="Kris Kirby">
+    <meta name="copyright" content="LSS Guides developed by K.R.I.S K.I.R.B.Y">
+    <title>VITAL Guide</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <header class="mobile-header">
+        <button class="mobile-menu-btn" onclick="toggleMobileNav()">
+            ☰
+        </button>
+        <div class="mobile-title">VITAL Guide</div>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/e/ea/Cap_Badge_of_the_RLC.png" alt="RLC" class="mobile-logo">
+    </header>
+
+    <div class="mobile-overlay" id="mobile-overlay" onclick="toggleMobileNav()"></div>
+
+    <div id="admin-login-overlay">
+        <div class="login-box">
+            <h3>Admin Access</h3>
+            <input type="password" id="admin-pin" placeholder="PIN" maxlength="4">
+            <br>
+            <button onclick="checkAdminPin()">Login</button>
+            <button onclick="closeAdminLogin()" style="background:#666; margin-left:10px;">Cancel</button>
+        </div>
+    </div>
+
+    <div id="admin-panel">
+        <div class="admin-header">
+            <h3>Admin Panel</h3>
+            <button class="admin-btn close" onclick="toggleAdminPanel()">X</button>
+        </div>
+
+        <div class="admin-section">
+            <h4>Edit Mode</h4>
+            <p style="font-size: 0.8rem; color: #a0aec0;">Click text in the guide to edit inline.</p>
+            <button class="admin-btn" id="toggle-edit-btn" onclick="toggleEditMode()">Enable Text Editing</button>
+        </div>
+
+        <div class="admin-section">
+            <h4>Add Category/Section</h4>
+            <div class="admin-form-group">
+                <label>Target Guide</label>
+                <select id="target-guide-select">
+                    <option value="nav-content-vital" selected>VITAL Guide</option>
+                </select>
+            </div>
+            <div class="admin-form-group">
+                <label>Category Title</label>
+                <input type="text" id="new-category-title" placeholder="e.g., 9. New Process">
+            </div>
+            <button class="admin-btn" onclick="addNewCategory()">Add Category</button>
+        </div>
+
+        <div class="admin-section">
+            <h4>Manage Categories</h4>
+            <div class="admin-form-group">
+                <label>Select Category to Delete</label>
+                <select id="delete-category-select">
+                    </select>
+            </div>
+            <button class="admin-btn delete-cat" onclick="deleteCategory()">Delete Category</button>
+        </div>
+
+        <div class="admin-section">
+            <h4>Add Content Step</h4>
+            <div class="admin-form-group">
+                <label>Target Section</label>
+                <select id="target-section-select">
+                    </select>
+            </div>
+            <div class="admin-form-group">
+                <label>Step Number</label>
+                <input type="text" id="new-step-num" placeholder="e.g. 4">
+            </div>
+            <div class="admin-form-group">
+                <label>Step Title</label>
+                <input type="text" id="new-step-title" placeholder="Step Title">
+            </div>
+            <div class="admin-form-group">
+                <label>Instructions</label>
+                <textarea id="new-step-text" rows="3"></textarea>
+            </div>
+            <div class="admin-form-group">
+                <label>Include Terminal Box?</label>
+                <select id="include-term">
+                    <option value="no">No</option>
+                    <option value="yes">Yes</option>
+                </select>
+            </div>
+            <div class="admin-form-group" id="term-content-group" style="display:none;">
+                <label>Terminal Content</label>
+                <textarea id="new-term-text" rows="3" placeholder="Green screen text..."></textarea>
+            </div>
+
+            <div class="admin-form-group">
+                <label>Include Image Upload Area?</label>
+                <select id="include-image">
+                    <option value="no">No</option>
+                    <option value="yes">Yes</option>
+                </select>
+            </div>
+            <button class="admin-btn" onclick="addNewStep()">Add Step</button>
+        </div>
+
+        <button class="admin-btn save" onclick="saveChanges()">Save to Browser Memory</button>
+        <button class="admin-btn export" onclick="downloadHtml()">Download Updated HTML</button>
+        <div id="auto-save-indicator" style="color: #48bb78; font-size: 0.8rem; text-align: center; margin-top: 10px; opacity: 0; transition: opacity 0.5s;">Autosaved</div>
+    </div>
+
+    <div id="app-container" class="visible">
+        
+        <nav class="sidebar" id="sidebar-nav">
+            <div class="sidebar-header">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/e/ea/Cap_Badge_of_the_RLC.png" alt="RLC" class="admin-trigger-logo" onclick="showAdminLogin()">
+                <div>
+                    <h2 id="guide-title" class="editable">VITAL Guide</h2>
+                    <span>For Dummies</span>
+                </div>
+            </div>
+
+            <div class="nav-scroll-area active" id="nav-content-vital" style="display:block;">
+                <div class="nav-group" id="group-create-issue">
+                    <button class="nav-trigger" onclick="toggleNav(this)">1. Creating & Maint. <span class="arrow">▼</span></button>
+                    <div class="nav-content">
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('create-issue')">1.1 Create Issue Pkg</a>
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('maintain-issue')">1.2 Maintain Issue</a>
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('maintain-package')">1.3 Maintain Package</a>
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('deployment-pkg')">1.4 Deployment Pkgs</a>
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('permanent-pkg')">1.5 Permanent Pkgs</a>
+                    </div>
+                </div>
+
+                <div class="nav-group" id="group-departures">
+                    <button class="nav-trigger" onclick="toggleNav(this)">2. Departures <span class="arrow">▼</span></button>
+                    <div class="nav-content">
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('direct-despatch-pdr')">2.1 Direct Despatch PDR</a>
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('direct-despatch-pkg')">2.2 Direct Despatch Pkg</a>
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('create-pdr')">2.3 Create PDR (1142)</a>
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('create-awb')">2.4 Create AWB (1380)</a>
+                    </div>
+                </div>
+
+                <div class="nav-group" id="group-arrivals">
+                    <button class="nav-trigger" onclick="toggleNav(this)">3. Arrivals <span class="arrow">▼</span></button>
+                    <div class="nav-content">
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('record-arrival')">3.1 Record Arrival</a>
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('node-discrepancies')">3.2 Discrepancies (JSP886)</a>
+                    </div>
+                </div>
+
+                <div class="nav-group" id="group-templocs">
+                    <button class="nav-trigger" onclick="toggleNav(this)">4. Temp Locations <span class="arrow">▼</span></button>
+                    <div class="nav-content">
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('temp-locs')">Manage Locations</a>
+                    </div>
+                </div>
+
+                <div class="nav-group" id="group-earlybird">
+                    <button class="nav-trigger" onclick="toggleNav(this)">5. Early Bird <span class="arrow">▼</span></button>
+                    <div class="nav-content">
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('early-bird')">Daily Routine</a>
+                    </div>
+                </div>
+
+                <div class="nav-group" id="group-contracts">
+                    <button class="nav-trigger" onclick="toggleNav(this)">6. Contracts <span class="arrow">▼</span></button>
+                    <div class="nav-content">
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('contracts')">Leonardo & Safran</a>
+                    </div>
+                </div>
+
+                <div class="nav-group" id="group-dscom">
+                    <button class="nav-trigger" onclick="toggleNav(this)">7. DSCOM & USA <span class="arrow">▼</span></button>
+                    <div class="nav-content">
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('dscom')">DSCOM Requests</a>
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('usa-returns')">USA Returns</a>
+                    </div>
+                </div>
+
+                <div class="nav-group" id="group-managerial">
+                    <button class="nav-trigger" onclick="toggleNav(this)">8. Managerial <span class="arrow">▼</span></button>
+                    <div class="nav-content">
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('kpis')">Weekly KPIs</a>
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('hhd')">Handheld Devices</a>
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('supervisor-docs')">Supervisor Annexes</a>
+                        <a href="#" class="nav-link" onclick="closeNavMobile(); showSection('deletions')">Record Deletion</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-scroll-area" id="nav-content-mjdi" style="display:none;"></div>
+
+            <div class="nav-scroll-area" id="nav-content-lsai" style="display:none;"></div>
+
+            <button class="home-btn" onclick="window.location.href='index.html'">Exit System</button>
+        </nav>
+
+        <div class="main-viewport">
+            <div class="doc-container">
+                
+                <div class="doc-header">
+                    <div class="credit-pill">Sgt Kirby</div>
+                    <h1 id="header-main" class="editable">VITAL System Handover</h1>
+                    <p id="header-sub" class="editable">Visibility In Transit Asset Logging - Procedural Guide</p>
+                </div>
+
+                <div class="content-body">
+                    
+                    <div id="section-welcome" class="guide-section active">
+                        <h3 class="editable">Welcome to VITAL</h3>
+                        <p class="editable">Select a procedure from the sidebar to begin.</p>
+                        <div class="step-block">
+                            <div class="step-marker">ℹ</div>
+                            <div class="step-detail">
+                                <span class="step-title editable">System Overview</span>
+                                <p class="step-text editable">VITAL is the pivotal link between Flight ES imports and external logistics organisations (Kuehne-Nagel, Safran, DE&S). It uses unique identifiers to track consignments within the Joint Supply Chain (JSC) at both fixed base and deployed locations.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="section-create-issue" class="guide-section">
+                        <h3 class="editable">1.1 Create Issue Package</h3>
+                        <div class="menu-path editable">Menu: 1. Issues & Packages → Seq. 1 Create Issue Package</div>
+
+                        <div class="step-block">
+                            <div class="step-marker">1</div>
+                            <div class="step-detail">
+                                <button class="delete-step-btn" onclick="deleteStep(this)">Delete</button>
+                                <span class="step-title editable">Input Voucher Data</span>
+                                <p class="step-text editable">Navigate to Menu 1 (Issues & Packages) then Sequence 1 (Create Issue Package). Populate the UIN section with the issuing UIN from the bottom left of the U050 voucher. Enter the Date (Issue Date) and Vch No (Top Right of U050).</p>
+                                <div class="terminal-window">
+                                    <div class="terminal-bar">
+                                        <div class="term-dot red"></div><div class="term-dot yellow"></div><div class="term-dot green"></div>
+                                    </div>
+                                    <div class="terminal-content editable">UIN: <span class="term-hl">F7751A</span>   Date: <span class="term-hl">161123</span>   Vch No: <span class="term-hl">000018245</span><span class="term-cursor"></span></div>
+                                </div>
+                                <div class="upload-zone" onclick="triggerUpload(this)">
+                                    <div class="upload-icon">📸</div>
+                                    <span class="upload-text">Click or Drag image here</span>
+                                    <input type="file" hidden accept="image/*" onchange="previewImage(this)">
+                                    <img src="">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="step-block">
+                            <div class="step-marker">2</div>
+                            <div class="step-detail">
+                                <button class="delete-step-btn" onclick="deleteStep(this)">Delete</button>
+                                <span class="step-title editable">Select Final Node</span>
+                                <p class="step-text editable">If the Final Node is not auto-populated, use the hotkey <kbd>F3</kbd> to open a list of nodes. Navigate until you find the correct end location node. If unknown, use <code>BIC</code> as a failsafe for EarlyBird consignments.</p>
+                                <div class="terminal-window">
+                                    <div class="terminal-bar"><div class="term-dot red"></div></div>
+                                    <div class="terminal-content editable">Final Node: <span class="term-hl">FLM RAF LEEMING</span></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="step-block">
+                            <div class="step-marker">3</div>
+                            <div class="step-detail">
+                                <button class="delete-step-btn" onclick="deleteStep(this)">Delete</button>
+                                <span class="step-title editable">Create Package</span>
+                                <p class="step-text editable">Once columns are populated, press <kbd>Ctrl</kbd> + <kbd>P</kbd>. Confirm "One or more Issue records will be updated..." with <kbd>Y</kbd>. Enter the number of packages required (e.g., 1).</p>
+                                <div class="terminal-window">
+                                    <div class="terminal-bar"><div class="term-dot red"></div></div>
+                                    <div class="terminal-content editable">Proceed with creating Packages (y/n)? <span class="term-hl">Y</span>
+Enter number of Packages required: <span class="term-hl">1</span></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="step-block">
+                            <div class="step-marker">4</div>
+                            <div class="step-detail">
+                                <button class="delete-step-btn" onclick="deleteStep(this)">Delete</button>
+                                <span class="step-title editable">Package Details</span>
+                                <p class="step-text editable">Use <kbd>F10</kbd> to select the Package Type. Weigh the stores and input the weight. Dimensions (L, W, H) usually pre-fill. Press <kbd>Alt</kbd> + <kbd>F2</kbd> to save.</p>
+                                <div class="terminal-window">
+                                    <div class="terminal-bar"><div class="term-dot red"></div></div>
+                                    <div class="terminal-content editable">Pkg Type: <span class="term-hl">JIF1</span>    Wt(kg): <span class="term-hl">2.00</span>
+L: 25  W: 20  H: 1</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="section-maintain-issue" class="guide-section">
+                        <h3 class="editable">1.2 Maintain Issue</h3>
+                        <div class="menu-path editable">Menu: 1. Issues & Packages → Seq. 2 Maintain Issue</div>
+                        <p class="step-text editable">Use this to manually create an issue on VITAL (e.g., internal issues not interfaced by MJDI).</p>
+                        
+                        <div class="step-block">
+                            <div class="step-marker">1</div>
+                            <div class="step-detail">
+                                <button class="delete-step-btn" onclick="deleteStep(this)">Delete</button>
+                                <span class="step-title editable">Issue & Demand References</span>
+                                <p class="step-text editable">Enter UIN (Issue Origin), Date, Voucher, and SPC from the U050. Then enter Demand UIN, Date, and Demand No.</p>
+                                <div class="terminal-window">
+                                    <div class="terminal-bar"><div class="term-dot red"></div></div>
+                                    <div class="terminal-content editable">UIN: <span class="term-hl">F7751A</span>  Date: 12/10/2022  Vch: 22874  SPC: 13</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="step-block">
+                            <div class="step-marker">2</div>
+                            <div class="step-detail">
+                                <button class="delete-step-btn" onclick="deleteStep(this)">Delete</button>
+                                <span class="step-title editable">Item Details</span>
+                                <p class="step-text editable">Enter DMC, NSN, DofQ (Unit of Issue), Quantity, MatCon, Price, and Consignee Unit Title (First line of address).</p>
+                                <div class="terminal-window">
+                                    <div class="terminal-bar"><div class="term-dot red"></div></div>
+                                    <div class="terminal-content editable">DMC: <span class="term-hl">A1</span>  NSN: <span class="term-hl">7920992571342</span>
+Short Name: CLOTH, POLISHING
+Press AddNew(Alt&F5)</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="step-block">
+                            <div class="step-marker">3</div>
+                            <div class="step-detail">
+                                <button class="delete-step-btn" onclick="deleteStep(this)">Delete</button>
+                                <span class="step-title editable">Address & Finalise</span>
+                                <p class="step-text editable">Press <kbd>Alt</kbd> + <kbd>F5</kbd> to Add New. Enter the full address. Press <kbd>Alt</kbd> + <kbd>F2</kbd> to save. Then use <kbd>Alt</kbd> + <kbd>K</kbd> (Keep) and <kbd>Alt</kbd> + <kbd>E</kbd> (Enter Package Creation).</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="section-maintain-package" class="guide-section">
+                        <h3 class="editable">1.3 Maintain Package (Audit)</h3>
+                        <div class="menu-path editable">Menu: 1. Issues & Packages → Seq. 3 Maintain Package</div>
+                        <div class="step-block">
+                            <div class="step-marker">1</div>
+                            <div class="step-detail">
+                                <button class="delete-step-btn" onclick="deleteStep(this)">Delete</button>
+                                <span class="step-title editable">Interrogate Package</span>
+                                <p class="step-text editable">Enter Package ID and press <kbd>F11</kbd>. Check <strong>Transit Ind</strong>: <code>N</code> (Not in transit), <code>I</code> (In transit), <code>E</code> (End). Check <strong>Current Node</strong> and <strong>Final Node</strong>.</p>
+                                <div class="terminal-window">
+                                    <div class="terminal-bar"><div class="term-dot red"></div></div>
+                                    <div class="terminal-content editable">Pkg ID: WTM02516743
+Transit Ind: <span class="term-hl">I</span>
+Current Node: WTM   Next Node: BIC   Final Node: CON</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="step-block">
+                            <div class="step-marker">2</div>
+                            <div class="step-detail">
+                                <button class="delete-step-btn" onclick="deleteStep(this)">Delete</button>
+                                <span class="step-title editable">Audit History</span>
+                                <p class="step-text editable">Press <kbd>Alt</kbd> + <kbd>F10</kbd> to view the audit trail (User, Date, Process). Press <kbd>Ctrl</kbd> + <kbd>G</kbd> for Movement Tracking (PDR history).</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="section-deployment-pkg" class="guide-section">
+                        <h3 class="editable">1.4 Deployment Packages</h3>
+                        <div class="menu-path editable">Menu: 1. Issues & Packages → Seq. 4 Create Deployment Package</div>
+                        <p class="step-text editable">For stores without a linked Issue Voucher (e.g., Unit Moves, PEPs). Requires permission.</p>
+                        <div class="step-block">
+                            <div class="step-marker">1</div>
+                            <div class="step-detail">
+                                <button class="delete-step-btn" onclick="deleteStep(this)">Delete</button>
+                                <span class="step-title editable">Consignment Details</span>
+                                <p class="step-text editable">Enter Consignor (You), Reference (WTM/DP/...), Final Node, Consignee (Them), and Address.</p>
+                                <div class="terminal-window">
+                                    <div class="terminal-bar"><div class="term-dot red"></div></div>
+                                    <div class="terminal-content editable">Consignor: F7751A   Reference: WTM/DP/001
+Final Node: GOS
+Consignee: GOSPORT, SAMPLES</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="step-block">
+                            <div class="step-marker">2</div>
+                            <div class="step-detail">
+                                <button class="delete-step-btn" onclick="deleteStep(this)">Delete</button>
+                                <span class="step-title editable">Create Packages</span>
+                                <p class="step-text editable">Press <kbd>Ctrl</kbd> + <kbd>P</kbd>. Enter number of packages. Fill in Description, Packaging Type (e.g., STC1), Weight, UNHaz, and Value. Save (<kbd>Alt</kbd> + <kbd>F2</kbd>).</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="section-permanent-pkg" class="guide-section">
+                        <h3 class="editable">1.5 Permanent Packages</h3>
+                        <div class="menu-path editable">Menu: 1. Issues & Packages → Seq. 7 Create Permanent Package</div>
+                        <div class="step-block">
+                            <div class="step-marker">1</div>
+                            <div class="step-detail">
+                                <button class="delete-step-btn" onclick="deleteStep(this)">Delete</button>
+                                <span class="step-title editable">Create ISO/Container</span>
+                                <p class="step-text editable">Enter Serial No (e.g., ISO12345). Use <kbd>F10</kbd> to select Pkg Type (e.g., ISO2). Dimensions auto-populate. Press <kbd>Alt</kbd> + <kbd>F5</kbd> to Add New.</p>
+                                <div class="terminal-window">
+                                    <div class="terminal-bar"><div class="term-dot red"></div></div>
+                                    <div class="terminal-content editable">Serial No: ISOSJL3432
+Pkg Type: ISO2
+Desc: ISO CONTAINER 20FT</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="section-direct-despatch-pdr" class="guide-section">
+                        <h3 class="editable">2.1 Direct Despatch PDR</h3>
+                        <div class="menu-path editable">Menu: 2. Departures & Despatches → Direct Despatch PDR</div>
+                        <div class="step-block">
+                            <div class="step-marker">⚠</div>
+                            <div class="step-detail">
+                                <span class="step-title editable">Warning</span>
+                                <p class="step-text editable">Used when PDRs are Unit collected. You cannot arrive the PDR via the Arrival screen if this option is used.</p>
+                            </div>
+                        </div>
+                        <div class="step-block">
+                            <div class="step-marker">1</div>
+                            <div class="step-detail">
+                                <button class="delete-step-btn" onclick="deleteStep(this)">Delete</button>
+                                <span class="step-title editable">Process Despatch</span>
+                                <p class="step-text editable">Enter PDR Number. Accept warning ("Packages not at Final Node"). Set Next Node to <code>CON</code>. Press <kbd>Alt</kbd>+<kbd>F2</kbd>.</p>
+                                <div class="terminal-window">
+                                    <div class="terminal-bar"><div class="term-dot red"></div></div>
+                                    <div class="terminal-content editable">PDR: WTM02507761
+Next Node: <span class="term-hl">CON</span>
+Mode: ROAD</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="section-direct-despatch-pkg" class="guide-section">
+                        <h3 class="editable">2.2 Direct Despatch Package</h3>
+                        <div class="menu-path editable">Menu: 2. Departures & Despatches → Direct Despatch Packages</div>
+                        <div class="step-block">
+                            <div class="step-marker">1</div>
+                            <div class="step-detail">
+                                <button class="delete-step-btn" onclick="deleteStep(this)">Delete</button>
+                                <span class="step-title editable">End of System</span>
+                                <p class="step-text editable">Used for Post/Road to non-VITAL node. Select Next Node (<code>CON</code> or <code>LST</code>). Add Packages (<kbd>Ctrl</kbd> + <kbd>P</kbd>). Press <kbd>Alt</kbd> + <kbd>F2</kbd> to Despatch.</p>
+                                <div class="terminal-window">
+                                    <div class="terminal-bar"><div class="term-dot red"></div></div>
+                                    <div class="terminal-content editable">Next Node: <span class="term-hl">CON</span>
+Title: CONSIGNEE</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="section-create-pdr" class="guide-section">
+                        <h3 class="editable">2.3 Create PDR (1142)</h3>
+                        <div class="menu-path editable">Menu: 2. Departures & Despatches → Seq. 1 Maintain PDR</div>
+                        <div class="step-block">
+                            <div class="step-marker">1</div>
+                            <div class="step-detail">
+                                <button class="delete-step-btn" onclick="deleteStep(this)">Delete</button>
+                                <span class="step-title editable">Header Details</span>
+                                <p class="step-text editable">Enter Next Node, Mode (ROAD/COUR), Originator Ref (Dependency), Consigned Via (Sender). Enter Remarks (Serial from PDR OUT folder). Save (<kbd>Alt</kbd> + <kbd>F2</kbd>) to generate PDR No.</p>
+                                <div class="terminal-window">
+                                    <div class="terminal-bar"><div class="term-dot red"></div></div>
+                                    <div class="terminal-content editable">Next Node: BIC   Mode: ROAD
+Originator Ref: POL</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="step-block">
+                            <div class="step-marker">2</div>
+                            <div class="step-detail">
+                                <button class="delete-step-btn" onclick="deleteStep(this)">Delete</button>
+                                <span class="step-title editable">Add Content</span>
+                                <p class="step-text editable">Press <kbd>Alt</kbd> + <kbd>F6</kbd> (Contents). Enter Package IDs. Save. Print 2 copies.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="section-create-awb" class="guide-section">
+                        <h3 class="editable">2.4 Create AWB (1380)</h3>
+                        <div class="menu-path editable">Menu: 2. Departures & Despatches → Seq. 6 Bid for Movement</div>
+                        <div class="step-block">
+                            <div class="step-marker">1</div>
+                            <div class="step-detail">
+                                <button class="delete-step-btn" onclick="deleteStep(this)">Delete</button>
+                                <span class="step-title editable">Create Record</span>
+                                <p class="step-text editable">Select Type <code>1380 - AIR WAYBILL</code>. Use Append Mode (<kbd>Ctrl</kbd> + <kbd>O</kbd>). Fill Final Dest Airfield (e.g., USA/BZZ), Move Priority (1), RDD, Import Auth (from Form 22 or NLR).</p>
+                                <div class="terminal-window">
+                                    <div class="terminal-bar"><div class="term-dot red"></div></div>
+                                    <div class="terminal-content editable">Final Dest: <span class="term-hl">USA</span>
+Import Auth: <span class="term-hl">22CFR123.4(A)(5)</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="step-block">
+                            <div class="step-marker">2</div>
+                            <div class="step-detail">
+                                <button class="delete-step-btn" onclick="deleteStep(this)">Delete</button>
+                                <span class="step-title editable">Packages & Bid</span>
+                                <p class="step-text editable">Add Packages (<kbd>Ctrl</kbd> + <kbd>P</kbd>). Save. Press <kbd>F12</kbd>, Print Labels. Press <kbd>F12</kbd> again, select Recipient (AFC UK Abbey Wood) and Raise Bid (<kbd>Ctrl</kbd> + <kbd>U</kbd>).</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="section-record-arrival" class="guide-section">
+                        <h3 class="editable">3.1 Record Arrival</h3>
+                        <div class="menu-path editable">Menu: 3. Arrivals → Seq. 1 Record Arrival</div>
+                        <div class="step-block">
+                            <div class="step-marker">1</div>
+                            <div class="step-detail">
+                                <button class="delete-step-btn" onclick="deleteStep(this)">Delete</button>
+                                <span class="step-title editable">Scan & Arrive</span>
+                                <p class="step-text editable">Enter Package ID manually or use LDT (<kbd>F4</kbd>) for multiple entries. Press <kbd>Ctrl</kbd> + <kbd>B</kbd> to Arrive.</p>
+                                <div class="terminal-window">
+                                    <div class="terminal-bar"><div class="term-dot red"></div></div>
+                                    <div class="terminal-content editable">Pkg ID: DBH01232022
+Desc: SORBENT, OIL</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="section-node-discrepancies" class="guide-section">
+                        <h3 class="editable">3.2 Node Discrepancies (JSP 886)</h3>
+                        <div class="menu-path editable">Menu: 3. Arrivals → Seq. 4 Node Discrepancies</div>
+                        <div class="step-block">
+                            <div class="step-marker">1</div>
+                            <div class="step-detail">
+                                <button class="delete-step-btn" onclick="deleteStep(this)">Delete</button>
+                                <span class="step-title editable">Daily Checks (Omissions)</span>
+                                <p class="step-text editable">Check daily for Omissions (OMIS) - items digitally despatched but not physically scanned. You have <strong>48 hours</strong> to investigate.</p>
+                                <div class="terminal-window">
+                                    <div class="terminal-bar"><div class="term-dot red"></div></div>
+                                    <div class="terminal-content editable">ID: DOC   Pkg: WTM02507400   Type: OMIS</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="step-block">
+                            <div class="step-marker">2</div>
+                            <div class="step-detail">
+                                <button class="delete-step-btn" onclick="deleteStep(this)">Delete</button>
+                                <span class="step-title editable">Resolution</span>
+                                <p class="step-text editable">Press <kbd>F10</kbd> in Resolution field. Select <code>CLEARED</code> if found, or <code>NOT FOUND</code> to bounce back to consignor (which may require End of System to LST later).</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="section-temp-locs" class="guide-section">
+                        <h3 class="editable">Manage Temporary Locations</h3>
+                        <div class="menu-path editable">Menu: 5. Temporary Locations</div>
+                        <div class="step-block">
+                            <div class="step-marker">1</div>
+                            <div class="step-detail">
+                                <button class="delete-step-btn" onclick="deleteStep(this)">Delete</button>
+                                <span class="step-title editable">View & Allocate</span>
+                                <p class="step-text editable"><strong>Seq 1 View:</strong> See list (3QM, 7BN, HANGER1, etc.). Press <kbd>F6</kbd> to print label.<br><strong>Seq 3 Allocate:</strong> <kbd>Ctrl</kbd> + <kbd>P</kbd>. Enter Temp Loc ID and Package ID. Save.</p>
+                                <div class="terminal-window">
+                                    <div class="terminal-bar"><div class="term-dot red"></div></div>
+                                    <div class="terminal-content editable">Temp Loc: 3QM
+Pkg ID: WTM02516743</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="step-block">
+                            <div class="step-marker">2</div>
+                            <div class="step-detail">
+                                <button class="delete-step-btn" onclick="deleteStep(this)">Delete</button>
+                                <span class="step-title editable">Move & Maintain</span>
+                                <p class="step-text editable"><strong>Move All:</strong> <kbd>Ctrl</kbd> + <kbd>G</kbd>. Enter Current and New location.<br><strong>Maintain:</strong> Add new IDs (e.g., NEWLOC) using <kbd>Alt</kbd> + <kbd>F5</kbd>.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="section-early-bird" class="guide-section">
+                        <h3 class="editable">Early Bird Routine</h3>
+                        <div class="step-block">
+                            <div class="step-marker">1</div>
+                            <div class="step-detail">
+                                <button class="delete-step-btn" onclick="deleteStep(this)">Delete</button>
+                                <span class="step-title editable">Node Activity Check</span>
+                                <p class="step-text editable">Navigate to <strong>Reports & Queries → Display Node Activity</strong>. Enter Node <code>[NODE]</code> and Activity <code>TO</code> (Due In). Press <kbd>F11</kbd>.</p>
+                                <div class="terminal-window">
+                                    <div class="terminal-bar"><div class="term-dot red"></div></div>
+                                    <div class="terminal-content editable">Node: WTM
+Activity: TO</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="step-block">
+                            <div class="step-marker">2</div>
+                            <div class="step-detail">
+                                <button class="delete-step-btn" onclick="deleteStep(this)">Delete</button>
+                                <span class="step-title editable">Print PDRs</span>
+                                <p class="step-text editable">Find packages from <code>BIC</code>. Expand consignment (<kbd>F5</kbd>) and Print PDR (<kbd>F6</kbd>). Compare with physical arrival.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="section-contracts" class="guide-section">
+                        <h3 class="editable">Leonardo & Safran</h3>
+                        <div class="step-block">
+                            <div class="step-marker">1</div>
+                            <div class="step-detail">
+                                <button class="delete-step-btn" onclick="deleteStep(this)">Delete</button>
+                                <span class="step-title editable">Safran (Engines)</span>
+                                <p class="step-text editable">Receive email (e.g., David Paterson). Print attachments. Create Package for Engine. Generate PDR. Confirm RDD.</p>
+                            </div>
+                        </div>
+                        <div class="step-block">
+                            <div class="step-marker">2</div>
+                            <div class="step-detail">
+                                <button class="delete-step-btn" onclick="deleteStep(this)">Delete</button>
+                                <span class="step-title editable">Leonardo</span>
+                                <p class="step-text editable">1. Create Package ID in VITAL.<br>2. Fill <strong>KN LHUK Road Freight Booking Form</strong> (Booked by, Priority, Dims, Weight).<br>3. In Special Instructions: "Pkg ID, NSN, Item Name, Qty".<br>4. Email to Leonardo Collections.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="section-dscom" class="guide-section">
+                        <h3 class="editable">DSCOM Requests</h3>
+                        <div class="step-block">
+                            <div class="step-marker">1</div>
+                            <div class="step-detail">
+                                <button class="delete-step-btn" onclick="deleteStep(this)">Delete</button>
+                                <span class="step-title editable">Account & Request</span>
+                                <p class="step-text editable">Create account (Role: External DMR Op). Create Request: <strong>WHO</strong> (You), <strong>WHEN</strong> (Method: Com Air/Mil Air, Dates), <strong>WHERE</strong> (Consignor POC, Airport: BZZ), <strong>WHAT</strong> (LSE GEN, Pkg ID, Value). Change status to <strong>APPROVED</strong>.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="section-usa-returns" class="guide-section">
+                        <h3 class="editable">USA Returns</h3>
+                        <div class="step-block">
+                            <div class="step-marker">1</div>
+                            <div class="step-detail">
+                                <button class="delete-step-btn" onclick="deleteStep(this)">Delete</button>
+                                <span class="step-title editable">Documentation & Workflow</span>
+                                <p class="step-text editable"><strong>Form 22:</strong> Critical. Must list ALL Package IDs, Total Pieces, Value in USD, and Import License (e.g., 22 CFR 123.4(a)(5)).<br><strong>Workflow:</strong> Create VITAL Pkgs/AWB -> Create DSCOM (Do Not Approve) -> Email to Hamilton for Approval -> Once Approved, Upload to DSCOM and Submit.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="section-kpis" class="guide-section">
+                        <h3 class="editable">Weekly Managerial Checks (KPIs)</h3>
+                        <div class="step-block">
+                            <div class="step-marker">✓</div>
+                            <div class="step-detail">
+                                <button class="delete-step-btn" onclick="deleteStep(this)">Delete</button>
+                                <span class="step-title editable">Weekly Requirements</span>
+                                <p class="step-text editable">Update Folder every Monday: Packages AT/TO Node, PDR In/Out Registers, Discrepancies, Cleaning Register, Supervisor Alerts.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="section-hhd" class="guide-section">
+                        <h3 class="editable">Handheld Devices (TC72)</h3>
+                        <div class="step-block">
+                            <div class="step-marker">1</div>
+                            <div class="step-detail">
+                                <button class="delete-step-btn" onclick="deleteStep(this)">Delete</button>
+                                <span class="step-title editable">Priming</span>
+                                <p class="step-text editable">Open ASP Gateway. Select <strong>HHD Priming</strong> -> Generate Data. Dock HHD -> Download.</p>
+                            </div>
+                        </div>
+                        <div class="step-block">
+                            <div class="step-marker">2</div>
+                            <div class="step-detail">
+                                <button class="delete-step-btn" onclick="deleteStep(this)">Delete</button>
+                                <span class="step-title editable">Updating</span>
+                                <p class="step-text editable">Copy zip from Portal to <code>TC72/Internal shared storage/Update</code>.</p>
+                            </div>
+                        </div>
+                        <div class="step-block">
+                            <div class="step-marker">3</div>
+                            <div class="step-detail">
+                                <button class="delete-step-btn" onclick="deleteStep(this)">Delete</button>
+                                <span class="step-title editable">User Mgmt</span>
+                                <p class="step-text editable">Use IDAM Portal to Create Users, Reset Passwords, or Change Pins (Requires Re-Prime).</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="section-supervisor-docs" class="guide-section">
+                        <h3 class="editable">Supervisor Annexes</h3>
+                        <div class="step-block">
+                            <div class="step-marker">A</div>
+                            <div class="step-detail">
+                                <button class="delete-step-btn" onclick="deleteStep(this)">Delete</button>
+                                <span class="step-title editable">Annex A: Account Unlock</span>
+                                <p class="step-text editable">Use to unlock user accounts. Upload completed form below.</p>
+                                <div class="upload-zone" onclick="triggerUpload(this)">
+                                    <div class="upload-icon">📄</div>
+                                    <span class="upload-text">Upload Annex A Document</span>
+                                    <input type="file" hidden accept=".pdf,.docx" onchange="handleFiles(this.files, this)">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="step-block">
+                            <div class="step-marker">B</div>
+                            <div class="step-detail">
+                                <button class="delete-step-btn" onclick="deleteStep(this)">Delete</button>
+                                <span class="step-title editable">Annex B: Node Creation</span>
+                                <p class="step-text editable">Use for creating new VITAL nodes.</p>
+                                <div class="upload-zone" onclick="triggerUpload(this)">
+                                    <div class="upload-icon">📄</div>
+                                    <span class="upload-text">Upload Annex B Document</span>
+                                    <input type="file" hidden accept=".pdf,.docx" onchange="handleFiles(this.files, this)">
+                                </div>
+                            </div>
+                        </div>
+                         <div class="step-block">
+                            <div class="step-marker">C</div>
+                            <div class="step-detail">
+                                <button class="delete-step-btn" onclick="deleteStep(this)">Delete</button>
+                                <span class="step-title editable">Annex C: Supervisor Nomination</span>
+                                <p class="step-text editable">Use to nominate new VITAL Supervisors.</p>
+                                <div class="upload-zone" onclick="triggerUpload(this)">
+                                    <div class="upload-icon">📄</div>
+                                    <span class="upload-text">Upload Annex C Document</span>
+                                    <input type="file" hidden accept=".pdf,.docx" onchange="handleFiles(this.files, this)">
+                                </div>
+                            </div>
+                        </div>
+                         <div class="step-block">
+                            <div class="step-marker">D</div>
+                            <div class="step-detail">
+                                <button class="delete-step-btn" onclick="deleteStep(this)">Delete</button>
+                                <span class="step-title editable">Annex D: Account Deletion/Creation</span>
+                                <p class="step-text editable">Use for managing user accounts.</p>
+                                <div class="upload-zone" onclick="triggerUpload(this)">
+                                    <div class="upload-icon">📄</div>
+                                    <span class="upload-text">Upload Annex D Document</span>
+                                    <input type="file" hidden accept=".pdf,.docx" onchange="handleFiles(this.files, this)">
+                                </div>
+                            </div>
+                        </div>
+                         <div class="step-block">
+                            <div class="step-marker">F</div>
+                            <div class="step-detail">
+                                <button class="delete-step-btn" onclick="deleteStep(this)">Delete</button>
+                                <span class="step-title editable">Annex F: Deletion Rights</span>
+                                <p class="step-text editable">Request rights to delete records.</p>
+                                <div class="upload-zone" onclick="triggerUpload(this)">
+                                    <div class="upload-icon">📄</div>
+                                    <span class="upload-text">Upload Annex F Document</span>
+                                    <input type="file" hidden accept=".pdf,.docx" onchange="handleFiles(this.files, this)">
+                                </div>
+                            </div>
+                        </div>
+                         <div class="step-block">
+                            <div class="step-marker">G</div>
+                            <div class="step-detail">
+                                <button class="delete-step-btn" onclick="deleteStep(this)">Delete</button>
+                                <span class="step-title editable">Annex G: Node Change</span>
+                                <p class="step-text editable">Request to change a user's assigned node.</p>
+                                <div class="upload-zone" onclick="triggerUpload(this)">
+                                    <div class="upload-icon">📄</div>
+                                    <span class="upload-text">Upload Annex G Document</span>
+                                    <input type="file" hidden accept=".pdf,.docx" onchange="handleFiles(this.files, this)">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="section-deletions" class="guide-section">
+                        <h3 class="editable">Deletion of Records</h3>
+                        <div class="step-block">
+                            <div class="step-marker">🗑</div>
+                            <div class="step-detail">
+                                <button class="delete-step-btn" onclick="deleteStep(this)">Delete</button>
+                                <span class="step-title editable">Procedure</span>
+                                <p class="step-text editable">Supervisors can delete unused records. <strong>Note:</strong> Packages must be removed from PDRs/AWBs first. Recall record, tab to Delete field, enter <code>Y</code>, Save.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="text-toolbar">
+        <button type="button" data-cmd="bold"><strong>B</strong></button>
+        <button type="button" data-cmd="italic"><em>I</em></button>
+        <button type="button" data-cmd="strikeThrough"><span style="text-decoration: line-through;">S</span></button>
+        <input type="color" id="toolbar-color" title="Text colour">
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
