@@ -590,20 +590,206 @@ function handleHotKeyTest(e) {
         setTimeout(() => { display.innerText = ""; }, 500);
     }
 }
+/* ==========================================================================
+   VITAL CERTIFICATE LOGIC
+   ========================================================================== */
 
+function printVitalCert() {
+    // 1. Prompt for Name (since Vital test doesn't force a login)
+    const name = prompt("AUTHENTICATION REQUIRED\n\nPlease enter your Rank and Name for the certificate:", "Cpl Bloggs");
+    if (!name) return;
+
+    // 2. Calculate Stats
+    const date = new Date().toLocaleDateString("en-GB", { day: 'numeric', month: 'long', year: 'numeric' });
+    const scorePct = Math.round((testScore / vitalQuestions.length) * 100);
+
+    // 3. Generate Certificate Window
+    const win = window.open('', '', 'width=900,height=700');
+    win.document.write(`
+        <html>
+        <head>
+            <title>VITAL Competency Certificate</title>
+            <style>
+                @page { size: landscape; margin: 0; }
+                body {
+                    font-family: 'Courier New', Courier, monospace;
+                    background: #fff;
+                    color: #000;
+                    padding: 40px;
+                    text-align: center;
+                    border: 15px double #1a202c;
+                    margin: 20px;
+                    height: 85vh;
+                    position: relative;
+                    -webkit-print-color-adjust: exact;
+                }
+                .watermark {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    opacity: 0.08;
+                    width: 400px;
+                    z-index: -1;
+                    filter: grayscale(100%);
+                }
+                .header-logo {
+                    width: 80px;
+                    margin-bottom: 10px;
+                }
+                h1 {
+                    font-size: 42px;
+                    margin: 10px 0;
+                    text-transform: uppercase;
+                    letter-spacing: 2px;
+                    color: #1a202c;
+                    text-decoration: underline;
+                }
+                h2 {
+                    font-size: 24px;
+                    margin-top: 5px;
+                    color: #4a5568;
+                    font-weight: normal;
+                    text-transform: uppercase;
+                }
+                .content {
+                    margin-top: 50px;
+                    font-size: 22px;
+                    line-height: 2;
+                }
+                .name {
+                    font-size: 36px;
+                    font-weight: bold;
+                    border-bottom: 2px solid #000;
+                    display: inline-block;
+                    min-width: 400px;
+                    margin: 10px 0;
+                    font-family: 'Times New Roman', serif;
+                }
+                .meta-box {
+                    border: 1px solid #000;
+                    display: inline-block;
+                    padding: 10px 30px;
+                    margin-top: 20px;
+                    background: #f7fafc;
+                }
+                .footer {
+                    margin-top: 80px;
+                    display: flex;
+                    justify-content: space-around;
+                    align-items: flex-end;
+                }
+                .sig-block {
+                    text-align: center;
+                }
+                .sig-line {
+                    border-top: 1px solid #000;
+                    width: 250px;
+                    padding-top: 5px;
+                    font-size: 14px;
+                    font-weight: bold;
+                    text-transform: uppercase;
+                }
+                .print-hide {
+                    position: fixed; top: 10px; right: 10px;
+                }
+            </style>
+        </head>
+        <body>
+            <button class="print-hide" onclick="window.print()">Print</button>
+            
+            <img src="https://upload.wikimedia.org/wikipedia/commons/e/ea/Cap_Badge_of_the_RLC.png" class="watermark">
+            
+            <h1>Certificate of Competency</h1>
+            <h2>VITAL Terminal Operation</h2>
+            
+            <div class="content">
+                <p>This is to certify that</p>
+                <div class="name">${name}</div>
+                <p>Has successfully passed the VITAL System Assessment</p>
+                
+                <div class="meta-box">
+                    <strong>SCORE: ${scorePct}%</strong> &nbsp;|&nbsp; <strong>GRADE: PASS</strong>
+                </div>
+            </div>
+            
+            <div class="footer">
+                <div class="sig-block">
+                    <div style="font-family:'Times New Roman',serif; font-size:20px; margin-bottom:5px;">${date}</div>
+                    <div class="sig-line">Date</div>
+                </div>
+                <div class="sig-block">
+                    <div style="font-family:'Brush Script MT', cursive; font-size:30px; color:#2d3748;">Sgt K. Kirby</div>
+                    <div class="sig-line">Authorised By</div>
+                </div>
+            </div>
+            
+            <script>
+                // Auto print dialog on load
+                window.onload = function() { setTimeout(function(){ window.print(); }, 500); }
+            </script>
+        </body>
+        </html>
+    `);
+    win.document.close();
+}
 function nextQuestion() {
     currentQuestion++;
     if (currentQuestion < vitalQuestions.length) {
         renderQuestion();
     } else {
         const area = document.getElementById('vt-game-area');
-        area.innerHTML = `
-            <div class="vt-question-box" style="text-align:center;">
-                <h2 style="color:#0f0; font-size:2rem;">TEST COMPLETE</h2>
-                <div style="font-size:4rem; margin:20px 0;">${testScore} / ${vitalQuestions.length}</div>
-                <p>${testScore >= (vitalQuestions.length * 0.8) ? 'EXCELLENT WORK, SPECIALIST.' : 'REVISION REQUIRED.'}</p>
-            </div>
+        const scorePct = Math.round((testScore / vitalQuestions.length) * 100);
+        const passed = scorePct >= 80; // Pass mark 80%
+        
+        // Define styles for Pass vs Fail
+        const statusColor = passed ? '#0f0' : '#f00';
+        const statusMsg = passed ? 'ASSESSMENT PASSED' : 'ASSESSMENT FAILED';
+        const feedback = passed ? 'EXCELLENT WORK. OPERATOR QUALIFIED.' : 'STANDARD NOT MET. REVISION REQUIRED.';
+
+        let html = `
+            <div class="vt-question-container" style="text-align:center; padding-top:20px; animation: fadeIn 1s;">
+                <h2 style="color:${statusColor}; font-size:2.5rem; margin-bottom:10px; text-shadow: 0 0 10px ${statusColor};">
+                    ${statusMsg}
+                </h2>
+                
+                <div style="font-size:5rem; margin:30px 0; color:#fff; text-shadow:0 0 5px ${statusColor}; font-family: 'Courier New';">
+                    ${testScore} <span style="font-size:2rem; color:#666;">/ ${vitalQuestions.length}</span>
+                </div>
+                
+                <div style="font-size:1.5rem; margin-bottom:40px; color:${statusColor}; border:1px solid ${statusColor}; display:inline-block; padding:5px 15px;">
+                    ${scorePct}%
+                </div>
+                
+                <p style="color:#fff; margin-bottom:40px; font-size:1.2rem;">
+                    ${feedback}
+                </p>
         `;
+        
+        if (passed) {
+            html += `
+                <button class="vt-btn" onclick="printVitalCert()" style="font-size:1.2rem; padding:15px 40px; border:2px solid #0f0; background:rgba(0,255,0,0.1); box-shadow: 0 0 15px #0f0;">
+                    [ PRINT CERTIFICATE ]
+                </button>
+            `;
+        } else {
+            html += `
+                <button class="vt-btn danger" onclick="startVitalTest()" style="font-size:1.2rem; padding:15px 40px;">
+                    [ RETAKE TEST ]
+                </button>
+            `;
+        }
+        
+        html += `</div>`;
+        area.innerHTML = html;
+        
+        // Update Footer Message
+        const footerMsg = document.getElementById('vital-footer-msg');
+        if(footerMsg) {
+            footerMsg.innerText = "SESSION ENDED";
+            footerMsg.style.background = passed ? '#0f0' : '#f00';
+            footerMsg.style.color = passed ? '#000' : '#fff';
+        }
     }
 }
 
