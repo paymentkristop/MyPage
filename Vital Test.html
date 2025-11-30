@@ -4,79 +4,108 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="author" content="Kris Kirby">
-    <meta name="copyright" content="LSS Guides developed by K.R.I.S K.I.R.B.Y">
-    <title>VITAL Test</title>
+    <title>VITAL Terminal Simulation</title>
     <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body class="vital-body">
+
+    <div id="vital-boot-screen">
+        <div class="vital-boot-text">
+            <div>VITAL LINK HARDWARE CHECK... OK</div>
+            <div>LOADING KERNEL... OK</div>
+            <div>ESTABLISHING SECURE LINK TO NODE...</div>
+            <div id="vital-boot-progress"></div>
+            <div class="vital-blink">_</div>
+        </div>
+    </div>
 
     <div id="vital-test-container">
-        <div class="crt-effect"></div>
-        <div class="vt-header">
-            <div>VITAL TERMINAL SIMULATION v2.4</div>
-            <div id="vt-score">SCORE: 0/5</div>
-        </div>
         
-        <div class="vt-content" id="vt-game-area">
+        <div class="vital-overlay"></div>
+        <div class="vital-scanlines"></div>
+
+        <div class="vital-screen">
+            
+            <div class="vital-header-row">
+                <div class="vital-header-left">SCREEN: <span style="color:#fff">VT-TEST-01</span></div>
+                <div class="vital-header-center">*** VITAL ONLINE TRAINING MODE ***</div>
+                <div class="vital-header-right" id="vt-score">SCORE: 00</div>
             </div>
+
+            <div class="vital-separator">================================================================================</div>
+
+            <div class="vital-content-area" id="vt-game-area">
+                </div>
+
+            <div class="vital-footer-row">
+                <div class="vital-footer-msg" id="vital-footer-msg">READY FOR INPUT</div>
+                <div class="vital-f-keys">F1=HELP  F3=EXIT  F10=SAVE  F12=SUBMIT</div>
+            </div>
+
+        </div>
 
         <div class="vt-admin-trigger" onclick="openVtAdmin()"></div>
         
-        <button onclick="closeVitalTest()" class="home-btn" style="position: absolute; bottom: 20px; right: 20px; z-index: 7001;">Exit Test</button>
+        <button onclick="closeVitalTest()" class="vital-off-switch" title="Power Off / Exit">
+            POWER O/I
+        </button>
     </div>
 
     <div id="vt-admin-panel">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-            <h2>ROOT ACCESS // TEST CONFIGURATION</h2>
-            <button class="vt-btn danger" onclick="closeVtAdmin()">EXIT ADMIN</button>
-        </div>
-        <div class="vt-admin-grid">
-            <div class="vt-admin-list" id="vt-q-list">
-                </div>
-            <div class="vt-admin-form">
-                <input type="hidden" id="vt-edit-index" value="-1">
-                <div class="vt-form-group">
-                    <label>Question Type</label>
-                    <select id="vt-type" onchange="toggleVtFields()">
-                        <option value="mc">Multiple Choice</option>
-                        <option value="terminal">Terminal Simulation</option>
-                        <option value="hotkey">Hotkey Challenge</option>
-                    </select>
-                </div>
-                <div class="vt-form-group">
-                    <label>Question Text</label>
-                    <textarea id="vt-qtext" rows="3"></textarea>
-                </div>
+        <div class="vital-admin-window">
+            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px dashed #0f0; padding-bottom:10px; margin-bottom:15px;">
+                <h2 style="margin:0; text-shadow: 0 0 5px #0f0;">ROOT ACCESS // CONFIGURATION</h2>
+                <button class="vt-btn danger" onclick="closeVtAdmin()">LOGOFF</button>
+            </div>
+            
+            <div class="vt-admin-grid">
+                <div class="vt-admin-list" id="vt-q-list"></div>
                 
-                <div class="vt-form-group">
-                    <label>Question Image (Optional)</label>
-                    <input type="text" id="vt-img-url" placeholder="Paste Image URL">
-                    <div style="margin-top:5px; color:#666; font-size:0.8rem;">OR Upload (Auto-converts to Base64 - Keep small!)</div>
-                    <input type="file" id="vt-img-upload" accept="image/*" onchange="handleVtImageUpload(this)">
-                </div>
-
-                <div id="vt-group-mc">
-                    <div class="vt-form-group">
-                        <label>Options (Comma Separated)</label>
-                        <input type="text" id="vt-options" placeholder="Option 1, Option 2, Option 3, Option 4">
+                <div class="vt-admin-form">
+                    <input type="hidden" id="vt-edit-index" value="-1">
+                    <input type="hidden" id="vt-target-db" value="vital"> <div class="vt-form-group">
+                        <label>QUESTION TYPE:</label>
+                        <select id="vt-type" onchange="toggleVtFields()">
+                            <option value="mc">MULTIPLE CHOICE</option>
+                            <option value="terminal">TERMINAL COMMAND INPUT</option>
+                            <option value="hotkey">HOTKEY CHALLENGE</option>
+                        </select>
                     </div>
-                    <div class="vt-form-group">
-                        <label>Correct Option Index (0-3)</label>
-                        <input type="number" id="vt-correct-idx" min="0" max="3">
-                    </div>
-                </div>
 
-                <div id="vt-group-ans" style="display:none;">
                     <div class="vt-form-group">
-                        <label>Correct Answer / Key</label>
-                        <input type="text" id="vt-answer" placeholder="e.g. CTRL+P or F2">
+                        <label>PROMPT TEXT:</label>
+                        <textarea id="vt-qtext" rows="3"></textarea>
                     </div>
-                </div>
+                    
+                    <div class="vt-form-group">
+                        <label>IMAGE URL (OPTIONAL):</label>
+                        <input type="text" id="vt-img-url">
+                        <input type="file" id="vt-img-upload" accept="image/*" onchange="handleVtImageUpload(this)" style="margin-top:5px;">
+                    </div>
 
-                <div style="margin-top:20px;">
-                    <button class="vt-btn" onclick="saveQuestionData()">SAVE QUESTION</button>
-                    <button class="vt-btn" onclick="clearVtForm()">NEW QUESTION</button>
-                    <button class="vt-btn danger" onclick="deleteQuestionData()">DELETE</button>
+                    <div id="vt-group-mc">
+                        <div class="vt-form-group">
+                            <label>OPTIONS (COMMA SEPARATED):</label>
+                            <input type="text" id="vt-options" placeholder="A, B, C, D">
+                        </div>
+                        <div class="vt-form-group">
+                            <label>CORRECT INDEX (0-3):</label>
+                            <input type="number" id="vt-correct-idx" min="0" max="3">
+                        </div>
+                    </div>
+
+                    <div id="vt-group-ans" style="display:none;">
+                        <div class="vt-form-group">
+                            <label>EXPECTED INPUT / KEY:</label>
+                            <input type="text" id="vt-answer" placeholder="e.g. CTRL+P or BIC">
+                        </div>
+                    </div>
+
+                    <div style="margin-top:20px; border-top:1px dashed #0f0; padding-top:10px;">
+                        <button class="vt-btn" onclick="saveQuestionData()">[ SAVE RECORD ]</button>
+                        <button class="vt-btn" onclick="clearVtForm()">[ NEW RECORD ]</button>
+                        <button class="vt-btn danger" onclick="deleteQuestionData()">[ DELETE ]</button>
+                    </div>
                 </div>
             </div>
         </div>

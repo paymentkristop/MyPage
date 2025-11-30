@@ -406,28 +406,43 @@ function closeTestHub() {
 }
 
 function startVitalTest() {
-    // If the container doesn't exist (we are on Hub), navigate to Test Page
-    if (!document.getElementById('vital-test-container')) {
-        window.location.href = 'Vital Test.html';
-        return;
-    }
-
-    // Logic for running the test on the Test Page
-    loadTestConfig();
-    
-    // Hide Hub if it exists (shouldn't on the dedicated page, but for safety)
+    // Hide Hub
     const hub = document.getElementById('test-hub');
     if (hub) {
         hub.classList.remove('visible');
         setTimeout(() => { hub.style.display = 'none'; }, 500);
     }
     
-    const testContainer = document.getElementById('vital-test-container');
-    testContainer.style.display = 'flex';
+    // Boot Sequence Logic
+    const bootScreen = document.getElementById('vital-boot-screen');
+    const container = document.getElementById('vital-test-container');
     
+    // Show boot screen first
+    if(bootScreen) {
+        bootScreen.style.display = 'block';
+        setTimeout(() => {
+            bootScreen.innerHTML += '<div>AUTHENTICATING USER...</div>';
+        }, 800);
+        setTimeout(() => {
+            bootScreen.innerHTML += '<div>ACCESS GRANTED.</div>';
+        }, 1600);
+        setTimeout(() => {
+            bootScreen.style.display = 'none';
+            if(container) container.style.display = 'flex';
+        }, 2500);
+    } else {
+        // Fallback if no boot screen element
+        if(container) container.style.display = 'flex';
+    }
+
+    // Reset Test Data
     testScore = 0;
     currentQuestion = 0;
-    updateScore();
+    
+    // Update Score Display
+    const scoreEl = document.getElementById('vt-score');
+    if (scoreEl) scoreEl.innerText = `SCORE: ${testScore}`;
+    
     renderQuestion();
 }
 
@@ -446,20 +461,24 @@ function updateScore() {
 function renderQuestion() {
     const qData = vitalQuestions[currentQuestion];
     const area = document.getElementById('vt-game-area');
-    if (!area) return;
+    const footerMsg = document.getElementById('vital-footer-msg');
     
+    if (!area) return;
     area.innerHTML = ''; 
 
-    const qText = document.createElement('div');
-    qText.className = 'vt-question-box';
+    // Update Footer Status
+    if(footerMsg) footerMsg.innerText = "WAITING FOR INPUT...";
+
+    const qBox = document.createElement('div');
+    qBox.className = 'vt-question-container'; // New wrapper
     
     let html = `<div class="vt-question-text">Q${currentQuestion + 1}: ${qData.question}</div>`;
     
     if (qData.image && qData.image.length > 5) {
-        html += `<img src="${qData.image}" class="vt-question-image" alt="Reference Image">`;
+        html += `<img src="${qData.image}" class="vt-question-image" alt="Reference Image" style="border:1px solid #0f0; margin-bottom:15px;">`;
     }
     
-    qText.innerHTML = html;
+    qBox.innerHTML = html;
     
     if (qData.type === 'mc') {
         const optsDiv = document.createElement('div');
@@ -471,30 +490,45 @@ function renderQuestion() {
             btn.onclick = () => checkMCAnswer(idx, qData.correct, btn);
             optsDiv.appendChild(btn);
         });
-        qText.appendChild(optsDiv);
+        qBox.appendChild(optsDiv);
     } else if (qData.type === 'terminal') {
-        qText.innerHTML += `
-            <div style="color:#aaa; font-size:0.9rem; margin-bottom:5px;">TERMINAL INPUT_</div>
-            <input type="text" class="vt-terminal-input" id="vt-input" placeholder="Type command..." autocomplete="off">
-            <button class="vt-next-btn" id="term-submit" style="display:inline-block;" onclick="checkTermAnswer('${qData.answer}')">SUBMIT</button>
-            <div id="term-feedback" style="margin-top:10px; font-weight:bold;"></div>
+        // Enhanced Terminal Input Layout
+        const termDiv = document.createElement('div');
+        termDiv.innerHTML = `
+            <div class="vt-terminal-prompt-line">
+                <span class="vt-terminal-label">COMMAND &gt;</span>
+                <input type="text" class="vt-terminal-input" id="vt-input" autocomplete="off" autofocus>
+            </div>
+            <div style="text-align:right; margin-top:10px;">
+                <button class="vt-btn" id="term-submit" onclick="checkTermAnswer('${qData.answer}')">[ ENTER ]</button>
+            </div>
+            <div id="term-feedback" style="margin-top:15px; font-weight:bold; min-height:20px; color:#fff;"></div>
         `;
+        qBox.appendChild(termDiv);
+        
+        // Auto-focus the input
+        setTimeout(() => {
+            const inp = document.getElementById('vt-input');
+            if(inp) inp.focus();
+        }, 100);
     } else if (qData.type === 'hotkey') {
-        qText.innerHTML += `
-            <div style="text-align:center; padding:40px; border:2px dashed #0f0; margin-top:20px;">
+        qBox.innerHTML += `
+            <div style="text-align:center; padding:40px; border:2px dashed #0f0; margin-top:20px; background:rgba(0,255,0,0.05);">
                 Waiting for Key Press...
-                <div id="key-press-display" style="font-size:2rem; margin-top:20px;"></div>
+                <div id="key-press-display" style="font-size:2rem; margin-top:20px; color:#fff;"></div>
             </div>
         `;
         document.addEventListener('keydown', handleHotKeyTest);
     }
 
-    area.appendChild(qText);
+    area.appendChild(qBox);
 
+    // Global Next Button (Hidden initially)
     const nextBtn = document.createElement('button');
     nextBtn.id = 'global-next-btn';
-    nextBtn.className = 'vt-next-btn';
-    nextBtn.innerText = 'NEXT QUESTION >>';
+    nextBtn.className = 'vt-btn';
+    nextBtn.style.cssText = 'display:none; margin-top:20px; width:100%; border-style:dashed;';
+    nextBtn.innerText = 'PROCEED TO NEXT RECORD >>';
     nextBtn.onclick = nextQuestion;
     area.appendChild(nextBtn);
 }

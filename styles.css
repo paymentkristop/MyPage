@@ -2288,3 +2288,213 @@ body.mjdi-sim-body {
     border-color: var(--mjdi-dark) var(--mjdi-light) var(--mjdi-light) var(--mjdi-dark);
     transform: translate(1px, 1px);
 }
+/* ==========================================================================
+   VITAL SIMULATOR THEME (HIGH FIDELITY)
+   Place at bottom of styles.css
+   ========================================================================== */
+
+/* 1. Page & Container Setup */
+body.vital-body {
+    background-color: #000;
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+#vital-test-container {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: #000;
+    display: none; /* Toggled by JS */
+    justify-content: center;
+    align-items: center;
+    z-index: 7000;
+}
+
+/* 2. CRT Screen Effects */
+.vital-screen {
+    width: 1024px;
+    height: 768px;
+    max-width: 95vw;
+    max-height: 90vh;
+    background-color: #0a0a0a; /* Deep black/green */
+    border: 2px solid #333;
+    border-radius: 10px; /* Slight curve of monitor */
+    padding: 40px;
+    position: relative;
+    box-shadow: 0 0 50px rgba(0, 255, 0, 0.1);
+    color: #00ff00; /* Classic Green Phosphor */
+    text-shadow: 0 0 4px rgba(0, 255, 0, 0.6);
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    font-size: 18px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.vital-scanlines {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    background-size: 100% 4px, 6px 100%;
+    pointer-events: none;
+    z-index: 10;
+    opacity: 0.6;
+}
+
+.vital-overlay {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle, rgba(0,255,0,0.05) 0%, rgba(0,0,0,0.4) 90%);
+    pointer-events: none;
+    z-index: 11;
+}
+
+/* 3. Screen Layout */
+.vital-header-row {
+    display: flex;
+    justify-content: space-between;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+.vital-separator {
+    white-space: nowrap;
+    overflow: hidden;
+    color: #008800;
+    margin-bottom: 20px;
+}
+.vital-content-area {
+    flex: 1;
+    overflow-y: auto;
+    border: 1px dashed #004400;
+    padding: 20px;
+    position: relative;
+}
+
+.vital-footer-row {
+    margin-top: 20px;
+    border-top: 2px solid #00ff00;
+    padding-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.vital-footer-msg {
+    background: #00ff00;
+    color: #000;
+    padding: 2px 8px;
+    animation: blinkCursor 1s infinite;
+}
+.vital-f-keys { font-size: 14px; color: #00cc00; }
+
+/* 4. Question Content Styling */
+.vt-question-text {
+    font-size: 20px;
+    margin-bottom: 30px;
+    line-height: 1.4;
+    color: #fff; /* White text for readability against green glow */
+    text-shadow: 0 0 2px #0f0;
+}
+
+.vt-options { display: flex; flex-direction: column; gap: 15px; }
+
+.vt-option-btn {
+    background: transparent;
+    border: 1px solid #00ff00;
+    color: #00ff00;
+    padding: 10px 15px;
+    font-family: inherit;
+    font-size: 18px;
+    text-align: left;
+    cursor: pointer;
+    text-shadow: inherit;
+    transition: all 0.1s;
+}
+.vt-option-btn:hover, .vt-option-btn:focus {
+    background: #00ff00;
+    color: #000;
+    box-shadow: 0 0 15px #00ff00;
+}
+.vt-option-btn.correct { background: #00ff00; color: #000; border-color: #fff; }
+.vt-option-btn.wrong { background: #ff0000; color: #fff; border-color: #ff0000; text-shadow: none; }
+
+/* Terminal Input Styling */
+.vt-terminal-prompt-line {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #001100;
+    padding: 10px;
+    border: 1px solid #00ff00;
+    margin-top: 20px;
+}
+.vt-terminal-label { color: #00ff00; white-space: nowrap; }
+.vt-terminal-input {
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid #00ff00;
+    color: #fff;
+    font-family: inherit;
+    font-size: 20px;
+    flex: 1;
+    text-transform: uppercase;
+}
+.vt-terminal-input:focus { outline: none; background: rgba(0, 255, 0, 0.1); }
+
+/* 5. Boot Screen */
+#vital-boot-screen {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: #000;
+    z-index: 8000;
+    display: none;
+    padding: 40px;
+    color: #00ff00;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+}
+.vital-boot-text div { margin-bottom: 10px; }
+.vital-blink { animation: blinkCursor 0.5s infinite; }
+
+@keyframes blinkCursor {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+/* 6. Admin Panel (The Matrix Style) */
+#vt-admin-panel {
+    display: none;
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.9);
+    z-index: 9000;
+    justify-content: center;
+    align-items: center;
+}
+.vital-admin-window {
+    width: 90%; height: 90%;
+    border: 2px dashed #00ff00;
+    background: #000;
+    padding: 20px;
+    color: #00ff00;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 0 50px rgba(0, 255, 0, 0.2);
+}
+.vt-btn {
+    background: transparent; border: 1px solid #00ff00; color: #00ff00;
+    padding: 5px 15px; font-family: inherit; cursor: pointer; margin-right: 10px;
+}
+.vt-btn:hover { background: #00ff00; color: #000; }
+.vt-btn.danger { border-color: #ff0000; color: #ff0000; }
+.vt-btn.danger:hover { background: #ff0000; color: white; }
+
+/* 7. Utilities */
+.vt-admin-trigger {
+    position: absolute; bottom: 0; right: 0; width: 40px; height: 40px; cursor: default;
+}
+.vital-off-switch {
+    position: absolute; bottom: -50px; right: 20px;
+    background: #333; color: #fff; border: 1px solid #666;
+    padding: 5px 10px; cursor: pointer;
+    font-family: sans-serif; font-size: 10px;
+}
+#vital-test-container:hover .vital-off-switch { bottom: 10px; transition: bottom 0.3s; }
