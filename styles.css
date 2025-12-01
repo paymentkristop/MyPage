@@ -2517,3 +2517,241 @@ body.vital-body {
         height: auto;
     }
 }
+/* Icon utility (if you do not already have it) */
+.icon {
+    width: 1.25em;
+    height: 1.25em;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* Launch Photo Walkthrough button */
+.btn-walkthrough {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #3b82f6; /* blue-main */
+    color: #ffffff;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 999px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(59, 130, 246, 0.4);
+    transition: all 0.2s;
+    font-size: 0.9rem;
+}
+
+.btn-walkthrough:hover {
+    transform: scale(1.05);
+    background: #2563eb; /* blue-dark */
+}
+
+/* === WALKTHROUGH OVERLAY STYLES === */
+
+.overlay-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.9);
+    backdrop-filter: blur(5px);
+    z-index: 5000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.overlay-backdrop.active {
+    display: flex;
+    opacity: 1;
+}
+
+.walkthrough-container {
+    width: 90%;
+    height: 90%;
+    max-width: 1400px;
+    background: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+}
+
+/* Header bar */
+.wt-header {
+    background: #0f172a; /* slate-900 */
+    color: #ffffff;
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.wt-title {
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    font-size: 0.9rem;
+    color: #d97706; /* gold-main */
+    text-transform: uppercase;
+}
+
+.wt-close {
+    background: transparent;
+    border: none;
+    color: #ffffff;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+/* Main viewport split */
+.wt-viewport {
+    flex: 1;
+    display: flex;
+    overflow: hidden;
+}
+
+/* Image area */
+.wt-stage {
+    flex: 2;
+    background: #000000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 2rem;
+}
+
+.wt-image-wrapper {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.image-placeholder {
+    color: #64748b; /* slate-600 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.image-placeholder .icon {
+    width: 64px;
+    height: 64px;
+}
+
+#wt-active-image {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 4px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+/* Sidebar with text and controls */
+.wt-sidebar {
+    flex: 1;
+    min-width: 350px;
+    max-width: 450px;
+    background: #f8fafc; /* slate-50 */
+    border-left: 1px solid #e2e8f0;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Progress bar */
+.wt-progress {
+    margin-bottom: 2rem;
+}
+
+#wt-step-counter {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #64748b;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.progress-track {
+    width: 100%;
+    height: 6px;
+    background: #e5e7eb; /* slate-200 */
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: #3b82f6;
+    width: 0%;
+    transition: width 0.3s;
+}
+
+/* Step text */
+#wt-step-header {
+    font-size: 1.75rem;
+    margin: 0 0 1rem 0;
+    line-height: 1.2;
+}
+
+.wt-step-desc {
+    font-size: 1rem;
+    color: #475569;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    flex: 1;
+}
+
+/* Hint box */
+.wt-terminal-hint {
+    background: #1e293b; /* slate-800 */
+    color: #22c55e;      /* success green text */
+    padding: 1rem;
+    border-radius: 6px;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 0.85rem;
+    border-left: 4px solid #22c55e;
+    margin-bottom: 2rem;
+}
+
+/* Controls */
+.wt-controls {
+    display: flex;
+    gap: 1rem;
+    margin-top: auto;
+}
+
+.btn-wt {
+    flex: 1;
+    padding: 1rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 0.9rem;
+}
+
+.btn-wt.next {
+    background: #3b82f6;
+    color: #ffffff;
+}
+
+.btn-wt.next:hover {
+    background: #2563eb;
+    transform: translateY(-2px);
+}
+
+.btn-wt.prev {
+    background: #e5e7eb;
+    color: #475569;
+}
+
+.btn-wt:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
