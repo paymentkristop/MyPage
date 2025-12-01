@@ -9,7 +9,17 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
+<svg style="display: none;">
+    <symbol id="icon-play" viewBox="0 0 24 24">
+        <polygon points="5 3 19 12 5 21 5 3" fill="currentColor"></polygon>
+    </symbol>
+</svg>
+<svg style="display: none;">
+    <symbol id="icon-camera" viewBox="0 0 24 24">
+        <path fill="none" stroke="currentColor" stroke-width="2" d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"></path>
+        <circle cx="12" cy="13" r="4" fill="none" stroke="currentColor" stroke-width="2"></circle>
+    </symbol>
+</svg>
     <!-- Mobile Header -->
     <header class="mobile-header">
         <button class="mobile-menu-btn" onclick="toggleMobileNav()">
@@ -273,6 +283,10 @@
                     <!-- 1. Receipts -->
                     <div id="section-mjdi-receipts" class="guide-section active">
                         <h3 class="editable">MJDI: Receipts – U010 / U013 / U014</h3>
+						<button class="btn-walkthrough" onclick="startWalkthrough('receipts')">
+    <svg class="icon"><use href="#icon-play"></use></svg>
+    Launch Photo Walkthrough
+</button>
                         <div class="menu-path editable">Menu: Transactions  ·  Receipts  ·  U010 / U013 / U014</div>
 
                         <div class="step-block">
@@ -1247,7 +1261,52 @@ that auditors can verify that stock was removed from the account with proper aut
             </div> <!-- /doc-container -->
         </div> <!-- /main-viewport -->
     </div> <!-- /app-shell -->
+<div id="walkthrough-overlay" class="overlay-backdrop">
+    <div class="walkthrough-container">
+        
+        <div class="wt-header">
+            <div class="wt-title" id="wt-title-display">MODULE: RECEIPTS U010</div>
+            <button class="wt-close" onclick="closeWalkthrough()">✕</button>
+        </div>
+        
+        <div class="wt-viewport">
+            <!-- Image stage -->
+            <div class="wt-stage">
+                <div class="wt-image-wrapper">
+                    <div id="wt-image-placeholder" class="image-placeholder">
+                        <svg class="icon"><use href="#icon-camera"></use></svg>
+                        <span>Loading Visual Asset...</span>
+                    </div>
+                    <img id="wt-active-image" src="" alt="Step Visual" style="display:none;">
+                </div>
+            </div>
 
+            <!-- Text / controls sidebar -->
+            <div class="wt-sidebar">
+                <div class="wt-progress">
+                    <span id="wt-step-counter">STEP 1 / 5</span>
+                    <div class="progress-track">
+                        <div class="progress-fill" id="wt-progress-bar"></div>
+                    </div>
+                </div>
+                
+                <h3 id="wt-step-header">Select Transaction Type</h3>
+                <div class="wt-step-desc" id="wt-step-desc">
+                    Navigate to the Transaction Menu and select Receipts. Ensure you have the IV ready.
+                </div>
+                
+                <div class="wt-terminal-hint" id="wt-term-hint">
+                    <strong>MJDI Tip:</strong> Ensure your Caps Lock is ON.
+                </div>
+
+                <div class="wt-controls">
+                    <button class="btn-wt prev" onclick="prevStep()" id="btn-prev" disabled>← Back</button>
+                    <button class="btn-wt next" onclick="nextStep()" id="btn-next">Next Step →</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
     <script src="script.js"></script>
 </body>
 </html>
