@@ -2504,3 +2504,16 @@ body.vital-body {
     border-color: #000080 !important;     /* Navy Border */
     font-weight: bold;
 }
+/* MJDI guide layout */
+.app-shell {
+    display: flex;
+    height: 100vh;
+}
+
+/* Keep mobile behaviour the same */
+@media (max-width: 1024px) {
+    .app-shell {
+        flex-direction: column;
+        height: auto;
+    }
+}
