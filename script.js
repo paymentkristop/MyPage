@@ -7,49 +7,19 @@ console.log("LSS Guide System v2.1 - Authorized Use Only - Developed by K.R.I.S.
 
 // Save current guide content into localStorage
 function saveGuideState() {
-    const content = document.querySelector('.content-body');
-    if (!content) return;
-
-    localStorage.setItem('mjdiGuideContent', content.innerHTML);
-    // Optional: also store header text if you want
-    const title = document.getElementById('header-main');
-    const subtitle = document.getElementById('header-sub');
-    if (title) localStorage.setItem('mjdiGuideTitle', title.innerHTML);
-    if (subtitle) localStorage.setItem('mjdiGuideSubtitle', subtitle.innerHTML);
+    // Disabled: saving to browser is turned off.
+    return;
 }
 
 // Load guide content from localStorage (if present)
 function loadGuideState() {
-    const content = document.querySelector('.content-body');
-    if (!content) return;
-
-    const saved = localStorage.getItem('mjdiGuideContent');
-    if (saved) {
-        content.innerHTML = saved;
-    }
-
-    const titleSaved = localStorage.getItem('mjdiGuideTitle');
-    const subSaved = localStorage.getItem('mjdiGuideSubtitle');
-    if (titleSaved) {
-        const title = document.getElementById('header-main');
-        if (title) title.innerHTML = titleSaved;
-    }
-    if (subSaved) {
-        const subtitle = document.getElementById('header-sub');
-        if (subtitle) subtitle.innerHTML = subSaved;
-    }
+    // Disabled: no loading from browser.
+    return;
 }
 
 // Run on page load
 document.addEventListener('DOMContentLoaded', loadGuideState);
 
-// Auto-save when editing text in admin edit mode
-document.addEventListener('input', function (e) {
-    if (e.target.classList && e.target.classList.contains('editable')) {
-        // Only save while admin edit mode is on, if you track that
-        saveGuideState();
-    }
-});
 // Initialize listeners for drag and drop & Page Setup
 document.addEventListener('DOMContentLoaded', () => {
     // 1. Initialize Upload Zones if they exist
