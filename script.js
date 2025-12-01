@@ -1993,3 +1993,188 @@ function mjdiAdmNew() {
     mjdiEditIdx = -1;
     document.getElementById('mjdi-adm-qtext').value = '';
 }
+// --- WALKTHROUGH DATA ---
+// Add or expand modules (receipts, issues, etc.)
+const WALKTHROUGH_DB = {
+    receipts: {
+        title: 'MJDI Receipts (U010)',
+        steps: [
+            {
+                header: 'Prepare Documentation',
+                text: 'Ensure the Issue Voucher (IV) matches the physical stock. Check NSN, Part Number, quantity and Unit of Issue.',
+                img: 'assets/mjdi_step1.jpg',
+                hint: 'Always confirm that the D of Q on the IV matches the MJDI Unit of Issue.'
+            },
+            {
+                header: 'Open Receipts Menu',
+                text: 'From the MJDI main menu, navigate to Transactions > Receipts and open the receipts pane.',
+                img: 'assets/mjdi_step2.jpg',
+                hint: 'If you have favourites set up, use them to speed up access to U010.'
+            },
+            {
+                header: 'Select U010',
+                text: 'Choose "U010 - Dues In Receipt" to link the receipt to an existing demand and dues position.',
+                img: 'assets/mjdi_step3.jpg',
+                hint: 'Use U013 only when authorised for non-dues receipts or local purchases.'
+            },
+            {
+                header: 'Enter NSN and Quantities',
+                text: 'Enter the NSN and confirm that the description, MatCon and quantity match the paperwork and physical items.',
+                img: 'assets/mjdi_step4.jpg',
+                hint: 'Watch for alternate item warnings and confirm with the Maintainer if unsure.'
+            },
+            {
+                header: 'Post and File',
+                text: 'Post the transaction. Annotate the IV with the MJDI voucher number and file both in the CRB.',
+                img: 'assets/mjdi_step5.jpg',
+                hint: 'Clear the screen before processing the next receipt to avoid carrying data across.'
+            }
+        ]
+    },
+    issues: {
+        title: 'MJDI AinU Issue',
+        steps: [
+            {
+                header: 'Select AinU Account',
+                text: 'Open Transactions > Issues and select the correct AinU holder or ledger.',
+                img: '',
+                hint: 'Ensure the AinU register has been created and authorised.'
+            },
+            {
+                header: 'Add Item to Issue',
+                text: 'Input the NSN and confirm that the item is a loan (not a consumable). Check the quantity against the task.',
+                img: '',
+                hint: 'Excessive quantities on AinU will raise questions at LSA&I.'
+            },
+            {
+                header: 'Confirm & Record',
+                text: 'Post the transaction, obtain the borrower’s signature on the IV and update the AinU register.',
+                img: '',
+                hint: 'Returns must be recorded promptly to prevent apparent losses.'
+            }
+        ]
+    }
+    // Add more modules here as needed...
+};
+// --- WALKTHROUGH ENGINE ---
+class WalkthroughEngine {
+    constructor() {
+        this.overlay = document.getElementById('walkthrough-overlay');
+        this.activeModule = null;
+        this.currentStepIndex = 0;
+
+        this.ui = {
+            title: document.getElementById('wt-title-display'),
+            img: document.getElementById('wt-active-image'),
+            placeholder: document.getElementById('wt-image-placeholder'),
+            counter: document.getElementById('wt-step-counter'),
+            bar: document.getElementById('wt-progress-bar'),
+            header: document.getElementById('wt-step-header'),
+            desc: document.getElementById('wt-step-desc'),
+            hint: document.getElementById('wt-term-hint'),
+            btnNext: document.getElementById('btn-next'),
+            btnPrev: document.getElementById('btn-prev')
+        };
+    }
+
+    start(moduleId) {
+        if (!WALKTHROUGH_DB[moduleId]) {
+            alert('Walkthrough module not found: ' + moduleId);
+            return;
+        }
+
+        this.activeModule = WALKTHROUGH_DB[moduleId];
+        this.currentStepIndex = 0;
+        this.overlay.classList.add('active');
+        this.renderStep();
+    }
+
+    close() {
+        this.overlay.classList.remove('active');
+    }
+
+    next() {
+        if (!this.activeModule) return;
+        if (this.currentStepIndex < this.activeModule.steps.length - 1) {
+            this.currentStepIndex++;
+            this.renderStep();
+        } else {
+            this.close();
+        }
+    }
+
+    prev() {
+        if (!this.activeModule) return;
+        if (this.currentStepIndex > 0) {
+            this.currentStepIndex--;
+            this.renderStep();
+        }
+    }
+
+    renderStep() {
+        const step = this.activeModule.steps[this.currentStepIndex];
+        const total = this.activeModule.steps.length;
+
+        // Update text
+        this.ui.title.innerText = 'MODULE: ' + this.activeModule.title.toUpperCase();
+        this.ui.counter.innerText = 'STEP ' + (this.currentStepIndex + 1) + ' / ' + total;
+        this.ui.header.innerText = step.header;
+        this.ui.desc.innerText = step.text;
+
+        // Hint
+        if (step.hint && step.hint.trim() !== '') {
+            this.ui.hint.style.display = 'block';
+            this.ui.hint.innerHTML = '<strong>TIP:</strong> ' + step.hint;
+        } else {
+            this.ui.hint.style.display = 'none';
+        }
+
+        // Progress bar
+        const pct = ((this.currentStepIndex + 1) / total) * 100;
+        this.ui.bar.style.width = pct + '%';
+
+        // Buttons
+        this.ui.btnPrev.disabled = (this.currentStepIndex === 0);
+        this.ui.btnNext.innerText = (this.currentStepIndex === total - 1) ? 'Finish' : 'Next Step →';
+
+        // Image vs placeholder
+        if (step.img && step.img !== '') {
+            this.ui.img.src = step.img;
+            this.ui.img.style.display = 'block';
+            this.ui.placeholder.style.display = 'none';
+        } else {
+            this.ui.img.style.display = 'none';
+            this.ui.placeholder.style.display = 'flex';
+        }
+    }
+}
+// --- INITIALISE WALKTHROUGH ON PAGE LOAD ---
+document.addEventListener('DOMContentLoaded', function () {
+    window.walkthroughEngine = new WalkthroughEngine();
+});
+
+// --- GLOBAL HELPERS (used by HTML onclicks) ---
+function startWalkthrough(id) {
+    if (window.walkthroughEngine) {
+        window.walkthroughEngine.start(id);
+    }
+}
+
+function closeWalkthrough() {
+    if (window.walkthroughEngine) {
+        window.walkthroughEngine.close();
+    }
+}
+
+function nextStep() {
+    if (window.walkthroughEngine) {
+        window.walkthroughEngine.next();
+    }
+}
+
+function prevStep() {
+    if (window.walkthroughEngine) {
+        window.walkthroughEngine.prev();
+    }
+}
+
